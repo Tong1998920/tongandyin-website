@@ -1,76 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Tong Yin</title>
-
-  <style>
-    body {
-      margin: 0;
-      padding: 40px;
-      font-family: Arial, Helvetica, sans-serif;
-      background: white;
-      color: black;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 22px;
-      font-weight: normal;
-    }
-
-    nav a {
-      margin-left: 30px;
-      color: black;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    main {
-      height: 75vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .intro {
-      text-align: center;
-    }
-
-    .intro p {
-      margin: 8px;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tong Yin</title>
+<meta name="description" content="Tong Yin — artist website. Works, exhibitions, news, and contact.">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
 
-<header>
-  <h1>TONG YIN</h1>
+<a class="skip-link" href="#main">Skip to content</a>
 
-  <nav>
-    <a href="#">WORKS</a>
-    <a href="#">EXHIBITIONS</a>
-    <a href="#">ABOUT</a>
-    <a href="#">CONTACT</a>
+<header class="site-header">
+  <a class="wordmark" href="/" aria-current="page">TONG YIN</a>
+  <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+  <nav class="primary-nav" id="primary-nav" aria-label="Primary">
+    <ul>
+      <li><a href="works/">Works</a></li>
+      <li><a href="exhibitions/">Exhibitions</a></li>
+      <li><a href="news/">News</a></li>
+      <li><a href="about/">About</a></li>
+      <li><a href="contact/">Contact</a></li>
+    </ul>
   </nav>
 </header>
 
-<main>
-  <div class="intro">
-    <p>TONG YIN</p>
-    <p>ARTIST</p>
+<main id="main">
+
+  <!--
+    HOMEPAGE HERO
+    ---------------------------------------------------------------
+    To change the homepage image: replace the file at
+    assets/images/hero/hero-01.jpg with your own image (same file
+    name, or update the src/href below), and edit the caption line.
+    Kept deliberately minimal — one image, one small caption — since
+    the Works page is where visitors browse the rest.
+  -->
+  <a class="hero" href="works/calling-a-deer-a-horse/" aria-label="View Calling A Deer A Horse">
+    <figure class="hero-figure">
+      <img
+        src="assets/images/hero/hero-01.jpg"
+        alt="Calling A Deer A Horse, Tong Yin — installation view"
+        width="1900" height="1306"
+        fetchpriority="high">
+    </figure>
+  </a>
+  <div class="hero-caption">
+    <p class="meta-text">Calling A Deer A Horse, 2026</p>
   </div>
+
 </main>
 
+<footer class="site-footer">
+  <p class="copyright">© Tong Yin</p>
+  <div class="footer-links">
+    <a href="contact/">Email</a>
+    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
 </body>
 </html>

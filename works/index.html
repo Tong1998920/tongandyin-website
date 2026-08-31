@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Works — Tong Yin</title>
+<meta name="description" content="Works by Tong Yin.">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <a class="wordmark" href="../">TONG YIN</a>
+  <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+  <nav class="primary-nav" id="primary-nav" aria-label="Primary">
+    <ul>
+      <li><a href="../works/" aria-current="page">Works</a></li>
+      <li><a href="../exhibitions/">Exhibitions</a></li>
+      <li><a href="../news/">News</a></li>
+      <li><a href="../about/">About</a></li>
+      <li><a href="../contact/">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="section wrap">
+    <h1 class="eyebrow" style="margin-bottom: var(--space-6);">Works</h1>
+
+    <!--
+      WORKS SEQUENCE
+      ---------------------------------------------------------------
+      This is a calm, centered sequence, not a grid, and not a visible
+      left/right/center pattern. Each entry below is one
+      <div class="work-item work-item--SIZE"> block. The SIZE modifier
+      (see style.css) controls how large that one work reads:
+
+        lead      — the largest, used once as the sequence's anchor
+        standard  — the normal size for most entries
+        intimate  — the smallest, for a quieter, more private work
+
+      Two of those have off-center variants, standard-left and
+      standard-right, which nudge the entry only slightly (about 40px)
+      off center. Use at most one or two of these in the whole page —
+      they exist so the sequence doesn't feel mechanically centered,
+      not to create a rule the visitor can spot. Everything else stays
+      centered. Do not alternate left/right/left/right.
+
+      To add a work:
+        1. Duplicate a whole block below (from
+           <div class="work-item ..."> to its closing </div>).
+        2. Create a folder under /works/ for it (copy an existing one,
+           e.g. works/the-boundary, and rename it), point the href at
+           it, and update its own page.
+        3. Default to a centered size (lead / standard / intimate).
+           Only reach for standard-left or standard-right if the page
+           doesn't already have one of those in use nearby.
+    -->
+    <div class="works-sequence">
+
+      <div class="work-item work-item--lead">
+        <a class="work-item-link" href="calling-a-deer-a-horse/">
+          <figure class="work-item-figure">
+            <img src="../assets/images/works/calling-a-deer-a-horse-01.jpg"
+                 alt="Calling A Deer A Horse, Tong Yin — installation view"
+                 width="1900" height="1306" loading="lazy">
+          </figure>
+          <figcaption class="work-item-caption caption">
+            <span class="index-row-title">Calling A Deer A Horse</span>
+            <span>2026</span>
+          </figcaption>
+        </a>
+      </div>
+
+      <div class="work-item work-item--standard">
+        <a class="work-item-link" href="ignore/">
+          <figure class="work-item-figure">
+            <img src="../assets/images/works/ignore-01.jpg"
+                 alt="Ignore, Tong Yin"
+                 width="1520" height="1900" loading="lazy">
+          </figure>
+          <figcaption class="work-item-caption caption">
+            <span class="index-row-title">Ignore</span>
+            <span>[Add year]</span>
+          </figcaption>
+        </a>
+      </div>
+
+      <div class="work-item work-item--standard-left">
+        <a class="work-item-link" href="the-stranger/">
+          <figure class="work-item-figure">
+            <img src="../assets/images/works/the-stranger-01.jpg"
+                 alt="The Stranger, Tong Yin"
+                 width="1520" height="1900" loading="lazy">
+          </figure>
+          <figcaption class="work-item-caption caption">
+            <span class="index-row-title">The Stranger</span>
+            <span>[Add year]</span>
+          </figcaption>
+        </a>
+      </div>
+
+      <div class="work-item work-item--standard-right">
+        <a class="work-item-link" href="the-boundary/">
+          <figure class="work-item-figure">
+            <img src="../assets/images/works/the-boundary-01.jpg"
+                 alt="The Boundary, Tong Yin"
+                 width="1520" height="1900" loading="lazy">
+          </figure>
+          <figcaption class="work-item-caption caption">
+            <span class="index-row-title">The Boundary</span>
+            <span>[Add year]</span>
+          </figcaption>
+        </a>
+      </div>
+
+      <div class="work-item work-item--intimate">
+        <a class="work-item-link" href="saint-sebastian/">
+          <figure class="work-item-figure">
+            <img src="../assets/images/works/saint-sebastian-01.jpg"
+                 alt="Saint Sebastian, Tong Yin"
+                 width="1520" height="1900" loading="lazy">
+          </figure>
+          <figcaption class="work-item-caption caption">
+            <span class="index-row-title">Saint Sebastian</span>
+            <span>[Add year]</span>
+          </figcaption>
+        </a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p class="copyright">© Tong Yin</p>
+  <div class="footer-links">
+    <a href="../contact/">Email</a>
+    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

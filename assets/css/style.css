@@ -1,0 +1,660 @@
+/* ==========================================================================
+   TONG YIN — shared stylesheet
+   One file, used by every page. Organized top to bottom:
+   1. Fonts + variables (the whole visual system lives in the variables)
+   2. Reset
+   3. Type
+   4. Layout helpers
+   5. Site header / navigation
+   6. Footer
+   7. Homepage
+   8. Works (overview + project pages)
+   9. Exhibitions
+   10. News
+   11. About
+   12. Contact
+   13. Responsive
+
+   Visual language: artwork first, space second, typography third. Body
+   copy, nav, and captions use one restrained sans-serif (Helvetica /
+   Arial / Univers territory); the wordmark alone uses a quiet, low-
+   contrast serif (Constantia, or the nearest system equivalent) sized
+   and colored to sit just slightly forward of the nav, never as a logo.
+   Hierarchy comes from size and weight, not from color or tracking. No
+   hairline dividers — sections are separated by space alone. Motion is
+   kept to near-nothing: no hover-zoom, no slides, no dramatic fades.
+   A capped content column (--content-max) keeps the page from simply
+   stretching to fill wide viewports — extra width becomes outer empty
+   space instead, the way it does on the site's reference.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  /* ---- palette: neutral off-white ground, soft gray ink throughout ---- */
+  --color-bg: #f7f7f6;
+  --color-ink: #57554f;      /* nav, body copy, headings — same ink everywhere */
+  --color-ink-soft: #83807a; /* secondary/meta text, and the wordmark */
+  --color-ink-strong: #3c3a35; /* reserved for rare emphasis only */
+  --color-line: #e2e0da;
+
+  /* ---- type ----
+     Body copy, nav, and captions: system Helvetica Neue / Arial first,
+     Arimo (an Arial-metric grotesque) as the web-hosted fallback.
+     The wordmark alone uses a separate, quiet serif — see .wordmark. */
+  --font-sans: -apple-system, 'Helvetica Neue', Helvetica, Arial, Arimo, sans-serif;
+  --font-serif-quiet: Constantia, Cambria, Georgia, 'Times New Roman', serif;
+
+  /* ---- spacing scale: tighter, print-like rhythm ---- */
+  --space-1: 0.3rem;
+  --space-2: 0.6rem;
+  --space-3: 0.9rem;
+  --space-4: 1.4rem;
+  --space-5: 2.2rem;
+  --space-6: 3.4rem;
+  --space-7: 5rem;
+  --space-8: 6.8rem;
+
+  /* ---- page margin, fluid — generous, close to a printed page's outer margin ---- */
+  --page-margin: clamp(20px, 9vw, 150px);
+
+  /* ---- content column: the page stops growing past this width, so on
+     wide monitors the extra space becomes margin, not more image ---- */
+  --content-max: 1180px;
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth, subtle same-origin page transitions where supported.
+   Pure progressive enhancement — does nothing in browsers that
+   don't understand it, no JS required. */
+@view-transition {
+  navigation: auto;
+}
+
+/* ---------------------------------------------------------------- reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, h4, p { margin: 0; }
+button { font-family: inherit; background: none; border: none; cursor: pointer; color: inherit; }
+
+/* ---------------------------------------------------------------- type */
+body {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  font-weight: 400;
+}
+
+.page-title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+.body-text {
+  max-width: 38em;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+.body-text p + p { margin-top: 1.3em; }
+
+.meta-text {
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+}
+
+.caption {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------- layout base */
+.wrap {
+  max-width: calc(var(--content-max) + 2 * var(--page-margin));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+}
+
+main { display: block; }
+
+.section {
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-7);
+}
+
+.section--tight { padding-top: var(--space-5); padding-bottom: var(--space-5); }
+
+.hairline {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--color-bg);
+  padding: var(--space-2);
+  z-index: 100;
+}
+.skip-link:focus { left: var(--page-margin); }
+
+/* --------------------------------------------------------- site header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--color-bg);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: calc(var(--content-max) + 2 * var(--page-margin));
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.9rem var(--page-margin) 0.65rem;
+  gap: var(--space-3);
+}
+
+/* The artist's name — a quiet, low-contrast serif (system Constantia,
+   or the nearest equivalent), sized a little larger than the nav so it
+   reads as the page's one point of identity, but kept pale and plain:
+   no tracking, no bold, no box or background. Its color is actually
+   softer than the nav's — size gives it presence, not weight or ink,
+   which is what keeps it from reading as a logo. */
+.wordmark {
+  position: relative;
+  z-index: 61;
+  font-family: var(--font-serif-quiet);
+  font-size: 1.7rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.2;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+.primary-nav {
+  display: flex;
+}
+
+.primary-nav ul {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.primary-nav a {
+  font-size: 0.85rem;
+  letter-spacing: 0;
+  color: var(--color-ink);
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.primary-nav a:hover,
+.primary-nav a:focus-visible,
+.primary-nav a[aria-current="page"] {
+  color: var(--color-ink-strong);
+  border-bottom-color: var(--color-ink-soft);
+}
+
+.nav-toggle {
+  position: relative;
+  z-index: 61;
+  display: none;
+  font-size: 0.85rem;
+}
+
+/* --------------------------------------------------------------- footer */
+.site-footer {
+  padding: var(--space-5) var(--page-margin) var(--space-6);
+  margin-top: var(--space-8);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.site-footer .footer-links {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  transition: color 0.2s var(--ease);
+}
+.site-footer a:hover, .site-footer a:focus-visible { color: var(--color-ink); }
+
+.site-footer .copyright {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+
+/* ------------------------------------------------------------- homepage */
+/* Inset twice, not once: the page margin gives the usual reading column,
+   and the image is capped narrower still (--hero-max) and centered
+   inside it — it does not simply grow to fill whatever width is
+   available. The result reads as browser → page space → photograph
+   → artwork, rather than browser → large image. */
+.hero {
+  --hero-max: 900px;
+  display: block;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+  padding-top: var(--space-6);
+}
+
+.hero-figure {
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--hero-max);
+}
+
+.hero-figure img {
+  width: 100%;
+  height: auto;
+}
+
+.hero-caption {
+  max-width: var(--hero-max);
+  margin: 0 auto;
+  padding: var(--space-3) var(--page-margin) 0;
+}
+
+.index-list {
+  display: block;
+}
+
+.index-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  transition: opacity 0.2s var(--ease);
+}
+
+.index-list a.index-row:hover .index-row-title,
+.index-list a.index-row:focus-visible .index-row-title {
+  opacity: 0.6;
+}
+
+.index-row-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  transition: opacity 0.2s var(--ease);
+}
+
+.index-row-meta {
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+/* ------------------------------------------------------- works overview */
+/*
+   The works index is a calm, centered sequence, not a grid and not a
+   visible left/right/center pattern. Every entry is centered by default
+   (work-item--lead / --standard / --intimate simply differ in max-width,
+   i.e. in how large that one work reads); only one or two entries in the
+   whole sequence carry a --standard-left / --standard-right nudge, and
+   that nudge is small (about 40px) — enough to keep the page from
+   feeling perfectly mechanical, not enough to register as a rule. Most
+   of the page's rhythm should come from each work's own aspect ratio
+   and from the vertical space between entries, not from side-to-side
+   placement.
+*/
+.works-sequence {
+  display: flex;
+  flex-direction: column;
+}
+
+.work-item + .work-item {
+  margin-top: var(--space-8);
+}
+
+.work-item-link {
+  display: block;
+}
+
+.work-item-figure {
+  margin: 0;
+}
+
+.work-item-figure img {
+  width: 100%;
+}
+
+.work-item-caption {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.work-item-caption .index-row-title { font-size: 0.95rem; }
+
+/* width + alignment — centered by default; two quiet, small nudges only */
+.work-item--lead          { max-width: 1080px; margin-left: auto; margin-right: auto; }
+.work-item--standard      { max-width: 620px;  margin-left: auto; margin-right: auto; }
+.work-item--standard-left { max-width: 600px;  margin-left: calc(50% - 340px); margin-right: auto; }
+.work-item--standard-right{ max-width: 600px;  margin-left: auto; margin-right: calc(50% - 340px); }
+.work-item--intimate       { max-width: 480px;  margin-left: auto; margin-right: auto; }
+
+/* ---------------------------------------------------------- project page */
+.project-header {
+  max-width: 42em;
+}
+
+/* Quieter than the shared .page-title default: on a project page the
+   artwork itself is the subject, so the title should read as a caption
+   for it, not compete with it. Regular weight, a moderately smaller
+   size — the year above it stays small and understated as it already was. */
+.project-header .page-title {
+  margin-top: var(--space-2);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.project-text {
+  margin-top: var(--space-3);
+}
+
+/*
+   Image plates are a simple vertical flow, not a grid — each plate is a
+   full-width block whose max-width and alignment vary, so the page
+   reads as a deliberate editorial sequence (left / right / centered,
+   wide / narrow) rather than a rigid grid or an e-commerce tile wall.
+   This also means plates can never collide or misplace regardless of
+   how tall any single image is.
+*/
+.project-images {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.plate {
+  margin: 0;
+  width: 100%;
+}
+
+.plate img {
+  width: 100%;
+}
+
+/* image rhythm: varied width + alignment so the page never reads as a uniform grid */
+.plate--full   { max-width: none; }
+.plate--wide   { max-width: 920px; margin-left: auto; margin-right: auto; }
+.plate--center { max-width: 640px; margin-left: auto; margin-right: auto; }
+.plate--left   { max-width: 680px; margin-left: 0; margin-right: auto; }
+.plate--right  { max-width: 680px; margin-left: auto; margin-right: 0; }
+.plate--left-narrow  { max-width: 480px; margin-left: 0; margin-right: auto; }
+.plate--right-narrow { max-width: 480px; margin-left: auto; margin-right: 0; }
+
+.plate-caption {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.plate-caption .work-title { font-style: italic; color: var(--color-ink); }
+
+.installation-heading {
+  padding-top: var(--space-2);
+}
+
+.project-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.project-nav a {
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+}
+.project-nav a:hover, .project-nav a:focus-visible { color: var(--color-ink); }
+
+/* ------------------------------------------------------------ exhibitions */
+.exhibition-list { width: 100%; }
+
+.exhibition-row {
+  display: grid;
+  grid-template-columns: 4.5em 1fr auto;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+.exhibition-year {
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+}
+
+.exhibition-main .exhibition-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+.exhibition-main a.exhibition-title:hover,
+.exhibition-main a.exhibition-title:focus-visible { opacity: 0.6; }
+
+.exhibition-main .exhibition-venue {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+  margin-top: 0.2em;
+}
+
+.exhibition-kind {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+.exhibition-page-header { max-width: 42em; }
+.exhibition-page-header .exhibition-venue { margin-top: var(--space-1); }
+
+.exhibition-images {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-top: var(--space-5);
+}
+.exhibition-images .plate img { width: 100%; }
+
+/* ------------------------------------------------------------------ news */
+.news-list { display: flex; flex-direction: column; }
+
+.news-entry {
+  display: grid;
+  grid-template-columns: 4.5em 1fr;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+.news-date { font-size: 0.85rem; color: var(--color-ink-soft); }
+.news-entry .news-title { font-size: 1rem; font-weight: 500; color: var(--color-ink); }
+.news-entry .body-text { margin-top: var(--space-2); }
+
+/* ----------------------------------------------------------------- about */
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+
+.about-portrait img { width: 100%; }
+
+.about-block + .about-block {
+  margin-top: var(--space-5);
+}
+
+.about-block h2 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-2);
+}
+
+.cv-list { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.cv-row {
+  display: grid;
+  grid-template-columns: 4.5em 1fr;
+  gap: var(--space-3);
+  font-size: 0.9rem;
+}
+.cv-row .cv-year { color: var(--color-ink-soft); }
+
+.cv-subgroup + .cv-subgroup { margin-top: var(--space-3); }
+.cv-subgroup-label {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-1);
+}
+
+/* --------------------------------------------------------------- contact */
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  max-width: 60em;
+}
+
+.contact-field + .contact-field { margin-top: var(--space-4); }
+.contact-field h2 {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-1);
+}
+.contact-field a, .contact-field p {
+  font-size: 1rem;
+  color: var(--color-ink);
+}
+.contact-field a { border-bottom: 1px solid var(--color-line); transition: border-color 0.2s var(--ease), color .2s var(--ease); }
+.contact-field a:hover, .contact-field a:focus-visible { border-color: var(--color-ink-soft); }
+
+/* --------------------------------------------------------------- callout */
+.placeholder-note {
+  background: transparent;
+  border: 1px dashed var(--color-line);
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.78rem;
+  color: var(--color-ink-soft);
+  max-width: 46em;
+  margin-bottom: var(--space-5);
+}
+
+/* ---------------------------------------------------------------- utility */
+.mt-0 { margin-top: 0 !important; }
+
+/* ============================================================ responsive */
+@media (max-width: 900px) {
+  .about-layout { grid-template-columns: 1fr; gap: var(--space-5); }
+  .about-portrait { max-width: 320px; }
+  .contact-layout { grid-template-columns: 1fr; }
+
+  .plate--left, .plate--right, .plate--right-narrow, .plate--left-narrow, .plate--center {
+    grid-column: 1 / -1;
+    max-width: 640px;
+  }
+
+  .work-item--lead, .work-item--standard, .work-item--standard-left,
+  .work-item--standard-right, .work-item--intimate {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  :root { --space-7: 3.4rem; --space-8: 4.6rem; }
+
+  .site-header { flex-wrap: wrap; }
+
+  .primary-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--color-bg);
+    padding: var(--space-7) var(--page-margin);
+    z-index: 50;
+  }
+  .primary-nav.is-open { display: block; }
+  .primary-nav ul { flex-direction: column; gap: var(--space-4); }
+  .primary-nav a { font-size: 1.05rem; }
+
+  .nav-toggle { display: inline-block; }
+
+  .exhibition-row, .news-entry { grid-template-columns: 3.6em 1fr; }
+}
+
+@media (max-width: 520px) {
+  .hero-caption { flex-direction: column; gap: var(--space-1); }
+  .index-row { flex-direction: column; align-items: flex-start; gap: 0.25em; }
+}
+
+/* --------------------------------------------------- reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
