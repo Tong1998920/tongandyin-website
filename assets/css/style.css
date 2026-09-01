@@ -133,16 +133,25 @@ body {
 
 .body-text p + p { margin-top: 1.3em; }
 
+/* Shared small-text scale — captions, footer, and other quiet
+   secondary text (exhibition/news meta, project-nav, etc). Sized and
+   spaced to read as part of the same typographic system as the
+   revised navigation: same sans stack, regular weight, no letter-
+   spacing, a relaxed line-height rather than the old cramped 1.6. */
 .meta-text {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 400;
   color: var(--color-ink-soft);
-  line-height: 1.6;
+  line-height: 1.65;
+  letter-spacing: 0;
 }
 
 .caption {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 400;
   color: var(--color-ink-soft);
-  line-height: 1.6;
+  line-height: 1.65;
+  letter-spacing: 0;
 }
 
 /* --------------------------------------------------------- layout base */
@@ -384,15 +393,21 @@ main { display: block; }
 }
 
 .site-footer a {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 400;
   color: var(--color-ink-soft);
+  line-height: 1.6;
+  letter-spacing: 0;
   transition: color 0.2s var(--ease);
 }
 .site-footer a:hover, .site-footer a:focus-visible { color: var(--color-ink); }
 
 .site-footer .copyright {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 400;
   color: var(--color-ink-soft);
+  line-height: 1.6;
+  letter-spacing: 0;
 }
 
 /* ------------------------------------------------------------- homepage */
@@ -485,7 +500,7 @@ main { display: block; }
 }
 
 .index-row-meta {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-ink-soft);
   white-space: nowrap;
 }
@@ -622,8 +637,9 @@ main { display: block; }
 }
 
 .project-nav a {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-ink-soft);
+  line-height: 1.6;
 }
 .project-nav a:hover, .project-nav a:focus-visible { color: var(--color-ink); }
 
@@ -640,7 +656,7 @@ main { display: block; }
 }
 
 .exhibition-year {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-ink-soft);
 }
 
@@ -655,13 +671,14 @@ main { display: block; }
 
 .exhibition-main .exhibition-venue {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-ink-soft);
   margin-top: 0.2em;
+  line-height: 1.6;
 }
 
 .exhibition-kind {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--color-ink-soft);
   white-space: nowrap;
 }
@@ -688,7 +705,7 @@ main { display: block; }
   padding-bottom: var(--space-4);
 }
 
-.news-date { font-size: 0.85rem; color: var(--color-ink-soft); }
+.news-date { font-size: 0.9rem; color: var(--color-ink-soft); line-height: 1.65; }
 .news-entry .news-title { font-size: 1rem; font-weight: 500; color: var(--color-ink); }
 .news-entry .body-text { margin-top: var(--space-2); }
 
