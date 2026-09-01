@@ -300,8 +300,8 @@ main { display: block; }
   position: absolute;
   top: 100%;
   left: 0;
-  width: 28rem;
-  min-height: 16rem;
+  width: 23rem;
+  min-height: 13rem;
   margin: 0;
   padding: 1.5rem 0 2rem;
   background: var(--color-bg);
