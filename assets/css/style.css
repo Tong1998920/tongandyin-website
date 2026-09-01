@@ -37,7 +37,7 @@
   --color-ink-soft: #83807a; /* secondary/meta text, and the wordmark */
   --color-ink-strong: #3c3a35; /* reserved for rare emphasis only */
   --color-line: #e2e0da;
-  --color-active: #007AAA22; /* active/current navigation state only — not decorative elsewhere */
+  --color-active: #007AAA;   /* active/current navigation state only — not decorative elsewhere */
 
   /* ---- type ----
      Body copy, nav, and captions: system Helvetica Neue / Arial first,
@@ -68,9 +68,9 @@
   /* ---- nav: sized and spaced independently of body copy — see
      .primary-nav a. Kept as its own variables so tightening body text
      elsewhere never accidentally tightens the nav again. ---- */
-  --nav-font-size: 1.05rem;
-  --nav-item-gap: 1.85rem;
-  --submenu-font-size: 1.1rem;
+  --nav-font-size: 0.875rem;
+  --nav-item-gap: 0.9rem;
+  --submenu-font-size: 0.875rem;
 
   /* ---- content column: the page stops growing past this width, so on
      wide monitors the extra space becomes margin, not more image ---- */
@@ -260,18 +260,17 @@ main { display: block; }
   flex-wrap: wrap;
 }
 
-/* Light, relaxed, closer in weight and proportion to the reference's
-   nav (Helvetica Neue / Univers / Suisse territory) — thin rather than
-   the default system-UI weight, a touch narrower via slight negative
-   tracking (never wide/exaggerated tracking), with a generous gap
-   between items doing most of the work of feeling calm rather than
-   the type itself being decorated. Never bold. */
+/* Small, light, compact — matched directly against the reference
+   screenshot rather than a general "Helvetica-like" description: a
+   modest size, regular-to-light weight, and a tight gap between items
+   so the whole group reads as one small, delicate cluster rather than
+   spreading across the header. Never bold. */
 .primary-nav a {
   font-family: var(--font-sans);
   font-size: var(--nav-font-size);
-  font-weight: 300;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
   color: var(--color-ink);
   padding: 0.3rem 0;
   transition: color 0.2s var(--ease);
@@ -284,14 +283,15 @@ main { display: block; }
 }
 
 /* ---- Works submenu ----
-   Not a compact dropdown: a large, calm white plane that overlays the
-   artwork below (it's position:absolute, so it never pushes the page
-   content down). It's deliberately much wider and deeper than the
-   text it holds — generous space to the right and below the last
-   item — with the text kept flush to the left edge, directly under
-   "Works", never centered inside that space. Still no border, shadow,
-   or rounded corners: the plane is just the page's own flat
-   background color, floating a layer above the image. */
+   Two things kept deliberately separate: a small, compact block of
+   text (sized and spaced like the rest of the nav, not spread out),
+   sitting inside a much larger white plane whose own width and height
+   are set explicitly below — not derived from how much room the text
+   needs. The plane overlays the artwork (position:absolute, so it
+   never pushes the page content down), with the text flush to the
+   left edge, directly under "Works", never centered. Still no border,
+   shadow, or rounded corners — just the page's own flat background
+   color, floating a layer above the image. */
 .primary-nav li.has-submenu {
   position: relative;
 }
@@ -300,9 +300,10 @@ main { display: block; }
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 26rem;
+  width: 26rem;
+  min-height: 17rem;
   margin: 0;
-  padding: 1.5rem 4rem 3.5rem 0;
+  padding: 1.5rem 0 2rem;
   background: var(--color-bg);
   opacity: 0;
   visibility: hidden;
@@ -320,20 +321,20 @@ main { display: block; }
 }
 
 .primary-nav .submenu li + li {
-  margin-top: 1.6rem;
+  margin-top: 0.55rem;
 }
 
-/* Larger than the top-level nav, and given real room between lines —
-   reads closer to the reference's own exhibition-title typography
-   than to a standard dropdown link. */
+/* Same small scale as the top-level nav — compact and editorial, not
+   a separate larger type style. The surrounding white plane (above)
+   is what creates the sense of space, not the text itself. */
 .primary-nav .submenu a {
   display: block;
   white-space: nowrap;
   padding: 0;
   font-size: var(--submenu-font-size);
-  font-weight: 300;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
   color: var(--color-ink-soft);
 }
 
@@ -846,6 +847,8 @@ main { display: block; }
   .primary-nav li.has-submenu { position: static; }
   .primary-nav .submenu {
     position: static;
+    width: auto;
+    min-height: 0;
     opacity: 1;
     visibility: visible;
     transform: none;
