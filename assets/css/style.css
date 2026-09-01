@@ -37,7 +37,7 @@
   --color-ink-soft: #83807a; /* secondary/meta text, and the wordmark */
   --color-ink-strong: #3c3a35; /* reserved for rare emphasis only */
   --color-line: #e2e0da;
-  --color-active: #007AAA;   /* active/current navigation state only — not decorative elsewhere */
+  --color-active: #007AAA22; /* active/current navigation state only — not decorative elsewhere */
 
   /* ---- type ----
      Body copy, nav, and captions: system Helvetica Neue / Arial first,
@@ -68,8 +68,9 @@
   /* ---- nav: sized and spaced independently of body copy — see
      .primary-nav a. Kept as its own variables so tightening body text
      elsewhere never accidentally tightens the nav again. ---- */
-  --nav-font-size: 0.9375rem; /* 15px */
-  --nav-item-gap: 1.3rem;
+  --nav-font-size: 1.05rem;
+  --nav-item-gap: 1.85rem;
+  --submenu-font-size: 1.1rem;
 
   /* ---- content column: the page stops growing past this width, so on
      wide monitors the extra space becomes margin, not more image ---- */
@@ -259,17 +260,18 @@ main { display: block; }
   flex-wrap: wrap;
 }
 
-/* Lighter, larger, more relaxed than body copy — closer in scale to
-   the reference's nav. Weight stays regular (never bold), tracking
-   stays at 0 (never exaggerated); the size and the generous gap
-   between items are what make it feel relaxed rather than the type
-   itself being decorated. */
+/* Light, relaxed, closer in weight and proportion to the reference's
+   nav (Helvetica Neue / Univers / Suisse territory) — thin rather than
+   the default system-UI weight, a touch narrower via slight negative
+   tracking (never wide/exaggerated tracking), with a generous gap
+   between items doing most of the work of feeling calm rather than
+   the type itself being decorated. Never bold. */
 .primary-nav a {
   font-family: var(--font-sans);
   font-size: var(--nav-font-size);
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: 0;
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
   padding: 0.3rem 0;
   transition: color 0.2s var(--ease);
@@ -282,10 +284,14 @@ main { display: block; }
 }
 
 /* ---- Works submenu ----
-   A quiet vertical continuation of the nav, not a dropdown "card": no
-   border, shadow, or rounded corners, and its background is the same
-   flat page color as everything else — it reads as part of the page,
-   not a UI control floating on top of it. */
+   Not a compact dropdown: a large, calm white plane that overlays the
+   artwork below (it's position:absolute, so it never pushes the page
+   content down). It's deliberately much wider and deeper than the
+   text it holds — generous space to the right and below the last
+   item — with the text kept flush to the left edge, directly under
+   "Works", never centered inside that space. Still no border, shadow,
+   or rounded corners: the plane is just the page's own flat
+   background color, floating a layer above the image. */
 .primary-nav li.has-submenu {
   position: relative;
 }
@@ -294,9 +300,9 @@ main { display: block; }
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 11em;
+  min-width: 26rem;
   margin: 0;
-  padding: 0.4rem 0 0.6rem;
+  padding: 1.5rem 4rem 3.5rem 0;
   background: var(--color-bg);
   opacity: 0;
   visibility: hidden;
@@ -314,15 +320,20 @@ main { display: block; }
 }
 
 .primary-nav .submenu li + li {
-  margin-top: 0.15rem;
+  margin-top: 1.6rem;
 }
 
+/* Larger than the top-level nav, and given real room between lines —
+   reads closer to the reference's own exhibition-title typography
+   than to a standard dropdown link. */
 .primary-nav .submenu a {
   display: block;
   white-space: nowrap;
-  padding: 0.4rem 0;
-  font-size: var(--nav-font-size);
-  line-height: 1.4;
+  padding: 0;
+  font-size: var(--submenu-font-size);
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
 }
 
