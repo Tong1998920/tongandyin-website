@@ -69,7 +69,7 @@
      .primary-nav a. Kept as its own variables so tightening body text
      elsewhere never accidentally tightens the nav again. ---- */
   --nav-font-size: 0.875rem;
-  --nav-item-gap: 0.9rem;
+  --nav-item-gap: 0.7rem;
   --submenu-font-size: 0.875rem;
 
   /* ---- content column: the page stops growing past this width, so on
@@ -268,9 +268,9 @@ main { display: block; }
 .primary-nav a {
   font-family: var(--font-sans);
   font-size: var(--nav-font-size);
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.4;
-  letter-spacing: 0;
+  letter-spacing: -0.005em;
   color: var(--color-ink);
   padding: 0.3rem 0;
   transition: color 0.2s var(--ease);
@@ -300,10 +300,10 @@ main { display: block; }
   position: absolute;
   top: 100%;
   left: 0;
-  width: 32rem;
-  min-height: 22rem;
+  width: 28rem;
+  min-height: 16rem;
   margin: 0;
-  padding: 1.5rem 0 2.5rem;
+  padding: 1.5rem 0 2rem;
   background: var(--color-bg);
   opacity: 0;
   visibility: hidden;
