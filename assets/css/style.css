@@ -58,12 +58,19 @@
   /* ---- page margin, fluid — generous, close to a printed page's outer margin ---- */
   --page-margin: clamp(20px, 9vw, 150px);
 
+  /* ---- header margin: deliberately smaller than --page-margin. The
+     header spans close to the full viewport width; the content column
+     below it (including the homepage image) is its own, narrower,
+     independently-centered block. Do not reuse --page-margin here. ---- */
+  --header-margin: clamp(20px, 4vw, 56px);
+
   /* ---- content column: the page stops growing past this width, so on
      wide monitors the extra space becomes margin, not more image ---- */
   --content-max: 1180px;
 
   /* ---- motion ---- */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-reveal: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* Smooth, subtle same-origin page transitions where supported.
@@ -174,6 +181,10 @@ main { display: block; }
 .skip-link:focus { left: var(--page-margin); }
 
 /* --------------------------------------------------------- site header */
+/* Deliberately NOT capped to --content-max / --page-margin like .wrap:
+   the header spans close to the full viewport width, with its own
+   smaller --header-margin, independent of how wide the content column
+   (and the homepage image) below it is. */
 .site-header {
   position: sticky;
   top: 0;
@@ -182,10 +193,8 @@ main { display: block; }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  max-width: calc(var(--content-max) + 2 * var(--page-margin));
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1.9rem var(--page-margin) 0.65rem;
+  width: 100%;
+  padding: 1.9rem var(--header-margin) 0.65rem;
   gap: var(--space-3);
 }
 
@@ -270,34 +279,66 @@ main { display: block; }
 }
 
 /* ------------------------------------------------------------- homepage */
-/* Inset twice, not once: the page margin gives the usual reading column,
-   and the image is capped narrower still (--hero-max) and centered
-   inside it — it does not simply grow to fill whatever width is
-   available. The result reads as browser → page space → photograph
-   → artwork, rather than browser → large image. */
-.hero {
-  --hero-max: 900px;
-  display: block;
+/* Single inset, matching the same column every other page uses (.wrap):
+   capped at --content-max, centered, with --page-margin on either side.
+   No second, narrower cap on the image itself — at typical desktop
+   widths the artwork ends up close to full column width, the way it
+   does on the reference site. */
+.hero-wrap {
+  max-width: calc(var(--content-max) + 2 * var(--page-margin));
+  margin-left: auto;
+  margin-right: auto;
   padding-left: var(--page-margin);
   padding-right: var(--page-margin);
-  padding-top: var(--space-6);
+  padding-top: var(--space-7);
+}
+
+/* Entrance: a single, whole-block fade + slight rise on first load —
+   not a per-image or staggered reveal. Skipped entirely under
+   prefers-reduced-motion, and safe if JS never runs (see main.js —
+   the .is-loaded class is added defensively, with a fallback). */
+.hero-wrap {
+  opacity: 0;
+  transform: translateY(20px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-wrap {
+    transition: opacity 1s var(--ease-reveal), transform 1s var(--ease-reveal);
+  }
+}
+.hero-wrap.is-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-wrap { opacity: 1; transform: none; }
+}
+
+.hero {
+  display: block;
 }
 
 .hero-figure {
-  margin: 0 auto;
-  width: 100%;
-  max-width: var(--hero-max);
+  margin: 0;
 }
 
 .hero-figure img {
   width: 100%;
   height: auto;
+  transition: opacity 250ms var(--ease);
+}
+
+/* A quiet hover affordance on the linked image — opacity only, no scale. */
+.hero:hover .hero-figure img,
+.hero:focus-visible .hero-figure img {
+  opacity: 0.88;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-figure img { transition: none; }
 }
 
 .hero-caption {
-  max-width: var(--hero-max);
-  margin: 0 auto;
-  padding: var(--space-3) var(--page-margin) 0;
+  padding-top: var(--space-3);
 }
 
 .index-list {

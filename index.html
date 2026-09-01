@@ -35,18 +35,26 @@
     name, or update the src/href below), and edit the caption line.
     Kept deliberately minimal — one image, one small caption — since
     the Works page is where visitors browse the rest.
+
+    .hero-wrap fades in and rises slightly on first load (see
+    style.css and assets/js/main.js) — a single, whole-block reveal,
+    not per-element. The <noscript> rule below is the fallback if
+    JS doesn't run: without it, the image would stay invisible.
   -->
-  <a class="hero" href="works/calling-a-deer-a-horse/" aria-label="View Calling A Deer A Horse">
-    <figure class="hero-figure">
-      <img
-        src="assets/images/hero/hero-01.jpg"
-        alt="Calling A Deer A Horse, Tong Yin — installation view"
-        width="1900" height="1306"
-        fetchpriority="high">
-    </figure>
-  </a>
-  <div class="hero-caption">
-    <p class="meta-text">Calling A Deer A Horse, 2026</p>
+  <noscript><style>.hero-wrap{opacity:1!important;transform:none!important;}</style></noscript>
+  <div class="hero-wrap">
+    <a class="hero" href="works/calling-a-deer-a-horse/" aria-label="View Calling A Deer A Horse">
+      <figure class="hero-figure">
+        <img
+          src="assets/images/hero/hero-01.jpg"
+          alt="Calling A Deer A Horse, Tong Yin"
+          width="2400" height="1440"
+          fetchpriority="high">
+      </figure>
+    </a>
+    <div class="hero-caption">
+      <p class="meta-text">Calling A Deer A Horse, 2026</p>
+    </div>
   </div>
 
 </main>
