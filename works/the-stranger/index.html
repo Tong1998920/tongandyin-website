@@ -14,15 +14,28 @@
 <header class="site-header">
   <a class="wordmark" href="../../">TONG YIN</a>
   <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+  <div class="header-right">
   <nav class="primary-nav" id="primary-nav" aria-label="Primary">
     <ul>
-      <li><a href="../../works/" aria-current="page">Works</a></li>
+      <li class="has-submenu">
+        <a href="../../works/" aria-current="page" aria-haspopup="true">Works</a>
+        <ul class="submenu">
+        <li><a href="../../works/">Chinese Silk</a></li>
+        <li><a href="../../works/">Acrylic Sheet</a></li>
+        <li><a href="../../works/">Digital Art</a></li>
+        <li><a href="../../works/">On Paper</a></li>
+        </ul>
+      </li>
       <li><a href="../../exhibitions/">Exhibitions</a></li>
       <li><a href="../../news/">News</a></li>
       <li><a href="../../about/">About</a></li>
       <li><a href="../../contact/">Contact</a></li>
     </ul>
   </nav>
+  <div class="lang-toggle" aria-label="Language">
+    <button type="button" class="lang-option" data-lang="en" aria-pressed="true">EN</button><span class="lang-sep">/</span><button type="button" class="lang-option" data-lang="zh" aria-pressed="false">中文</button>
+  </div>
+  </div>
 </header>
 
 <main id="main">

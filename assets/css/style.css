@@ -37,6 +37,7 @@
   --color-ink-soft: #83807a; /* secondary/meta text, and the wordmark */
   --color-ink-strong: #3c3a35; /* reserved for rare emphasis only */
   --color-line: #e2e0da;
+  --color-active: #007AAA;   /* active/current navigation state only — not decorative elsewhere */
 
   /* ---- type ----
      Body copy, nav, and captions: system Helvetica Neue / Arial first,
@@ -63,6 +64,12 @@
      below it (including the homepage image) is its own, narrower,
      independently-centered block. Do not reuse --page-margin here. ---- */
   --header-margin: clamp(20px, 4vw, 56px);
+
+  /* ---- nav: sized and spaced independently of body copy — see
+     .primary-nav a. Kept as its own variables so tightening body text
+     elsewhere never accidentally tightens the nav again. ---- */
+  --nav-font-size: 0.9375rem; /* 15px */
+  --nav-item-gap: 1.3rem;
 
   /* ---- content column: the page stops growing past this width, so on
      wide monitors the extra space becomes margin, not more image ---- */
@@ -184,12 +191,18 @@ main { display: block; }
 /* Deliberately NOT capped to --content-max / --page-margin like .wrap:
    the header spans close to the full viewport width, with its own
    smaller --header-margin, independent of how wide the content column
-   (and the homepage image) below it is. */
+   (and the homepage image) below it is.
+
+   Always transparent — no background fill, even when sticky and even
+   once content has scrolled underneath it. Whatever's on the page
+   (the homepage image included) continues visually behind the header,
+   the way it does on the reference site. This is a deliberate choice,
+   not an oversight: don't "fix" it by adding a background on scroll. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 60;
-  background: var(--color-bg);
+  background: transparent;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -216,37 +229,141 @@ main { display: block; }
   white-space: nowrap;
 }
 
+/* Groups the nav and the language toggle together on the right side of
+   the header, as one unit, so .site-header's space-between still only
+   has two things to place: the wordmark, and this. */
+.header-right {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
 .primary-nav {
   display: flex;
 }
 
-.primary-nav ul {
+.primary-nav > ul {
   display: flex;
-  gap: var(--space-4);
+  align-items: baseline;
+  gap: var(--nav-item-gap);
   flex-wrap: wrap;
 }
 
+/* Lighter, larger, more relaxed than body copy — closer in scale to
+   the reference's nav. Weight stays regular (never bold), tracking
+   stays at 0 (never exaggerated); the size and the generous gap
+   between items are what make it feel relaxed rather than the type
+   itself being decorated. */
 .primary-nav a {
-  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-size: var(--nav-font-size);
+  font-weight: 400;
+  line-height: 1.4;
   letter-spacing: 0;
   color: var(--color-ink);
-  padding-bottom: 2px;
-  border-bottom: 1px solid transparent;
-  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  padding: 0.3rem 0;
+  transition: color 0.2s var(--ease);
 }
 
 .primary-nav a:hover,
 .primary-nav a:focus-visible,
 .primary-nav a[aria-current="page"] {
-  color: var(--color-ink-strong);
-  border-bottom-color: var(--color-ink-soft);
+  color: var(--color-active);
+}
+
+/* ---- Works submenu ----
+   A quiet vertical continuation of the nav, not a dropdown "card": no
+   border, shadow, or rounded corners, and its background is the same
+   flat page color as everything else — it reads as part of the page,
+   not a UI control floating on top of it. */
+.primary-nav li.has-submenu {
+  position: relative;
+}
+
+.primary-nav .submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 11em;
+  margin: 0;
+  padding: 0.4rem 0 0.6rem;
+  background: var(--color-bg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-2px);
+  transition: opacity 250ms ease-in-out, transform 250ms ease-in-out, visibility 250ms ease-in-out;
+  z-index: 5;
+}
+
+.primary-nav li.has-submenu:hover > .submenu,
+.primary-nav li.has-submenu:focus-within > .submenu,
+.primary-nav li.has-submenu.is-open > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.primary-nav .submenu li + li {
+  margin-top: 0.15rem;
+}
+
+.primary-nav .submenu a {
+  display: block;
+  white-space: nowrap;
+  padding: 0.4rem 0;
+  font-size: var(--nav-font-size);
+  line-height: 1.4;
+  color: var(--color-ink-soft);
+}
+
+.primary-nav .submenu a:hover,
+.primary-nav .submenu a:focus-visible {
+  color: var(--color-active);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-nav .submenu { transition: none; }
+}
+
+/* ---- language toggle ----
+   Plain text, not a control: no box, border, or background. The
+   active language is simply darker than the inactive one. Chinese
+   content doesn't exist yet (see main.js) — switching to 中文 today
+   is a no-op until that content is added. */
+.lang-toggle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+}
+
+.lang-option {
+  font-family: var(--font-sans);
+  font-size: inherit;
+  color: var(--color-ink-soft);
+  padding: 0.3rem 0;
+}
+
+.lang-option[aria-pressed="true"] {
+  color: var(--color-ink);
+}
+
+.lang-option:hover,
+.lang-option:focus-visible {
+  color: var(--color-active);
+}
+
+.lang-sep {
+  color: var(--color-line);
+  font-size: inherit;
 }
 
 .nav-toggle {
   position: relative;
   z-index: 61;
   display: none;
-  font-size: 0.85rem;
+  font-size: var(--nav-font-size);
 }
 
 /* --------------------------------------------------------------- footer */
@@ -671,7 +788,16 @@ main { display: block; }
 @media (max-width: 700px) {
   :root { --space-7: 3.4rem; --space-8: 4.6rem; }
 
-  .site-header { flex-wrap: wrap; }
+  .site-header {
+    flex-wrap: wrap;
+    padding: 1.5rem var(--header-margin) 0.65rem;
+  }
+
+  /* Language toggle stays put in the header bar; only the nav itself
+     becomes the fullscreen overlay below. Order it before the Menu
+     button so the bar reads wordmark / EN·中文 / Menu. */
+  .header-right { order: 1; }
+  .nav-toggle { order: 2; display: inline-block; }
 
   .primary-nav {
     display: none;
@@ -680,12 +806,26 @@ main { display: block; }
     background: var(--color-bg);
     padding: var(--space-7) var(--page-margin);
     z-index: 50;
+    overflow-y: auto;
   }
   .primary-nav.is-open { display: block; }
-  .primary-nav ul { flex-direction: column; gap: var(--space-4); }
-  .primary-nav a { font-size: 1.05rem; }
+  .primary-nav > ul { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .primary-nav a { font-size: 1.15rem; }
 
-  .nav-toggle { display: inline-block; }
+  /* On touch/mobile the Works submenu is not hidden behind hover at
+     all — it reads as a permanently-open, de-emphasized continuation
+     of the "Works" line, so it's reachable with a simple tap-through. */
+  .primary-nav li.has-submenu { position: static; }
+  .primary-nav .submenu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+    margin-top: 0.6rem;
+    padding: 0;
+  }
+  .primary-nav .submenu a { font-size: 1rem; padding: 0.35rem 0; }
 
   .exhibition-row, .news-entry { grid-template-columns: 3.6em 1fr; }
 }

@@ -14,15 +14,28 @@
 <header class="site-header">
   <a class="wordmark" href="../">TONG YIN</a>
   <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+  <div class="header-right">
   <nav class="primary-nav" id="primary-nav" aria-label="Primary">
     <ul>
-      <li><a href="../works/">Works</a></li>
+      <li class="has-submenu">
+        <a href="../works/" aria-haspopup="true">Works</a>
+        <ul class="submenu">
+        <li><a href="../works/">Chinese Silk</a></li>
+        <li><a href="../works/">Acrylic Sheet</a></li>
+        <li><a href="../works/">Digital Art</a></li>
+        <li><a href="../works/">On Paper</a></li>
+        </ul>
+      </li>
       <li><a href="../exhibitions/" aria-current="page">Exhibitions</a></li>
       <li><a href="../news/">News</a></li>
       <li><a href="../about/">About</a></li>
       <li><a href="../contact/">Contact</a></li>
     </ul>
   </nav>
+  <div class="lang-toggle" aria-label="Language">
+    <button type="button" class="lang-option" data-lang="en" aria-pressed="true">EN</button><span class="lang-sep">/</span><button type="button" class="lang-option" data-lang="zh" aria-pressed="false">中文</button>
+  </div>
+  </div>
 </header>
 
 <main id="main">
@@ -35,47 +48,100 @@
       Chronological list, most recent first. Each row is one
       <div class="exhibition-row">. To add an exhibition, copy a whole
       row and edit its fields. If it has installation photographs,
-      wrap the title in a link (see the 2025 example below) pointing
-      to a new folder under /exhibitions/ — copy the
-      example-solo-2025 folder as a starting point. Rows without
-      photographs can stay plain text (see the 2021 example).
+      wrap the title in a link pointing to a new folder under
+      /exhibitions/ (copy the example-solo-2025 folder as a starting
+      point). Rows without a detail page stay plain text, as below.
     -->
     <div class="exhibition-list">
 
       <div class="exhibition-row">
+        <span class="exhibition-year">2026</span>
+        <span class="exhibition-main">
+          <span class="exhibition-title">Conditions of Presence</span>
+          <span class="exhibition-venue">Auguststr. 11–13, Berlin, Germany</span>
+        </span>
+        <span class="exhibition-kind">Group</span>
+      </div>
+
+      <div class="exhibition-row">
+        <span class="exhibition-year">2026</span>
+        <span class="exhibition-main">
+          <span class="exhibition-title">Rundgang</span>
+          <span class="exhibition-venue">Universität der Künste Berlin, Berlin, Germany</span>
+        </span>
+        <span class="exhibition-kind">Group</span>
+      </div>
+
+      <div class="exhibition-row">
+        <span class="exhibition-year">2026</span>
+        <span class="exhibition-main">
+          <span class="exhibition-title">Drifting</span>
+          <span class="exhibition-venue">DODGERS GALLERY, Guangzhou, China</span>
+        </span>
+        <span class="exhibition-kind">Solo</span>
+      </div>
+
+      <div class="exhibition-row">
         <span class="exhibition-year">2025</span>
         <span class="exhibition-main">
-          <a class="exhibition-title" href="example-solo-2025/">[Placeholder] Exhibition Title</a>
-          <span class="exhibition-venue">[Placeholder Gallery / Institution], [City, Country]</span>
-        </span>
-        <span class="exhibition-kind">Solo</span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2024</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">[Placeholder] Exhibition Title</span>
-          <span class="exhibition-venue">[Placeholder Gallery / Institution], [City, Country]</span>
+          <span class="exhibition-title">Rundgang</span>
+          <span class="exhibition-venue">Universität der Künste Berlin, Berlin, Germany</span>
         </span>
         <span class="exhibition-kind">Group</span>
       </div>
 
       <div class="exhibition-row">
-        <span class="exhibition-year">2023</span>
+        <span class="exhibition-year">2022</span>
         <span class="exhibition-main">
-          <span class="exhibition-title">[Placeholder] Exhibition Title</span>
-          <span class="exhibition-venue">[Placeholder Gallery / Institution], [City, Country]</span>
+          <span class="exhibition-title">The Caulking Generation</span>
+          <span class="exhibition-venue">MOUart, Beijing, China</span>
         </span>
         <span class="exhibition-kind">Group</span>
       </div>
 
       <div class="exhibition-row">
-        <span class="exhibition-year">2021</span>
+        <span class="exhibition-year">2020</span>
         <span class="exhibition-main">
-          <span class="exhibition-title">[Placeholder] Exhibition Title</span>
-          <span class="exhibition-venue">[Placeholder Gallery / Institution], [City, Country]</span>
+          <span class="exhibition-title">Please Jump Down Too</span>
+          <span class="exhibition-venue">KeYi Gallery, Hefei, China</span>
         </span>
-        <span class="exhibition-kind">Solo</span>
+        <span class="exhibition-kind">Group</span>
+      </div>
+
+      <div class="exhibition-row">
+        <span class="exhibition-year">2020</span>
+        <span class="exhibition-main">
+          <span class="exhibition-title">Evolution: Chapter One</span>
+          <span class="exhibition-venue">enjoyartmuseum, Beijing, China</span>
+        </span>
+        <span class="exhibition-kind">Group</span>
+      </div>
+
+      <div class="exhibition-row">
+        <span class="exhibition-year">2019</span>
+        <span class="exhibition-main">
+          <span class="exhibition-title">Night Inquiry</span>
+          <span class="exhibition-venue">horizonartspace, Beijing, China</span>
+        </span>
+        <span class="exhibition-kind">Group</span>
+      </div>
+
+      <div class="exhibition-row">
+        <span class="exhibition-year">2018</span>
+        <span class="exhibition-main">
+          <span class="exhibition-title">Abstract Beijing</span>
+          <span class="exhibition-venue">NL Museum, Beijing, China</span>
+        </span>
+        <span class="exhibition-kind">Group</span>
+      </div>
+
+      <div class="exhibition-row">
+        <span class="exhibition-year">2018</span>
+        <span class="exhibition-main">
+          <span class="exhibition-title">Evolution and Development: The 5th Studio Faculty and Student Exhibition</span>
+          <span class="exhibition-venue">enjoyartmuseum, Beijing, China</span>
+        </span>
+        <span class="exhibition-kind">Group</span>
       </div>
 
     </div>

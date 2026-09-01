@@ -51,3 +51,61 @@
     if (e.key === 'Escape') closeNav();
   });
 })();
+
+(function () {
+  // Works submenu: on the mobile full-screen menu the submenu is
+  // always expanded in CSS (no hover needed there). This block only
+  // handles the in-between case — a touch device at a wide-enough
+  // viewport that it still gets the desktop hover-style header. A
+  // finger can't hover, so give the "Works" trigger a first tap that
+  // opens the submenu instead of navigating, and a second tap (or a
+  // tap elsewhere) that proceeds normally / closes it.
+  var hasSubmenuItems = document.querySelectorAll('.primary-nav li.has-submenu');
+  if (!hasSubmenuItems.length) return;
+  var isCoarsePointer = window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (!isCoarsePointer) return;
+
+  hasSubmenuItems.forEach(function (item) {
+    var trigger = item.querySelector(':scope > a');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', function (e) {
+      // Mobile overlay: the submenu is already always-visible via CSS,
+      // so the trigger should behave like a normal link there.
+      if (window.matchMedia('(max-width: 700px)').matches) return;
+
+      if (!item.classList.contains('is-open')) {
+        e.preventDefault();
+        hasSubmenuItems.forEach(function (other) { other.classList.remove('is-open'); });
+        item.classList.add('is-open');
+      }
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    hasSubmenuItems.forEach(function (item) {
+      if (!item.contains(e.target)) item.classList.remove('is-open');
+    });
+  });
+})();
+
+(function () {
+  // Language toggle: structure only, per the current brief — no
+  // Chinese content has been supplied yet, so this just tracks which
+  // option is selected (aria-pressed) and is a no-op otherwise. Once
+  // Chinese copy exists, swap the no-op branch below for the real
+  // content switch (e.g. toggling a `lang-zh` class on <body> and
+  // showing/hiding matching [data-lang="zh"] content blocks).
+  var options = document.querySelectorAll('.lang-option');
+  if (!options.length) return;
+
+  options.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (btn.getAttribute('aria-pressed') === 'true') return;
+      options.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+      btn.setAttribute('aria-pressed', 'true');
+      // No Chinese content exists yet — English stays the functional
+      // default regardless of which option is selected.
+    });
+  });
+})();
