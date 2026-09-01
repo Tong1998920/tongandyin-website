@@ -300,10 +300,10 @@ main { display: block; }
   position: absolute;
   top: 100%;
   left: 0;
-  width: 26rem;
-  min-height: 17rem;
+  width: 32rem;
+  min-height: 22rem;
   margin: 0;
-  padding: 1.5rem 0 2rem;
+  padding: 1.5rem 0 2.5rem;
   background: var(--color-bg);
   opacity: 0;
   visibility: hidden;
