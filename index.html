@@ -12,7 +12,7 @@
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header">
-  <a class="wordmark" href="/" aria-current="page">TONG YIN</a>
+  <a class="wordmark" href="/" aria-current="page">Tong Yin</a>
   <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
   <div class="header-right">
   <nav class="primary-nav" id="primary-nav" aria-label="Primary">
@@ -20,15 +20,11 @@
       <li class="has-submenu">
         <a href="works/" aria-haspopup="true">Works</a>
         <ul class="submenu">
-        <li><a href="works/">Chinese Silk</a></li>
-        <li><a href="works/">Acrylic Sheet</a></li>
-        <li><a href="works/">Digital Art</a></li>
-        <li><a href="works/">On Paper</a></li>
+        <li><a href="works/">Selected Works</a></li>
+        <li><a href="works/archive/">Archive</a></li>
         </ul>
       </li>
       <li><a href="exhibitions/">Exhibitions</a></li>
-      <li><a href="news/">News</a></li>
-      <li><a href="about/">About</a></li>
       <li><a href="contact/">Contact</a></li>
     </ul>
   </nav>
@@ -41,32 +37,93 @@
 <main id="main">
 
   <!--
-    HOMEPAGE HERO
+    HOMEPAGE CAROUSEL
     ---------------------------------------------------------------
-    To change the homepage image: replace the file at
-    assets/images/hero/hero-01.jpg with your own image (same file
-    name, or update the src/href below), and edit the caption line.
-    Kept deliberately minimal — one image, one small caption — since
-    the Works page is where visitors browse the rest.
+    One artwork at a time, in a fixed curatorial order (not
+    alphabetical, not by date added) — to reorder, move whole
+    <li class="carousel-slide"> blocks. To add or remove a work, copy
+    or delete a whole slide and update its data-index and the
+    following siblings' data-index so they stay 0-based and
+    consecutive; assets/js/main.js reads the slide count from the
+    DOM, so nothing elsewhere needs to change.
 
-    .hero-wrap fades in and rises slightly on first load (see
-    style.css and assets/js/main.js) — a single, whole-block reveal,
-    not per-element. The <noscript> rule below is the fallback if
-    JS doesn't run: without it, the image would stay invisible.
+    Each image keeps its own original aspect ratio inside a shared
+    viewing box (object-fit: contain in style.css) — never cropped,
+    never stretched. Only the first slide needs eager loading /
+    fetchpriority, since it's the only one visible before any script
+    runs.
+
+    The image itself is the link to that work's detail page. Slide 5
+    intentionally has no href / no <a> wrapper: this second "The
+    Boundary, 2026" photograph does not yet have its own detail page
+    on the site, so its image is left non-clickable rather than
+    guessing a destination. Once a page exists for it, wrap its
+    figure the same way the other four slides do.
+
+    The <noscript> rule hides the prev/next arrows when JS can't run
+    (they'd otherwise be dead buttons) — the first slide is still
+    fully visible and still a working link without any script.
   -->
-  <noscript><style>.hero-wrap{opacity:1!important;transform:none!important;}</style></noscript>
-  <div class="hero-wrap">
-    <a class="hero" href="works/calling-a-deer-a-horse/" aria-label="View Calling A Deer A Horse">
-      <figure class="hero-figure">
-        <img
-          src="assets/images/hero/hero-01.jpg"
-          alt="Calling A Deer A Horse, Tong Yin"
-          width="2400" height="1440"
-          fetchpriority="high">
-      </figure>
-    </a>
-    <div class="hero-caption">
-      <p class="meta-text">Calling A Deer A Horse, 2026</p>
+  <noscript><style>.carousel-arrow{display:none;}</style></noscript>
+
+  <div class="carousel" data-carousel>
+    <div class="carousel-stage">
+      <button type="button" class="carousel-arrow carousel-arrow--prev" data-carousel-prev aria-label="Previous artwork">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"></polyline></svg>
+      </button>
+
+      <div class="carousel-viewport">
+        <ul class="carousel-track">
+
+          <li class="carousel-slide is-active is-visible" data-index="0">
+            <a class="carousel-figure-link" href="works/calling-a-deer-a-horse/" aria-label="View Calling A Deer A Horse, 2026">
+              <span class="carousel-figure">
+                <img src="assets/images/home/home-01-calling-a-deer-a-horse.jpg" alt="Calling A Deer A Horse, Tong Yin" width="2400" height="1440" fetchpriority="high">
+              </span>
+            </a>
+            <p class="carousel-caption meta-text">Calling A Deer A Horse, 2026</p>
+          </li>
+
+          <li class="carousel-slide" data-index="1">
+            <a class="carousel-figure-link" href="works/the-stranger/" aria-label="View The Stranger, 2026">
+              <span class="carousel-figure">
+                <img src="assets/images/home/home-02-the-stranger.jpg" alt="The Stranger, Tong Yin" width="2400" height="1440" loading="lazy">
+              </span>
+            </a>
+            <p class="carousel-caption meta-text">The Stranger, 2026</p>
+          </li>
+
+          <li class="carousel-slide" data-index="2">
+            <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
+              <span class="carousel-figure">
+                <img src="assets/images/home/home-03-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1440" loading="lazy">
+              </span>
+            </a>
+            <p class="carousel-caption meta-text">Ignore, 2026</p>
+          </li>
+
+          <li class="carousel-slide" data-index="3">
+            <a class="carousel-figure-link" href="works/the-boundary/" aria-label="View The Boundary, 2026">
+              <span class="carousel-figure">
+                <img src="assets/images/home/home-04-the-boundary.jpg" alt="The Boundary, Tong Yin" width="2400" height="1440" loading="lazy">
+              </span>
+            </a>
+            <p class="carousel-caption meta-text">The Boundary, 2026</p>
+          </li>
+
+          <li class="carousel-slide" data-index="4">
+            <span class="carousel-figure">
+              <img src="assets/images/home/home-05-the-boundary.jpg" alt="The Boundary, Tong Yin" width="2400" height="1440" loading="lazy">
+            </span>
+            <p class="carousel-caption meta-text">The Boundary, 2026</p>
+          </li>
+
+        </ul>
+      </div>
+
+      <button type="button" class="carousel-arrow carousel-arrow--next" data-carousel-next aria-label="Next artwork">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+      </button>
     </div>
   </div>
 
@@ -74,10 +131,6 @@
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
-  <div class="footer-links">
-    <a href="contact/">Email</a>
-    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-  </div>
 </footer>
 
 <script src="assets/js/main.js"></script>

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TONG YIN — shared stylesheet
+   Tong Yin — shared stylesheet
    One file, used by every page. Organized top to bottom:
    1. Fonts + variables (the whole visual system lives in the variables)
    2. Reset
@@ -28,7 +28,7 @@
    space instead, the way it does on the site's reference.
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:wght@400&display=swap');
 
 :root {
   /* ---- palette: neutral off-white ground, soft gray ink throughout ---- */
@@ -45,6 +45,12 @@
      The wordmark alone uses a separate, quiet serif — see .wordmark. */
   --font-sans: -apple-system, 'Helvetica Neue', Helvetica, Arial, Arimo, sans-serif;
   --font-serif-quiet: Constantia, Cambria, Georgia, 'Times New Roman', serif;
+
+  /* ---- wordmark: a single deliberate webfont dependency, scoped to
+     .wordmark only — every other serif reference on the site keeps
+     using --font-serif-quiet. Cormorant Garamond Regular (400), with
+     the same quiet system-serif stack as a fallback. ---- */
+  --font-wordmark: 'Cormorant Garamond', Constantia, Cambria, Georgia, 'Times New Roman', serif;
 
   /* ---- spacing scale: tighter, print-like rhythm ---- */
   --space-1: 0.3rem;
@@ -230,7 +236,7 @@ main { display: block; }
 .wordmark {
   position: relative;
   z-index: 61;
-  font-family: var(--font-serif-quiet);
+  font-family: var(--font-wordmark);
   font-size: 1.7rem;
   font-weight: 400;
   letter-spacing: 0;
@@ -283,15 +289,14 @@ main { display: block; }
 }
 
 /* ---- Works submenu ----
-   Two things kept deliberately separate: a small, compact block of
-   text (sized and spaced like the rest of the nav, not spread out),
-   sitting inside a much larger white plane whose own width and height
-   are set explicitly below — not derived from how much room the text
-   needs. The plane overlays the artwork (position:absolute, so it
-   never pushes the page content down), with the text flush to the
-   left edge, directly under "Works", never centered. Still no border,
-   shadow, or rounded corners — just the page's own flat background
-   color, floating a layer above the image. */
+   A natural vertical continuation of "Works" — not a conventional
+   dropdown card. No fixed width or height: the background plane is
+   sized by its own content plus a little breathing room (padding
+   only), so it never reads as a large empty white rectangle. Still no
+   border, shadow, or rounded corners — just the page's own flat
+   background color, floating a layer above the page (position:
+   absolute, so it never pushes content down), flush to the left edge,
+   directly under "Works". */
 .primary-nav li.has-submenu {
   position: relative;
 }
@@ -300,10 +305,9 @@ main { display: block; }
   position: absolute;
   top: 100%;
   left: 0;
-  width: 23rem;
-  min-height: 13rem;
+  width: max-content;
   margin: 0;
-  padding: 1.5rem 0 2rem;
+  padding: 0.75rem 0.1rem 0.85rem;
   background: var(--color-bg);
   opacity: 0;
   visibility: hidden;
@@ -423,67 +427,130 @@ main { display: block; }
 }
 
 /* ------------------------------------------------------------- homepage */
-/* Single inset, matching the same column every other page uses (.wrap):
-   capped at --content-max, centered, with --page-margin on either side.
-   No second, narrower cap on the image itself — at typical desktop
-   widths the artwork ends up close to full column width, the way it
-   does on the reference site. */
-.hero-wrap {
-  max-width: calc(var(--content-max) + 2 * var(--page-margin));
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--page-margin);
-  padding-right: var(--page-margin);
-  padding-top: var(--space-7);
+/* Homepage artwork carousel — an exhibition-viewing interface, not a
+   commercial slider. Full-bleed (independent of --content-max, like
+   the header) so the prev/next controls can sit near the true
+   viewport edges; the artwork itself is centered in its own capped
+   viewing area. One slide is shown at a time (plain display block/
+   none), so there is nothing here for a no-JS visitor to trip on —
+   the first slide is simply the page's static content. */
+.carousel {
+  width: 100%;
+  padding: var(--space-7) 0 var(--space-6);
 }
 
-/* Entrance: a single, whole-block fade + slight rise on first load —
-   not a per-image or staggered reveal. Skipped entirely under
-   prefers-reduced-motion, and safe if JS never runs (see main.js —
-   the .is-loaded class is added defensively, with a fallback). */
-.hero-wrap {
-  opacity: 0;
-  transform: translateY(20px);
+.carousel-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
+
+.carousel-viewport {
+  width: min(64vw, 900px);
+  max-width: 100%;
+}
+
+.carousel-track {
+  position: relative;
+}
+
+.carousel-slide {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: 0;
+}
+
+.carousel-slide.is-active {
+  display: flex;
+}
+
+.carousel-slide.is-visible {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: no-preference) {
-  .hero-wrap {
-    transition: opacity 1s var(--ease-reveal), transform 1s var(--ease-reveal);
+  .carousel-slide.is-active {
+    transition: opacity 550ms var(--ease);
   }
 }
-.hero-wrap.is-loaded {
-  opacity: 1;
-  transform: translateY(0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-wrap { opacity: 1; transform: none; }
-}
 
-.hero {
+/* The consistent "maximum viewing area": every slide gets the same
+   box, and each image scales inside it without cropping or
+   distortion (object-fit: contain) and stays centered. A landscape
+   work naturally fills the width; a portrait work naturally reads
+   narrower, with the extra width becoming quiet side margin instead
+   of being forced to match. */
+.carousel-figure {
   display: block;
-}
-
-.hero-figure {
+  width: 100%;
+  height: min(54vh, 620px);
   margin: 0;
 }
 
-.hero-figure img {
+.carousel-figure-link {
+  display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+}
+
+.carousel-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
   transition: opacity 250ms var(--ease);
 }
 
 /* A quiet hover affordance on the linked image — opacity only, no scale. */
-.hero:hover .hero-figure img,
-.hero:focus-visible .hero-figure img {
+.carousel-figure-link:hover img,
+.carousel-figure-link:focus-visible img {
   opacity: 0.88;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-figure img { transition: none; }
+  .carousel-figure img { transition: none; }
 }
 
-.hero-caption {
-  padding-top: var(--space-3);
+.carousel-caption {
+  padding-top: var(--space-4);
+  text-align: center;
 }
+
+/* Prev/next controls: thin, quiet strokes near the true viewport
+   edges — not boxes, not circles, not sitting beside the artwork.
+   Vertically centered against the artwork viewing area. */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  color: var(--color-ink-soft);
+  transition: color 0.2s var(--ease);
+}
+.carousel-arrow svg {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+.carousel-arrow:hover,
+.carousel-arrow:focus-visible {
+  color: var(--color-active);
+}
+.carousel-arrow--prev { left: var(--header-margin); }
+.carousel-arrow--next { right: var(--header-margin); }
+
+/* No-JS fallback (see the <noscript> rule in index.html): without
+   main.js the arrows can't do anything, so they're hidden rather than
+   left as dead controls. The first slide (marked is-active/is-visible
+   in the HTML) is still fully visible and its image is still a plain,
+   working link. */
 
 .index-list {
   display: block;
@@ -660,7 +727,7 @@ main { display: block; }
 
 .exhibition-row {
   display: grid;
-  grid-template-columns: 4.5em 1fr auto;
+  grid-template-columns: 4.5em 1fr;
   gap: var(--space-3);
   align-items: baseline;
   padding-top: var(--space-3);
@@ -687,12 +754,6 @@ main { display: block; }
   color: var(--color-ink-soft);
   margin-top: 0.2em;
   line-height: 1.6;
-}
-
-.exhibition-kind {
-  font-size: 0.875rem;
-  color: var(--color-ink-soft);
-  white-space: nowrap;
 }
 
 .exhibition-page-header { max-width: 42em; }
@@ -848,7 +909,6 @@ main { display: block; }
   .primary-nav .submenu {
     position: static;
     width: auto;
-    min-height: 0;
     opacity: 1;
     visibility: visible;
     transform: none;
@@ -859,10 +919,20 @@ main { display: block; }
   .primary-nav .submenu a { font-size: 1rem; padding: 0.35rem 0; }
 
   .exhibition-row, .news-entry { grid-template-columns: 3.6em 1fr; }
+
+  /* Carousel: less side margin so the artwork stays the largest thing
+     on screen, smaller/closer arrows so they never crowd the image,
+     everything still object-fit: contain so nothing crops. */
+  .carousel { padding: var(--space-5) 0 var(--space-4); }
+  .carousel-viewport { width: 80vw; }
+  .carousel-figure { height: 40vh; }
+  .carousel-arrow { width: 1.9rem; height: 1.9rem; }
+  .carousel-arrow svg { width: 0.85rem; height: 0.85rem; }
+  .carousel-arrow--prev { left: 0.4rem; }
+  .carousel-arrow--next { right: 0.4rem; }
 }
 
 @media (max-width: 520px) {
-  .hero-caption { flex-direction: column; gap: var(--space-1); }
   .index-row { flex-direction: column; align-items: flex-start; gap: 0.25em; }
 }
 
