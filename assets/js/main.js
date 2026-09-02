@@ -26,7 +26,10 @@
   var current = slides.findIndex(function (s) { return s.classList.contains('is-active'); });
   if (current < 0) current = 0;
   var animating = false;
-  var FADE_MS = 550;
+  // Kept short and linear on purpose — a quick, light cut rather than
+  // an animated fade, so prev/next feels immediate (see style.css,
+  // .carousel-slide.is-active's transition).
+  var FADE_MS = 140;
 
   function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

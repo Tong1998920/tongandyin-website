@@ -71,6 +71,11 @@
      independently-centered block. Do not reuse --page-margin here. ---- */
   --header-margin: clamp(20px, 4vw, 56px);
 
+  /* ---- carousel prev/next inset: tighter than --header-margin on
+     purpose — these sit right at the true viewport edge, not aligned
+     to the header's own margin. ---- */
+  --carousel-edge: clamp(8px, 1.8vw, 22px);
+
   /* ---- nav: sized and spaced independently of body copy — see
      .primary-nav a. Kept as its own variables so tightening body text
      elsewhere never accidentally tightens the nav again. ---- */
@@ -446,9 +451,17 @@ main { display: block; }
   width: 100%;
 }
 
+/* Same content column the rest of the site uses (compare .wrap /
+   the old .hero-wrap) — this is what gives the artwork its previous
+   large scale back, instead of shrinking into a small centered
+   viewer box. */
 .carousel-viewport {
-  width: min(64vw, 900px);
-  max-width: 100%;
+  width: 100%;
+  max-width: calc(var(--content-max) + 2 * var(--page-margin));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
 }
 
 .carousel-track {
@@ -473,20 +486,23 @@ main { display: block; }
 
 @media (prefers-reduced-motion: no-preference) {
   .carousel-slide.is-active {
-    transition: opacity 550ms var(--ease);
+    transition: opacity 140ms linear;
   }
 }
 
-/* The consistent "maximum viewing area": every slide gets the same
-   box, and each image scales inside it without cropping or
-   distortion (object-fit: contain) and stays centered. A landscape
-   work naturally fills the width; a portrait work naturally reads
-   narrower, with the extra width becoming quiet side margin instead
-   of being forced to match. */
+/* The consistent "maximum viewing area", restored to the same scale
+   the previous single-image hero used: full content-column width,
+   with a height proportioned the same way that hero's 5:3 image
+   filled it (so a landscape work still reads exactly that large).
+   Each image scales inside via object-fit: contain — never cropped,
+   never distorted, never forced to share a literal width. A
+   landscape work fills the box; a portrait work reads narrower,
+   using the same generous height instead of being shrunk to match. */
 .carousel-figure {
   display: block;
   width: 100%;
-  height: min(54vh, 620px);
+  aspect-ratio: 5 / 3;
+  max-height: 78vh;
   margin: 0;
 }
 
@@ -528,23 +544,23 @@ main { display: block; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 3.2rem;
+  height: 3.2rem;
   padding: 0;
   color: var(--color-ink-soft);
   transition: color 0.2s var(--ease);
 }
 .carousel-arrow svg {
-  width: 1rem;
-  height: 1rem;
+  width: 1.6rem;
+  height: 1.6rem;
   display: block;
 }
 .carousel-arrow:hover,
 .carousel-arrow:focus-visible {
   color: var(--color-active);
 }
-.carousel-arrow--prev { left: var(--header-margin); }
-.carousel-arrow--next { right: var(--header-margin); }
+.carousel-arrow--prev { left: var(--carousel-edge); }
+.carousel-arrow--next { right: var(--carousel-edge); }
 
 /* No-JS fallback (see the <noscript> rule in index.html): without
    main.js the arrows can't do anything, so they're hidden rather than
@@ -920,16 +936,14 @@ main { display: block; }
 
   .exhibition-row, .news-entry { grid-template-columns: 3.6em 1fr; }
 
-  /* Carousel: less side margin so the artwork stays the largest thing
-     on screen, smaller/closer arrows so they never crowd the image,
-     everything still object-fit: contain so nothing crops. */
+  /* Carousel: the artwork still uses the same full content column as
+     desktop (--page-margin already narrows itself on small screens),
+     just with less vertical padding around it. Arrows stay large
+     enough to see and read, anchored at the true screen edge. */
   .carousel { padding: var(--space-5) 0 var(--space-4); }
-  .carousel-viewport { width: 80vw; }
-  .carousel-figure { height: 40vh; }
-  .carousel-arrow { width: 1.9rem; height: 1.9rem; }
-  .carousel-arrow svg { width: 0.85rem; height: 0.85rem; }
-  .carousel-arrow--prev { left: 0.4rem; }
-  .carousel-arrow--next { right: 0.4rem; }
+  .carousel-figure { max-height: 62vh; }
+  .carousel-arrow { width: 2.3rem; height: 2.3rem; }
+  .carousel-arrow svg { width: 1.15rem; height: 1.15rem; }
 }
 
 @media (max-width: 520px) {

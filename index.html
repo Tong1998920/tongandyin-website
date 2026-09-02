@@ -49,9 +49,13 @@
 
     Each image keeps its own original aspect ratio inside a shared
     viewing box (object-fit: contain in style.css) — never cropped,
-    never stretched. Only the first slide needs eager loading /
-    fetchpriority, since it's the only one visible before any script
-    runs.
+    never stretched. All five load eagerly (no loading="lazy") even
+    though only the first is visible at first — with only five
+    slides, that small extra weight up front is what keeps prev/next
+    feeling instant instead of pausing to fetch each image the first
+    time it's shown. Only the first slide additionally gets
+    fetchpriority="high", since it's the one visible before any
+    script runs.
 
     The image itself is the link to that work's detail page. Slide 5
     intentionally has no href / no <a> wrapper: this second "The
@@ -87,7 +91,7 @@
           <li class="carousel-slide" data-index="1">
             <a class="carousel-figure-link" href="works/the-stranger/" aria-label="View The Stranger, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-02-the-stranger.jpg" alt="The Stranger, Tong Yin" width="2400" height="1440" loading="lazy">
+                <img src="assets/images/home/home-02-the-stranger.jpg" alt="The Stranger, Tong Yin" width="2400" height="1440">
               </span>
             </a>
             <p class="carousel-caption meta-text">The Stranger, 2026</p>
@@ -96,7 +100,7 @@
           <li class="carousel-slide" data-index="2">
             <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-03-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1440" loading="lazy">
+                <img src="assets/images/home/home-03-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1440">
               </span>
             </a>
             <p class="carousel-caption meta-text">Ignore, 2026</p>
@@ -105,7 +109,7 @@
           <li class="carousel-slide" data-index="3">
             <a class="carousel-figure-link" href="works/the-boundary/" aria-label="View The Boundary, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-04-the-boundary.jpg" alt="The Boundary, Tong Yin" width="2400" height="1440" loading="lazy">
+                <img src="assets/images/home/home-04-the-boundary.jpg" alt="The Boundary, Tong Yin" width="2400" height="1440">
               </span>
             </a>
             <p class="carousel-caption meta-text">The Boundary, 2026</p>
@@ -113,7 +117,7 @@
 
           <li class="carousel-slide" data-index="4">
             <span class="carousel-figure">
-              <img src="assets/images/home/home-05-the-boundary.jpg" alt="The Boundary, Tong Yin" width="2400" height="1440" loading="lazy">
+              <img src="assets/images/home/home-05-the-boundary.jpg" alt="The Boundary, Tong Yin" width="2400" height="1440">
             </span>
             <p class="carousel-caption meta-text">The Boundary, 2026</p>
           </li>
