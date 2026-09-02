@@ -7,7 +7,7 @@
 <meta name="description" content="Ignore — a body of work by Tong Yin.">
 <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
-<body>
+<body class="work-detail-page">
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -20,7 +20,7 @@
       <li class="has-submenu">
         <a href="../../works/calling-a-deer-a-horse/" aria-current="page" aria-haspopup="true">Works</a>
         <ul class="submenu">
-        <li><a href="../../works/calling-a-deer-a-horse/">Selected Works</a></li>
+        <li><a href="../../works/calling-a-deer-a-horse/" aria-current="page">Selected Works</a></li>
         <li><a href="../../works/archive/">Archive</a></li>
         </ul>
       </li>
@@ -35,49 +35,54 @@
 </header>
 
 <main id="main">
-  <section class="section wrap">
+  <section class="section work-detail-shell">
 
-    <div class="project-header">
-      <p class="eyebrow">[Add year]</p>
-      <h1 class="page-title">Ignore</h1>
+    <!--
+      IGNORE OVERVIEW
+      ---------------------------------------------------------------
+      Sits inside the same left-column / right-stage grid as the
+      Calling A Deer A Horse detail template (.work-detail), so the
+      Selected Works list lines up identically across every Selected
+      Works page. Unlike that page, this one has NO .work-detail-info
+      block — Ignore is a group of two artworks, not one, so no single
+      title/medium/dimensions/year belongs here. The right column
+      carries no carousel either: just two static, linked images
+      (.ignore-overview-stage, style.css), each a plain link to its
+      own artwork's detail page. No captions, no hover text — images
+      only, by design.
+    -->
+    <div class="work-detail">
+      <aside class="work-detail-side">
+        <div>
+          <h1 class="selected-works-heading">Selected Works</h1>
+          <nav class="selected-works-list" aria-label="Selected works">
+            <a href="../calling-a-deer-a-horse/">Calling A Deer A Horse</a>
+            <a href="../ignore/" aria-current="page">Ignore</a>
+            <a href="../the-boundary/">The Boundary</a>
+            <a href="../the-stranger/">The Stranger</a>
+          </nav>
+        </div>
+      </aside>
+
+      <div class="work-detail-stage ignore-overview-stage">
+        <figure class="ignore-overview-figure ignore-overview-top">
+          <a href="ignore-01/">
+            <img src="../../assets/images/works/ignore-01-full.jpg" alt="Ignore 01, Tong Yin" width="2400" height="1917">
+          </a>
+        </figure>
+        <figure class="ignore-overview-figure ignore-overview-bottom">
+          <a href="ignore-02/">
+            <img src="../../assets/images/works/ignore-02-overview.jpg" alt="Ignore 02, Tong Yin" width="2400" height="1096">
+          </a>
+        </figure>
+      </div>
     </div>
-
-    <div class="project-images">
-
-      <figure class="plate plate--wide">
-        <img src="../../assets/images/works/ignore-01.jpg"
-             alt="Ignore, Tong Yin"
-             width="1520" height="1900" loading="lazy">
-      </figure>
-
-      <figure class="plate plate--right">
-        <img src="../../assets/images/works/ignore-02.jpg"
-             alt="Ignore 2, Tong Yin"
-             width="1520" height="1900" loading="lazy">
-      </figure>
-
-      <figure class="plate plate--left">
-        <img src="../../assets/images/works/ignore-03.jpg"
-             alt="Ignore 3, Tong Yin"
-             width="1520" height="1900" loading="lazy">
-      </figure>
-
-    </div>
-
-    <nav class="project-nav" aria-label="Other works">
-      <a href="../calling-a-deer-a-horse/">← Calling A Deer A Horse</a>
-      <a href="../the-stranger/">The Stranger →</a>
-    </nav>
 
   </section>
 </main>
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
-  <div class="footer-links">
-    <a href="../../contact/">Email</a>
-    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-  </div>
 </footer>
 
 <script src="../../assets/js/main.js"></script>

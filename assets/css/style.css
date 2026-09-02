@@ -1047,6 +1047,54 @@ body.work-detail-page .primary-nav .submenu a {
   object-position: center;
 }
 
+/* ------------------------------------------------------- Ignore overview */
+/* The Ignore work-detail page shows two clickable artwork groups
+   instead of a single-image carousel, and no metadata at all — so it
+   reuses .work-detail / .work-detail-side (heading + Selected Works
+   list only, no .work-detail-info block) but swaps .work-detail-stage
+   for this stacked, centered layout via the .ignore-overview-stage
+   modifier. Each image keeps its own natural aspect ratio (width:100%,
+   height:auto, no object-fit) so neither is cropped or stretched. */
+.ignore-overview-stage {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(4rem, 9vw, 8rem);
+  width: 100%;
+}
+
+.ignore-overview-figure {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.ignore-overview-figure a {
+  display: block;
+}
+
+.ignore-overview-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.2s var(--ease);
+}
+
+/* Quiet hover affordance, matching .carousel-figure-link elsewhere on
+   the site — opacity only, no scale, no border, no background. */
+.ignore-overview-figure a:hover img,
+.ignore-overview-figure a:focus-visible img {
+  opacity: 0.88;
+}
+
+.ignore-overview-top { max-width: min(48%, 420px); }
+.ignore-overview-bottom { max-width: min(58vw, 920px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ignore-overview-figure img { transition: none; }
+}
+
 /* ------------------------------------------------------------ exhibitions */
 /* The exhibitions index (year / title / venue) is a navigable list,
    like the works overview — structural sans, not the serif
