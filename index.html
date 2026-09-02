@@ -39,13 +39,14 @@
   <!--
     HOMEPAGE CAROUSEL
     ---------------------------------------------------------------
-    One artwork at a time, in a fixed curatorial order (not
-    alphabetical, not by date added) — to reorder, move whole
-    <li class="carousel-slide"> blocks. To add or remove a work, copy
-    or delete a whole slide and update its data-index and the
-    following siblings' data-index so they stay 0-based and
-    consecutive; assets/js/main.js reads the slide count from the
-    DOM, so nothing elsewhere needs to change.
+    Rebuilt from the 8 newly supplied, explicitly numbered images
+    (01-home through 08-home in the brief) — the numeric position is
+    the sole ordering authority, so these 8 slides simply run 1-8 in
+    upload order. All 8 are photographs of the same body of work,
+    "Ignore, 2026" (matching that series' established documentation
+    at works/ignore/), so each links to that existing detail page —
+    per the standing rule that multiple images of one work are not
+    deduplicated, each keeps its own independent slide.
 
     Each image keeps its own original aspect ratio inside a shared
     viewing box (object-fit: contain in style.css) — never cropped,
@@ -57,18 +58,6 @@
     it's shown. Only the first slide additionally gets
     fetchpriority="high", since it's the one visible before any
     script runs.
-
-    The image itself is the link to that work's detail page:
-    - Slides 0, 1, 3 link to their own existing detail page.
-    - Slides 2, 5, 6, 7 are all titled "Ignore, 2026" — four different
-      photographs of the same body of work — and all link to the
-      existing works/ignore/ page, which already documents that
-      series with multiple plates.
-    - Slide 4 (the second "The Boundary, 2026") intentionally has no
-      href / no <a> wrapper: this photograph does not yet have its
-      own detail page on the site, so it's left non-clickable rather
-      than guessing a destination. Once a page exists for it, wrap
-      its figure the same way the others do.
 
     The <noscript> rule hides the prev/next arrows when JS can't run
     (they'd otherwise be dead buttons) — the first slide is still
@@ -86,58 +75,54 @@
         <ul class="carousel-track">
 
           <li class="carousel-slide is-active is-visible" data-index="0">
-            <a class="carousel-figure-link" href="works/calling-a-deer-a-horse/" aria-label="View Calling A Deer A Horse, 2026">
+            <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-01-calling-a-deer-a-horse.jpg" alt="Calling A Deer A Horse, Tong Yin" width="2400" height="1917" fetchpriority="high">
+                <img src="assets/images/home/home-01-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917" fetchpriority="high">
               </span>
             </a>
-            <p class="carousel-caption meta-text">Calling A Deer A Horse, 2026</p>
+            <p class="carousel-caption meta-text">Ignore, 2026</p>
           </li>
 
-          <!-- "The Stranger" is a physically small artwork, so this
-               slide alone carries carousel-figure--small (style.css):
-               same fixed viewing box as every other slide, but the
-               image itself is capped well under the box's full size
-               and centered within it, so its small scale still reads
-               instead of being blown up to match the larger works. -->
           <li class="carousel-slide" data-index="1">
-            <a class="carousel-figure-link" href="works/the-stranger/" aria-label="View The Stranger, 2026">
-              <span class="carousel-figure carousel-figure--small">
-                <img src="assets/images/home/home-02-the-stranger.jpg" alt="The Stranger, Tong Yin" width="2400" height="1917">
+            <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
+              <span class="carousel-figure">
+                <img src="assets/images/home/home-02-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
               </span>
             </a>
-            <p class="carousel-caption meta-text">The Stranger, 2026</p>
+            <p class="carousel-caption meta-text">Ignore, 2026</p>
           </li>
 
           <li class="carousel-slide" data-index="2">
             <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-03-ignore-a.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+                <img src="assets/images/home/home-03-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
               </span>
             </a>
             <p class="carousel-caption meta-text">Ignore, 2026</p>
           </li>
 
           <li class="carousel-slide" data-index="3">
-            <a class="carousel-figure-link" href="works/the-boundary/" aria-label="View The Boundary, 2026">
+            <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-04-the-boundary-a.jpg" alt="The Boundary, Tong Yin" width="2400" height="1917">
+                <img src="assets/images/home/home-04-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
               </span>
             </a>
-            <p class="carousel-caption meta-text">The Boundary, 2026</p>
+            <p class="carousel-caption meta-text">Ignore, 2026</p>
           </li>
 
           <li class="carousel-slide" data-index="4">
-            <span class="carousel-figure">
-              <img src="assets/images/home/home-05-the-boundary-b.jpg" alt="The Boundary, Tong Yin" width="2400" height="1917">
-            </span>
-            <p class="carousel-caption meta-text">The Boundary, 2026</p>
+            <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
+              <span class="carousel-figure">
+                <img src="assets/images/home/home-05-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+              </span>
+            </a>
+            <p class="carousel-caption meta-text">Ignore, 2026</p>
           </li>
 
           <li class="carousel-slide" data-index="5">
             <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-06-ignore-b.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+                <img src="assets/images/home/home-06-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
               </span>
             </a>
             <p class="carousel-caption meta-text">Ignore, 2026</p>
@@ -146,7 +131,7 @@
           <li class="carousel-slide" data-index="6">
             <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-07-ignore-c.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+                <img src="assets/images/home/home-07-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
               </span>
             </a>
             <p class="carousel-caption meta-text">Ignore, 2026</p>
@@ -155,7 +140,7 @@
           <li class="carousel-slide" data-index="7">
             <a class="carousel-figure-link" href="works/ignore/" aria-label="View Ignore, 2026">
               <span class="carousel-figure">
-                <img src="assets/images/home/home-08-ignore-d.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+                <img src="assets/images/home/home-08-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
               </span>
             </a>
             <p class="carousel-caption meta-text">Ignore, 2026</p>

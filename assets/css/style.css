@@ -28,7 +28,7 @@
    space instead, the way it does on the site's reference.
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
   /* ---- palette: neutral off-white ground, soft gray ink throughout ---- */
@@ -46,11 +46,15 @@
   --font-sans: -apple-system, 'Helvetica Neue', Helvetica, Arial, Arimo, sans-serif;
   --font-serif-quiet: Constantia, Cambria, Georgia, 'Times New Roman', serif;
 
-  /* ---- wordmark: a single deliberate webfont dependency, scoped to
-     .wordmark only — every other serif reference on the site keeps
-     using --font-serif-quiet. Cormorant Garamond Regular (400), with
-     the same quiet system-serif stack as a fallback. ---- */
-  --font-wordmark: 'Cormorant Garamond', Constantia, Cambria, Georgia, 'Times New Roman', serif;
+  /* ---- wordmark: previously a dedicated serif (Cormorant Garamond),
+     now removed sitewide in favor of one restrained neo-grotesk —
+     this variable (used by the wordmark and, scoped, by the
+     single-work detail template) now simply points at the same
+     Helvetica-family stack as the rest of the site's type. Kept as
+     its own variable rather than merged into --font-sans so the
+     wordmark and the work-detail template can still be retuned
+     independently if needed later. ---- */
+  --font-wordmark: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* ---- spacing scale: tighter, print-like rhythm ---- */
   --space-1: 0.3rem;
@@ -89,7 +93,7 @@
      track the artwork specifically, not the caption underneath it.
      Overridden smaller for mobile, where the fold requirement doesn't
      apply. ---- */
-  --carousel-figure-h: 90vh;
+  --carousel-figure-h: 94vh;
 
   /* ---- nav: sized and spaced independently of body copy — see
      .primary-nav a. Kept as its own variables so tightening body text
@@ -257,7 +261,7 @@ main { display: block; }
   position: relative;
   z-index: 61;
   font-family: var(--font-wordmark);
-  font-size: 1.7rem;
+  font-size: 1.3125rem;
   font-weight: 400;
   letter-spacing: 0;
   line-height: 1.2;
@@ -456,7 +460,12 @@ main { display: block; }
    the first slide is simply the page's static content. */
 .carousel {
   width: 100%;
-  padding: clamp(24px, 4.5vh, var(--space-7)) 0 var(--space-6);
+  /* Kept deliberately small: the artwork should sit close under the
+     header, not centered in a tall gap beneath it. The box itself
+     (--carousel-figure-h) stays at its full size — only this padding
+     was reduced, so the artwork reads higher on the page without
+     reading any smaller. */
+  padding: clamp(4px, 1.2vh, 20px) 0 var(--space-6);
 }
 
 .carousel-stage {
@@ -779,39 +788,59 @@ main { display: block; }
 
 /* ---------------------------------------------------- single-work detail
    A second, more spacious template for one individual artwork page: a
-   fixed left column (the Selected Works list, this work's info, and
-   its own image prev/next) beside a large single-image carousel on the
-   right. Scoped entirely to body.work-detail-page, so it only touches
-   pages that opt into it by carrying that class on <body> — currently
-   only Calling A Deer A Horse — every other project page keeps the
-   plain vertical .project-images sequence above, untouched.
+   left column (the Selected Works list, this work's info, and its own
+   image prev/next) anchored near the true page margin, beside a large
+   single-image carousel reaching toward the right edge. Scoped entirely
+   to body.work-detail-page, so it only touches pages that opt into it
+   by carrying that class on <body> — currently only Calling A Deer A
+   Horse — every other project page keeps the plain vertical
+   .project-images sequence above, untouched.
 
-   Typography on this template moves to Cormorant Garamond throughout,
-   per this page's own brief, restrained (Regular 400 only — it's the
-   only weight loaded), small, and archival rather than editorial. The
-   header/nav markup itself is unchanged (same file everywhere); these
-   rules simply override its type only when body.work-detail-page is
-   present, so no other page is affected. */
+   Typography here shares the sitewide neo-grotesk (var(--font-wordmark)
+   now simply aliases the same Helvetica-family stack as --font-sans —
+   no serif anywhere on this page), kept small, restrained, and
+   institutional rather than editorial. The header/nav markup itself is
+   unchanged (same file everywhere); these rules simply override its
+   size only when body.work-detail-page is present, so no other page is
+   affected. */
 body.work-detail-page .primary-nav a {
   font-family: var(--font-wordmark);
-  font-size: 1.05rem;
+  font-size: 0.85rem;
   font-weight: 400;
   letter-spacing: 0;
 }
 body.work-detail-page .primary-nav .submenu a {
   font-family: var(--font-wordmark);
-  font-size: 1rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0;
+}
+
+/* Outer shell for the work-detail section only: unlike the rest of the
+   site's body copy (.wrap), this is NOT capped to --content-max and
+   re-centered — that centering is what was pushing the left column
+   toward the middle of wide viewports. Instead it spans full width with
+   its own left/right padding, so the left column anchors at the same
+   --page-margin every other page's content starts at, while the right
+   side is free to run out toward the true viewport edge (only
+   --header-margin, the same tight inset the header itself uses). */
+.work-detail-shell {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-left: var(--page-margin);
+  padding-right: var(--header-margin);
 }
 
 /* Shared figure height for the artwork stage — also used by the left
-   column's min-height so its info block naturally settles low, "near
-   the lower-left area," echoing the right column's own height, rather
-   than the two columns being independently top-aligned and uneven. */
+   column's min-height so its info block naturally settles low, with a
+   large vertical gap under the Selected Works list, echoing the right
+   column's own height, rather than the two columns being independently
+   top-aligned and uneven. */
 .work-detail {
-  --work-detail-figure-h: 70vh;
+  --work-detail-figure-h: 82vh;
   display: grid;
-  grid-template-columns: minmax(200px, 280px) 1fr;
-  gap: var(--space-7);
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  gap: clamp(3.5rem, 7vw, 7.5rem);
   align-items: start;
 }
 
@@ -824,8 +853,9 @@ body.work-detail-page .primary-nav .submenu a {
 
 .selected-works-heading {
   font-family: var(--font-wordmark);
-  font-size: 1.3rem;
-  font-weight: 400;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
   color: var(--color-ink);
   margin: 0 0 var(--space-4);
 }
@@ -837,8 +867,9 @@ body.work-detail-page .primary-nav .submenu a {
 }
 .selected-works-list a {
   font-family: var(--font-wordmark);
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 400;
+  letter-spacing: 0;
   line-height: 1.3;
   color: var(--color-ink);
 }
@@ -853,24 +884,27 @@ body.work-detail-page .primary-nav .submenu a {
    this block near the bottom, not immediately under the list). */
 .work-detail-info .work-detail-title {
   font-family: var(--font-wordmark);
-  font-size: 1.15rem;
-  font-weight: 400;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
   line-height: 1.3;
   color: var(--color-ink);
   margin: 0;
 }
 .work-detail-info .work-detail-meta {
   font-family: var(--font-wordmark);
-  font-size: 0.95rem;
+  font-size: 0.8125rem;
   font-weight: 400;
-  line-height: 1.3;
+  letter-spacing: 0;
+  line-height: 1.4;
   color: var(--color-ink-soft);
   margin: 0.35em 0 0;
 }
 .work-detail-info .work-detail-credit {
   font-family: var(--font-wordmark);
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
   font-weight: 400;
+  letter-spacing: 0;
   color: var(--color-ink-soft);
   margin: var(--space-3) 0 0;
 }
@@ -882,7 +916,9 @@ body.work-detail-page .primary-nav .submenu a {
 }
 .work-detail-controls button {
   font-family: var(--font-wordmark);
-  font-size: 1.15rem;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
   line-height: 1;
   color: var(--color-ink-soft);
   padding: 0.3rem 0.1rem;
@@ -896,12 +932,18 @@ body.work-detail-page .primary-nav .submenu a {
 /* Right column: the artwork stage. A fixed box (width AND height, not
    just an aspect-ratio) so the display area never changes size between
    the three images regardless of each one's own proportions — the page
-   never jumps or reflows on switch. Sized well under the viewport
-   (~54vw / ~70vh) per this page's brief, deliberately leaving generous
-   white space around it rather than filling the column. */
+   never jumps or reflows on switch. Sized large and dominant — close to
+   REF-02's scale — while still leaving intentional white space around
+   it; aligned to the end (right) of its grid column so it reads as
+   reaching toward the true right edge rather than floating centered in
+   whatever space happens to be left. Not every future work-detail page
+   need use these exact numbers: a portrait work should be constrained
+   primarily by --work-detail-figure-h (viewport height) rather than
+   this width, and a physically small work (as with the homepage's
+   earlier "Stranger" treatment) may intentionally render smaller. */
 .work-detail-stage {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .work-carousel-track { position: relative; }
@@ -909,7 +951,7 @@ body.work-detail-page .primary-nav .submenu a {
 .work-carousel-slide {
   display: none;
   opacity: 0;
-  width: 54vw;
+  width: min(58vw, 920px);
   height: var(--work-detail-figure-h);
 }
 .work-carousel-slide.is-active { display: flex; align-items: center; justify-content: center; }
