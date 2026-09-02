@@ -1095,6 +1095,73 @@ body.work-detail-page .primary-nav .submenu a {
   .ignore-overview-figure img { transition: none; }
 }
 
+/* ----------------------------------------------------- Boundary overview */
+/* The Boundary work-detail page shows three clickable artwork groups
+   side by side instead of a single-image carousel, and no metadata at
+   all — same pattern as the Ignore overview (.work-detail-side keeps
+   only the heading + list, no .work-detail-info block). Unlike
+   Ignore's vertical stack, the three Boundary artworks read as one
+   row: one physically large work on the left, two substantially
+   smaller works spaced across the right. Sizing here (not just each
+   image's own aspect ratio) is what signals the real difference in
+   physical scale between the works, so — unlike every other
+   image on the site — these three intentionally do NOT all render at
+   the same width; .boundary-overview-large is deliberately larger
+   than .boundary-overview-small. Every image still keeps its own
+   natural aspect ratio (width:100%, height:auto, no object-fit), so
+   none of the three is ever cropped or stretched. */
+.boundary-overview-stage {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: clamp(2rem, 4vw, 4rem);
+  width: 100%;
+}
+
+.boundary-overview-figure {
+  margin: 0;
+  display: block;
+  min-width: 0;
+}
+
+.boundary-overview-figure a {
+  display: block;
+}
+
+.boundary-overview-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.2s var(--ease);
+}
+
+.boundary-overview-figure a:hover img,
+.boundary-overview-figure a:focus-visible img {
+  opacity: 0.88;
+}
+
+/* Percentages of the row's own width (not the viewport), so the row
+   always resolves in one line regardless of how much space the left
+   Selected Works column happens to take — a vw-based width could
+   overflow and wrap the small group onto its own line, which would
+   read as two separate rows rather than one composition. */
+.boundary-overview-large { flex: 0 1 55%; min-width: 0; }
+
+.boundary-overview-small-group {
+  flex: 0 1 42%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+.boundary-overview-small { flex: 1 1 0; min-width: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .boundary-overview-figure img { transition: none; }
+}
+
 /* ------------------------------------------------------------ exhibitions */
 /* The exhibitions index (year / title / venue) is a navigable list,
    like the works overview — structural sans, not the serif

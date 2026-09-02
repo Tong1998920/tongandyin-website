@@ -7,7 +7,7 @@
 <meta name="description" content="The Boundary — a body of work by Tong Yin.">
 <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
-<body>
+<body class="work-detail-page">
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -20,7 +20,7 @@
       <li class="has-submenu">
         <a href="../../works/calling-a-deer-a-horse/" aria-current="page" aria-haspopup="true">Works</a>
         <ul class="submenu">
-        <li><a href="../../works/calling-a-deer-a-horse/">Selected Works</a></li>
+        <li><a href="../../works/calling-a-deer-a-horse/" aria-current="page">Selected Works</a></li>
         <li><a href="../../works/archive/">Archive</a></li>
         </ul>
       </li>
@@ -35,43 +35,61 @@
 </header>
 
 <main id="main">
-  <section class="section wrap">
+  <section class="section work-detail-shell">
 
-    <div class="project-header">
-      <p class="eyebrow">[Add year]</p>
-      <h1 class="page-title">The Boundary</h1>
+    <!--
+      THE BOUNDARY OVERVIEW
+      ---------------------------------------------------------------
+      Sits inside the same left-column / right-stage grid as the
+      Calling A Deer A Horse detail template (.work-detail). Unlike
+      that page, this one has NO .work-detail-info block — The
+      Boundary is a group of three independent artworks, not one, so
+      no single title/medium/dimensions/year belongs here. The right
+      column carries no carousel either: three static, linked images
+      (.boundary-overview-stage, style.css) — one large (Boundary 01)
+      on the left, two substantially smaller (Boundary 02, Boundary
+      03) spaced across the right, echoing each work's real physical
+      scale. No metadata, no captions, no hover text — images only.
+    -->
+    <div class="work-detail">
+      <aside class="work-detail-side">
+        <div>
+          <h1 class="selected-works-heading">Selected Works</h1>
+          <nav class="selected-works-list" aria-label="Selected works">
+            <a href="../calling-a-deer-a-horse/">Calling A Deer A Horse</a>
+            <a href="../ignore/">Ignore</a>
+            <a href="../the-boundary/" aria-current="page">The Boundary</a>
+            <a href="../the-stranger/">The Stranger</a>
+          </nav>
+        </div>
+      </aside>
+
+      <div class="work-detail-stage boundary-overview-stage">
+        <figure class="boundary-overview-figure boundary-overview-large">
+          <a href="boundary-01/">
+            <img src="../../assets/images/works/boundary-01-full.jpg" alt="The Boundary 01, Tong Yin" width="2238" height="2400">
+          </a>
+        </figure>
+        <div class="boundary-overview-small-group">
+          <figure class="boundary-overview-figure boundary-overview-small">
+            <a href="boundary-02/">
+              <img src="../../assets/images/works/boundary-02-full.jpg" alt="The Boundary 02, Tong Yin" width="2400" height="1917">
+            </a>
+          </figure>
+          <figure class="boundary-overview-figure boundary-overview-small">
+            <a href="boundary-03/">
+              <img src="../../assets/images/works/boundary-03-full.jpg" alt="The Boundary 03, Tong Yin" width="2400" height="1917">
+            </a>
+          </figure>
+        </div>
+      </div>
     </div>
-
-    <div class="project-images">
-
-      <figure class="plate plate--wide">
-        <img src="../../assets/images/works/the-boundary-01.jpg"
-             alt="The Boundary, Tong Yin"
-             width="1520" height="1900" loading="lazy">
-      </figure>
-
-      <figure class="plate plate--left">
-        <img src="../../assets/images/works/the-boundary-02.jpg"
-             alt="The Boundary 2, Tong Yin"
-             width="1520" height="1900" loading="lazy">
-      </figure>
-
-    </div>
-
-    <nav class="project-nav" aria-label="Other works">
-      <a href="../the-stranger/">← The Stranger</a>
-      <a href="../saint-sebastian/">Saint Sebastian →</a>
-    </nav>
 
   </section>
 </main>
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
-  <div class="footer-links">
-    <a href="../../contact/">Email</a>
-    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-  </div>
 </footer>
 
 <script src="../../assets/js/main.js"></script>
