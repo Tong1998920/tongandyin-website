@@ -4,7 +4,6 @@ from playwright.async_api import async_playwright
 BASE = "http://localhost:8123"
 PAGES = [
     ("/", "home"),
-    ("/works/", "works"),
     ("/works/calling-a-deer-a-horse/", "cadah"),
     ("/works/the-stranger/", "stranger"),
     ("/works/saint-sebastian/", "sebastian"),
