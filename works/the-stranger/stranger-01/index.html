@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Stranger — Tong Yin</title>
-<meta name="description" content="The Stranger, Tong Yin — Stranger 01.">
+<meta name="description" content="The Stranger, 2026 — a work by Tong Yin.">
 <link rel="stylesheet" href="../../../assets/css/style.css">
 </head>
 <body class="work-detail-page">
@@ -38,31 +38,25 @@
   <section class="section work-detail-shell">
 
     <!--
-      THE STRANGER 01 — DETAIL
+      THE STRANGER 01 — PREVIEW
       ---------------------------------------------------------------
-      Direct structural clone of the Calling A Deer A Horse detail
-      template. One of four independent artworks in The Stranger
-      series (01–04) — sharing only the series title, same as The
-      Boundary's three works. Physically the smallest of the four, so
-      its stage box is deliberately narrowed via the
-      .work-detail-stage--small modifier (style.css) rather than
-      using the shared fixed-size box every other work-detail page
-      keeps — see that rule's own comment for why. Single photograph,
-      so [data-work-carousel] in main.js (page-scoped, unmodified) is
-      a no-op here: fewer than two slides means no hover/click
-      navigation zones are attached, just a plain static image.
+      Dedicated "image only" viewing template for the Stranger series
+      (see style.css, .stranger-preview-stage) — deliberately separate
+      from the metadata-carrying .work-detail-info / boxed
+      .work-carousel every other work-detail page (Calling A Deer A
+      Horse, Ignore, The Boundary) still uses; none of that markup or
+      CSS is touched by this page. No title, medium, dimensions, year,
+      or credit is shown — that information is kept as data-* on
+      .stranger-preview-stage below for future use, not rendered.
 
-      Unlike The Boundary's small works, this one DOES carry the
-      photography credit — Stranger 02–04 do not; see each page's own
-      comment.
-
-      First artwork in the series, so its prev/next chain (.work-
-      detail-nav, style.css — new to this series; Calling A Deer A
-      Horse and The Boundary's sub-pages deliberately omit this, see
-      their own comments) has no real "previous" artwork to point to:
-      it loops back to The Stranger overview instead, matching the
-      "← previous / next or overview →" convention already used by
-      .project-nav on the plain-template pages (e.g. Saint Sebastian).
+      Switching between Stranger 01–04 has no visible prev/next
+      control: clicking the image's own left/right half (quiet
+      arrow-cursor hint, same convention as .work-carousel elsewhere
+      on the site) or the Left/Right arrow keys moves between works —
+      see main.js, [data-stranger-preview]. The visually-hidden link
+      below keeps the series reachable without JavaScript and for
+      keyboard/screen-reader users. First artwork in the series: no
+      "previous" target.
     -->
     <div class="work-detail">
       <aside class="work-detail-side">
@@ -75,29 +69,18 @@
             <a href="../../the-stranger/" aria-current="page">The Stranger</a>
           </nav>
         </div>
-
-        <div class="work-detail-info">
-          <p class="work-detail-title">The Stranger</p>
-          <p class="work-detail-meta">[Add medium]</p>
-          <p class="work-detail-meta">[Add dimensions]</p>
-          <p class="work-detail-meta">[Add year]</p>
-          <p class="work-detail-credit">Photography by Bonsai Peng</p>
-
-          <nav class="work-detail-nav" aria-label="Other Stranger works">
-            <a href="../">← The Stranger</a>
-            <a href="../stranger-02/">Stranger 02 →</a>
-          </nav>
-        </div>
       </aside>
 
-      <div class="work-detail-stage work-detail-stage--small">
-        <div class="work-carousel" data-work-carousel>
-          <ul class="work-carousel-track">
-            <li class="work-carousel-slide is-active is-visible" data-index="0">
-              <img src="../../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01, full view" width="2400" height="1917">
-            </li>
-          </ul>
-        </div>
+      <div class="stranger-preview-stage"
+           data-stranger-preview
+           data-next-href="../stranger-02/"
+           data-title="The Stranger"
+           data-medium="Acrylic on acrylic sheet, acrylic on silk"
+           data-dimensions="16.5 × 12 cm"
+           data-year="2026"
+           data-credit="Photography by Bonsai Peng">
+        <img class="stranger-preview-image" src="../../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01" width="2400" height="1917">
+        <a class="visually-hidden" href="../stranger-02/">Next: Stranger 02</a>
       </div>
     </div>
 

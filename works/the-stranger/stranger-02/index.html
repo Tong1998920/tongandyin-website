@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Stranger — Tong Yin</title>
-<meta name="description" content="The Stranger, Tong Yin — Stranger 02.">
+<meta name="description" content="The Stranger, 2026 — a work by Tong Yin.">
 <link rel="stylesheet" href="../../../assets/css/style.css">
 </head>
 <body class="work-detail-page">
@@ -38,19 +38,15 @@
   <section class="section work-detail-shell">
 
     <!--
-      THE STRANGER 02 — DETAIL
+      THE STRANGER 02 — PREVIEW
       ---------------------------------------------------------------
-      Direct structural clone of the Calling A Deer A Horse detail
-      template. One of four independent artworks in The Stranger
-      series (01–04). Physically mid-sized, so its stage box uses the
-      .work-detail-stage--medium modifier (style.css) rather than the
-      shared fixed-size box every other work-detail page keeps. Single
-      photograph, so [data-work-carousel] in main.js (page-scoped,
-      unmodified) is a no-op here — fewer than two slides means no
-      hover/click navigation zones are attached.
-
-      No photography credit shown — only Stranger 01 carries one; see
-      that page's own comment.
+      Same dedicated "image only" template as Stranger 01/03/04 (see
+      style.css, .stranger-preview-stage) — no title, medium,
+      dimensions, year, or credit rendered; kept as data-* on
+      .stranger-preview-stage for future use only. See stranger-01 for
+      the full comment on the click/keyboard navigation and the
+      visually-hidden fallback links. No photography credit — only
+      Stranger 01 carries one.
     -->
     <div class="work-detail">
       <aside class="work-detail-side">
@@ -63,28 +59,19 @@
             <a href="../../the-stranger/" aria-current="page">The Stranger</a>
           </nav>
         </div>
-
-        <div class="work-detail-info">
-          <p class="work-detail-title">The Stranger</p>
-          <p class="work-detail-meta">[Add medium]</p>
-          <p class="work-detail-meta">[Add dimensions]</p>
-          <p class="work-detail-meta">[Add year]</p>
-
-          <nav class="work-detail-nav" aria-label="Other Stranger works">
-            <a href="../stranger-01/">← Stranger 01</a>
-            <a href="../stranger-03/">Stranger 03 →</a>
-          </nav>
-        </div>
       </aside>
 
-      <div class="work-detail-stage work-detail-stage--medium">
-        <div class="work-carousel" data-work-carousel>
-          <ul class="work-carousel-track">
-            <li class="work-carousel-slide is-active is-visible" data-index="0">
-              <img src="../../../assets/images/works/stranger-02-full.jpg" alt="The Stranger, Tong Yin — Stranger 02, full view" width="2400" height="1917">
-            </li>
-          </ul>
-        </div>
+      <div class="stranger-preview-stage"
+           data-stranger-preview
+           data-prev-href="../stranger-01/"
+           data-next-href="../stranger-03/"
+           data-title="The Stranger"
+           data-medium="Acrylic on acrylic sheet, Chinese silk"
+           data-dimensions="23.8 × 25 cm"
+           data-year="2026">
+        <img class="stranger-preview-image" src="../../../assets/images/works/stranger-02-full.jpg" alt="The Stranger, Tong Yin — Stranger 02" width="2400" height="1917">
+        <a class="visually-hidden" href="../stranger-01/">Previous: Stranger 01</a>
+        <a class="visually-hidden" href="../stranger-03/">Next: Stranger 03</a>
       </div>
     </div>
 

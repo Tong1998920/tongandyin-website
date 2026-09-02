@@ -934,16 +934,21 @@ body.work-detail-page .primary-nav .submenu a {
   --work-detail-figure-h: 82vh;
   display: grid;
   grid-template-columns: minmax(180px, 260px) 1fr;
-  gap: clamp(3.5rem, 7vw, 7.5rem);
+  column-gap: clamp(3.5rem, 7vw, 7.5rem);
+  row-gap: 0;
   align-items: start;
 }
 
 .work-detail-side {
+  grid-column: 1;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: var(--work-detail-figure-h);
 }
+
+.work-detail-stage { grid-column: 2; grid-row: 1; }
 
 .selected-works-heading {
   font-family: var(--font-wordmark);
@@ -1006,35 +1011,6 @@ body.work-detail-page .primary-nav .submenu a {
   margin: var(--space-3) 0 0;
 }
 
-/* Prev/next between artworks WITHIN one numbered series — currently
-   only The Stranger (01→02→03→04) needs this; Calling A Deer A Horse
-   and The Boundary's sub-pages deliberately omit it (see their own
-   comments). Sits at the foot of .work-detail-info, below the
-   credit line (or meta, on pages with no credit), so it reads as part
-   of this work's own information block rather than site chrome. Same
-   minimal "← / →" text-link convention as .project-nav on the plain
-   .project-images template, just stacked to fit this column's narrow
-   width instead of that template's full-width row — reuses its sans
-   family and quiet ink-soft → ink hover, not the serif info voice. */
-.work-detail-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45em;
-  margin: var(--space-4) 0 0;
-}
-.work-detail-nav a {
-  font-family: var(--font-sans);
-  font-size: clamp(0.75rem, 0.85vw, 0.8125rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  color: var(--color-ink-soft);
-}
-.work-detail-nav a:hover,
-.work-detail-nav a:focus-visible {
-  color: var(--color-ink);
-}
-
 /* Right column: the artwork stage. A fixed box (width AND height, not
    just an aspect-ratio) so the display area never changes size between
    the three images regardless of each one's own proportions — the page
@@ -1076,21 +1052,41 @@ body.work-detail-page .primary-nav .submenu a {
   object-position: center;
 }
 
-/* Per-page stage-width modifiers — used only by The Stranger's four
-   detail pages, whose four works read at genuinely different physical
-   scale (see the brief: Stranger 01 small, 02/03 medium, 04 the large
-   anchor). Every other work-detail page keeps the plain fixed
-   .work-carousel-slide box above regardless of the real artwork's
-   size; these three classes go on .work-detail-stage itself and only
-   narrow the box's WIDTH (never its height — .work-detail-figure-h
-   stays constant so the left column's info block still bottom-aligns
-   consistently across all four pages). object-fit: contain on the
-   image then does the actual scaling within that narrower box. Reset
-   back to 100%/50vh on small screens alongside the base rule — see
-   the 700px breakpoint below. */
-.work-detail-stage--small .work-carousel-slide { width: min(24vw, 340px); }
-.work-detail-stage--medium .work-carousel-slide { width: min(40vw, 620px); }
-.work-detail-stage--large .work-carousel-slide { width: min(66vw, 980px); }
+/* ------------------------------------------------- Stranger preview stage */
+/* Stranger 01–04 use a dedicated, deliberately minimal template — one
+   large image, nothing else in the right column — instead of the
+   metadata-carrying .work-detail-info / boxed .work-carousel every
+   other work-detail page uses. It still shares .work-detail's grid
+   and .work-detail-side's Selected Works styling (same left column,
+   same rhythm as the rest of the site), but the right column has no
+   fixed box: the image is centered in the available space and scales
+   by its own natural proportions up to --work-detail-figure-h, so a
+   landscape, portrait, square or irregular-silk work all read at a
+   generous, coherent size without being forced into one shape.
+   Switching between the four works has no visible prev/next control —
+   see main.js, [data-stranger-preview]: clicking the image's own
+   left/right half (with a quiet arrow-cursor hint, same convention as
+   .work-carousel above) or the Left/Right arrow keys moves to the
+   previous/next work. A visually-hidden real link for each direction
+   (omitted at either end of the series) keeps the series navigable
+   without JavaScript and for keyboard/screen-reader users. */
+.stranger-preview-stage {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--work-detail-figure-h);
+}
+
+.stranger-preview-image {
+  display: block;
+  max-width: 100%;
+  max-height: var(--work-detail-figure-h);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
 
 /* ------------------------------------------------------- Ignore overview */
 /* The Ignore work-detail page shows two clickable artwork groups
@@ -1210,26 +1206,30 @@ body.work-detail-page .primary-nav .submenu a {
 /* ----------------------------------------------------- Stranger overview */
 /* The Stranger work-detail page shows four clickable artworks — same
    no-metadata pattern as Ignore/Boundary above (.work-detail-side
-   keeps only the heading + list) — but arranged as one deliberately
-   asymmetrical, non-grid composition rather than either of those two
-   templates' single row/column: Stranger 01 sits small, alone, offset
-   right of center; 02 and 03 follow as a mid-sized, unevenly staggered
-   pair; 04 anchors the whole composition below, large. The three tiers
-   are plain stacked flex blocks (not a grid), and within them each
-   image is positioned with its own margin offset rather than being
-   centered or edge-aligned like Ignore/Boundary — deliberately "placed"
-   rather than laid out on a shared axis. Every image still keeps its
-   own natural aspect ratio (width:100%, height:auto, no object-fit),
-   so none of the four is ever cropped or stretched. */
+   keeps only the heading + list). Reuses the exact same shared-size
+   convention as .boundary-overview-* (one "large" treatment, one
+   "small" treatment — never four one-off per-image rules): Stranger
+   04 is by far the physically largest of the four (115 × 77 cm vs.
+   under 30 cm for the other three), so it gets the large treatment;
+   01/02/03 share the small-group treatment. Reading order (01→02→03
+   →04, matching the series' fixed navigation order) is kept as plain
+   DOM/visual order — the small group comes first, large last — a
+   mirror of .boundary-overview-stage's own row rather than a new
+   layout system. Every image keeps its own natural aspect ratio
+   (width:100%, height:auto, no object-fit), so none of the four is
+   ever cropped or stretched. */
 .stranger-overview-stage {
-  flex-direction: column;
-  align-items: stretch;
-  gap: clamp(3rem, 7vw, 6rem);
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: clamp(2rem, 4vw, 4rem);
   width: 100%;
 }
 
 .stranger-overview-figure {
   margin: 0;
+  display: block;
   min-width: 0;
 }
 
@@ -1249,51 +1249,18 @@ body.work-detail-page .primary-nav .submenu a {
   opacity: 0.88;
 }
 
-/* Tier 1 — Stranger 01, small, set upper-middle: offset right of the
-   column's own center rather than centered on it, so it reads as
-   placed, not aligned to a grid. */
-.stranger-overview-tier-01 {
-  display: flex;
-  justify-content: center;
-}
-.stranger-overview-01 {
-  width: min(30vw, 300px);
-  margin-left: clamp(0rem, 10vw, 5rem);
-}
-
-/* Tier 2 — Stranger 02 + 03, a medium, unevenly staggered pair. Flex
-   (not grid) with flex-basis + max-width so the pair can wrap to two
-   lines on narrow viewports instead of overflowing; 03 is both
-   smaller and dropped lower than 02, keeping the pair off any shared
-   baseline. */
-.stranger-overview-tier-row {
+.stranger-overview-small-group {
+  flex: 0 1 46%;
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-end;
-  gap: clamp(1.75rem, 4vw, 4rem);
-}
-.stranger-overview-02 {
-  flex: 1 1 260px;
-  max-width: 420px;
-}
-.stranger-overview-03 {
-  flex: 1 1 210px;
-  max-width: 360px;
-  margin-top: clamp(1.25rem, 5vw, 3.5rem);
+  align-items: flex-end;
+  gap: clamp(1rem, 2.5vw, 2rem);
 }
 
-/* Tier 3 — Stranger 04, the large anchor, set toward the left edge —
-   opposite the tier-1 offset — so the whole composition reads as a
-   loose diagonal rather than a centered stack. */
-.stranger-overview-tier-04 {
-  display: flex;
-  justify-content: flex-start;
-}
-.stranger-overview-04 {
-  width: min(68vw, 940px);
-  margin-right: clamp(0rem, 6vw, 3rem);
-}
+.stranger-overview-small { flex: 1 1 90px; min-width: 0; }
+
+.stranger-overview-large { flex: 0 1 46%; min-width: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .stranger-overview-figure img { transition: none; }
@@ -1558,30 +1525,16 @@ body.work-detail-page .primary-nav .submenu a {
      so the list/info aren't squeezed into a ~200px sliver on a phone
      screen. Desktop composition (the point of this round's brief) is
      otherwise untouched. */
-  .work-detail { grid-template-columns: 1fr; gap: var(--space-6); }
-  .work-detail-side { min-height: 0; }
+  .work-detail { grid-template-columns: 1fr; column-gap: 0; row-gap: var(--space-6); }
+  .work-detail-side { grid-column: 1; grid-row: 1; min-height: 0; }
   .work-detail-info { margin-top: var(--space-5); }
-  .work-carousel-slide,
-  .work-detail-stage--small .work-carousel-slide,
-  .work-detail-stage--medium .work-carousel-slide,
-  .work-detail-stage--large .work-carousel-slide { width: 100%; height: 50vh; }
+  .work-detail-stage { grid-column: 1; grid-row: 2; }
+  .work-carousel-slide { width: 100%; height: 50vh; }
 
-  /* Stranger overview: the tier-1/tier-04 offsets and the tier-row
-     stagger are a desktop composition choice — on a phone-width
-     column they'd just eat into already-scarce horizontal space, so
-     every figure resets to full width, centered, in plain reading
-     order (01, 02, 03, 04). */
-  .stranger-overview-01,
-  .stranger-overview-02,
-  .stranger-overview-03,
-  .stranger-overview-04 {
-    width: 100%;
-    max-width: 420px;
-    margin: 0;
-  }
-  .stranger-overview-tier-01,
-  .stranger-overview-tier-04 { justify-content: center; }
-  .stranger-overview-tier-row { justify-content: center; }
+  /* Stranger preview: same single-column stack, image below Selected
+     Works, natural aspect ratio preserved (no fixed height). */
+  .stranger-preview-stage { grid-column: 1; grid-row: 2; min-height: 0; }
+  .stranger-preview-image { max-height: 70vh; }
 }
 
 @media (max-width: 520px) {

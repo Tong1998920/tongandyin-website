@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Stranger 3 — Tong Yin</title>
-<meta name="description" content="The Stranger 3, Tong Yin — a work in The Stranger series.">
+<title>The Stranger — Tong Yin</title>
+<meta name="description" content="The Stranger, 2026 — a work by Tong Yin.">
 <link rel="stylesheet" href="../../../assets/css/style.css">
 </head>
 <body class="work-detail-page">
@@ -38,25 +38,16 @@
   <section class="section work-detail-shell">
 
     <!--
-      THE STRANGER 04 — DETAIL
+      THE STRANGER 04 — PREVIEW
       ---------------------------------------------------------------
-      Direct structural clone of the Calling A Deer A Horse detail
-      template. Last of the four artworks in The Stranger series
-      (01–04). Its own title is "The Stranger 3", NOT "The Stranger"
-      — deliberate, given verbatim in the brief, and kept exactly as
-      specified rather than normalized to match the other three.
-      Physically the largest of the four, so its stage box uses the
-      .work-detail-stage--large modifier (style.css) — wider even than
-      the shared default box every other work-detail page keeps, to
-      read as the composition's anchor. Single photograph, so
-      [data-work-carousel] in main.js (page-scoped, unmodified) is a
-      no-op here — fewer than two slides means no hover/click
-      navigation zones are attached.
-
-      No photography credit shown — only Stranger 01 carries one; see
-      that page's own comment. Last artwork in the series, so its
-      "next" link closes the loop back to The Stranger overview,
-      mirroring Stranger 01's "previous" link at the other end.
+      Same dedicated "image only" template as Stranger 01/02/03 (see
+      style.css, .stranger-preview-stage) — no title, medium,
+      dimensions, year, or credit rendered; kept as data-* on
+      .stranger-preview-stage for future use only. See stranger-01 for
+      the full comment on the click/keyboard navigation and the
+      visually-hidden fallback links. No photography credit — only
+      Stranger 01 carries one. Last artwork in the series: no "next"
+      target.
     -->
     <div class="work-detail">
       <aside class="work-detail-side">
@@ -69,28 +60,17 @@
             <a href="../../the-stranger/" aria-current="page">The Stranger</a>
           </nav>
         </div>
-
-        <div class="work-detail-info">
-          <p class="work-detail-title">The Stranger 3</p>
-          <p class="work-detail-meta">[Add medium]</p>
-          <p class="work-detail-meta">[Add dimensions]</p>
-          <p class="work-detail-meta">[Add year]</p>
-
-          <nav class="work-detail-nav" aria-label="Other Stranger works">
-            <a href="../stranger-03/">← Stranger 03</a>
-            <a href="../">The Stranger →</a>
-          </nav>
-        </div>
       </aside>
 
-      <div class="work-detail-stage work-detail-stage--large">
-        <div class="work-carousel" data-work-carousel>
-          <ul class="work-carousel-track">
-            <li class="work-carousel-slide is-active is-visible" data-index="0">
-              <img src="../../../assets/images/works/stranger-04-full.jpg" alt="The Stranger 3, Tong Yin — full view" width="2400" height="1917">
-            </li>
-          </ul>
-        </div>
+      <div class="stranger-preview-stage"
+           data-stranger-preview
+           data-prev-href="../stranger-03/"
+           data-title="The Stranger"
+           data-medium="Acrylic on acrylic sheet, Chinese silk"
+           data-dimensions="115 × 77 cm"
+           data-year="2026">
+        <img class="stranger-preview-image" src="../../../assets/images/works/stranger-04-full.jpg" alt="The Stranger, Tong Yin — Stranger 04" width="2400" height="1917">
+        <a class="visually-hidden" href="../stranger-03/">Previous: Stranger 03</a>
       </div>
     </div>
 
