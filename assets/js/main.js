@@ -28,8 +28,9 @@
   var animating = false;
   // Kept short and linear on purpose — a quick, light cut rather than
   // an animated fade, so prev/next feels immediate (see style.css,
-  // .carousel-slide.is-active's transition).
-  var FADE_MS = 140;
+  // .carousel-slide.is-active's transition). ~180-250ms reads as
+  // "almost instantaneous" without an abrupt flash.
+  var FADE_MS = 200;
 
   function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

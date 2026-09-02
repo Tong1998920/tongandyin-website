@@ -76,6 +76,21 @@
      to the header's own margin. ---- */
   --carousel-edge: clamp(8px, 1.8vw, 22px);
 
+  /* ---- carousel artwork viewing box: a FIXED height (not a fixed
+     aspect-ratio) so every slide occupies exactly the same vertical
+     space regardless of its own image's proportions — object-fit:
+     contain then does the work of keeping each image uncropped and
+     undistorted inside it. Deliberately tall enough that, combined
+     with the header and the carousel's own top padding, the caption
+     that follows the image lands just past the bottom of a typical
+     desktop viewport (the "below the fold" requirement) — tuned
+     against real viewport heights, not guessed. Also the box
+     .carousel-arrow centers itself against (see below), so arrows
+     track the artwork specifically, not the caption underneath it.
+     Overridden smaller for mobile, where the fold requirement doesn't
+     apply. ---- */
+  --carousel-figure-h: 90vh;
+
   /* ---- nav: sized and spaced independently of body copy — see
      .primary-nav a. Kept as its own variables so tightening body text
      elsewhere never accidentally tightens the nav again. ---- */
@@ -441,7 +456,7 @@ main { display: block; }
    the first slide is simply the page's static content. */
 .carousel {
   width: 100%;
-  padding: var(--space-7) 0 var(--space-6);
+  padding: clamp(24px, 4.5vh, var(--space-7)) 0 var(--space-6);
 }
 
 .carousel-stage {
@@ -486,23 +501,24 @@ main { display: block; }
 
 @media (prefers-reduced-motion: no-preference) {
   .carousel-slide.is-active {
-    transition: opacity 140ms linear;
+    transition: opacity 200ms linear;
   }
 }
 
-/* The consistent "maximum viewing area", restored to the same scale
-   the previous single-image hero used: full content-column width,
-   with a height proportioned the same way that hero's 5:3 image
-   filled it (so a landscape work still reads exactly that large).
-   Each image scales inside via object-fit: contain — never cropped,
-   never distorted, never forced to share a literal width. A
-   landscape work fills the box; a portrait work reads narrower,
-   using the same generous height instead of being shrunk to match. */
+/* The shared "artwork viewing box": a fixed height (--carousel-figure-h,
+   defined above) rather than a fixed aspect-ratio, so switching between
+   a landscape and a portrait work never changes the box's height and
+   never jumps the page — only the rendered image's width changes,
+   via object-fit: contain, which also keeps every image uncropped and
+   undistorted at its own natural proportions. A landscape work reads
+   wide within the box; a portrait work reads narrower, both using the
+   same full height rather than being shrunk to share a width. */
 .carousel-figure {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  aspect-ratio: 5 / 3;
-  max-height: 78vh;
+  height: var(--carousel-figure-h);
   margin: 0;
 }
 
@@ -518,6 +534,22 @@ main { display: block; }
   object-fit: contain;
   object-position: center;
   transition: opacity 250ms var(--ease);
+}
+
+/* One-off: "The Stranger" is a physically small artwork, so it's
+   deliberately NOT scaled up to fill the shared viewing box the way
+   every other slide is. The box itself (.carousel-figure, above)
+   stays exactly the same fixed size as all the others — arrows and
+   fold position are unaffected — only this image is capped well
+   below the box's full size and centered within it (via the flex
+   rule above), reading as quietly smaller with generous space around
+   it. Applied only via the carousel-figure--small modifier class on
+   that one slide in index.html; no other slide should carry it. */
+.carousel-figure--small img {
+  width: auto;
+  height: auto;
+  max-width: 42%;
+  max-height: 42%;
 }
 
 /* A quiet hover affordance on the linked image — opacity only, no scale. */
@@ -536,23 +568,30 @@ main { display: block; }
 
 /* Prev/next controls: thin, quiet strokes near the true viewport
    edges — not boxes, not circles, not sitting beside the artwork.
-   Vertically centered against the artwork viewing area. */
+   top is pinned to half of --carousel-figure-h (the artwork box
+   itself, which sits flush with the top of .carousel-stage) rather
+   than 50% of the stage — the stage also contains the caption below
+   the image, and centering on the whole stage would pull the arrows
+   down off the artwork's own midpoint. The button's own hit area
+   (width/height) is kept larger than the chevron glyph inside it, so
+   there's a generous click target without the arrow reading as a
+   button — no circle, box, background, or border. */
 .carousel-arrow {
   position: absolute;
-  top: 50%;
+  top: calc(var(--carousel-figure-h) / 2);
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3.2rem;
-  height: 3.2rem;
+  width: 3.8rem;
+  height: 3.8rem;
   padding: 0;
   color: var(--color-ink-soft);
   transition: color 0.2s var(--ease);
 }
 .carousel-arrow svg {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 2rem;
+  height: 2rem;
   display: block;
 }
 .carousel-arrow:hover,
@@ -940,8 +979,7 @@ main { display: block; }
      desktop (--page-margin already narrows itself on small screens),
      just with less vertical padding around it. Arrows stay large
      enough to see and read, anchored at the true screen edge. */
-  .carousel { padding: var(--space-5) 0 var(--space-4); }
-  .carousel-figure { max-height: 62vh; }
+  .carousel { --carousel-figure-h: 62vh; padding: var(--space-5) 0 var(--space-4); }
   .carousel-arrow { width: 2.3rem; height: 2.3rem; }
   .carousel-arrow svg { width: 1.15rem; height: 1.15rem; }
 }
