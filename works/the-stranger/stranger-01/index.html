@@ -40,14 +40,17 @@
     <!--
       THE STRANGER 01 — PREVIEW
       ---------------------------------------------------------------
-      Dedicated "image only" viewing template for the Stranger series
-      (see style.css, .stranger-preview-stage) — deliberately separate
-      from the metadata-carrying .work-detail-info / boxed
-      .work-carousel every other work-detail page (Calling A Deer A
-      Horse, Ignore, The Boundary) still uses; none of that markup or
-      CSS is touched by this page. No title, medium, dimensions, year,
-      or credit is shown — that information is kept as data-* on
-      .stranger-preview-stage below for future use, not rendered.
+      Dedicated "image only" viewing stage for the Stranger series
+      (see style.css, .stranger-preview-stage) — the right/main column
+      is a single large image, not the boxed .work-carousel Calling A
+      Deer A Horse/Ignore/The Boundary use. The left column, though,
+      keeps the same .work-detail-info block those pages use: title,
+      medium, dimensions, year and (Stranger 01 only) photography
+      credit, in the lower-left area under Selected Works — same
+      markup and CSS as everywhere else on the site, understated,
+      no card or border. justify-content:space-between on
+      .work-detail-side (unchanged) is what settles this info near the
+      foot of the column beneath the Selected Works list.
 
       Switching between Stranger 01–04 has no visible prev/next
       control: clicking the image's own left/right half (quiet
@@ -69,16 +72,18 @@
             <a href="../../the-stranger/" aria-current="page">The Stranger</a>
           </nav>
         </div>
+        <div class="work-detail-info">
+          <p class="work-detail-title">The Stranger</p>
+          <p class="work-detail-meta">Acrylic on acrylic sheet,<br>acrylic on silk</p>
+          <p class="work-detail-meta">16.5 × 12 cm</p>
+          <p class="work-detail-meta">2026</p>
+          <p class="work-detail-credit">Photography by Bonsai Peng</p>
+        </div>
       </aside>
 
       <div class="stranger-preview-stage"
            data-stranger-preview
-           data-next-href="../stranger-02/"
-           data-title="The Stranger"
-           data-medium="Acrylic on acrylic sheet, acrylic on silk"
-           data-dimensions="16.5 × 12 cm"
-           data-year="2026"
-           data-credit="Photography by Bonsai Peng">
+           data-next-href="../stranger-02/">
         <img class="stranger-preview-image" src="../../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01" width="2400" height="1917">
         <a class="visually-hidden" href="../stranger-02/">Next: Stranger 02</a>
       </div>

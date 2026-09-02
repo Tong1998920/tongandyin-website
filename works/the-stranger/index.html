@@ -43,18 +43,17 @@
       Sits inside the same left-column / right-stage grid as every
       other work-detail page (.work-detail). Like Ignore and The
       Boundary, this one has NO .work-detail-info block — The
-      Stranger is a group of four independent artworks, not one.
-      Reuses The Boundary overview's exact pattern (one shared "large"
-      treatment, one shared "small" treatment — see
-      .stranger-overview-* in style.css, deliberately modeled 1:1 on
-      .boundary-overview-*, not a new one-off system): Stranger 04 is
-      by far the physically largest of the four (115 × 77 cm vs. under
-      30 cm for the rest), so it gets the large treatment; 01/02/03
-      share the small-group treatment. DOM/visual order is plain
-      reading order (01, 02, 03, 04), matching the series' fixed
-      navigation order. Four static, linked images, each a plain link
-      to its own artwork's detail page. No captions, no hover text —
-      images only, by design, same as Ignore/Boundary.
+      Stranger is a group of four independent artworks, not one. Reads
+      top to bottom as a three-tier exhibition sequence rather than a
+      grid or a single row (.stranger-overview-*, style.css): Stranger
+      01 alone near the top, smaller; Stranger 04 and Stranger 02
+      paired side by side below that, medium-large and balanced;
+      Stranger 03 alone lower still, the largest of the four. Order
+      here is deliberate composition, not the series' 01→02→03→04
+      navigation order — each figure still links straight to its own
+      artwork's correct detail page regardless of where it sits on
+      this page. No captions, no hover text — images only, by design,
+      same as Ignore/Boundary.
     -->
     <div class="work-detail">
       <aside class="work-detail-side">
@@ -70,26 +69,26 @@
       </aside>
 
       <div class="work-detail-stage stranger-overview-stage">
-        <div class="stranger-overview-small-group">
-          <figure class="stranger-overview-figure stranger-overview-small">
-            <a href="stranger-01/">
-              <img src="../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01" width="2400" height="1917">
+        <figure class="stranger-overview-figure stranger-overview-01">
+          <a href="stranger-01/">
+            <img src="../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01" width="2400" height="1917">
+          </a>
+        </figure>
+        <div class="stranger-overview-pair">
+          <figure class="stranger-overview-figure">
+            <a href="stranger-04/">
+              <img src="../../assets/images/works/stranger-04-full.jpg" alt="The Stranger, Tong Yin — Stranger 04" width="2400" height="1917">
             </a>
           </figure>
-          <figure class="stranger-overview-figure stranger-overview-small">
+          <figure class="stranger-overview-figure">
             <a href="stranger-02/">
               <img src="../../assets/images/works/stranger-02-full.jpg" alt="The Stranger, Tong Yin — Stranger 02" width="2400" height="1917">
             </a>
           </figure>
-          <figure class="stranger-overview-figure stranger-overview-small">
-            <a href="stranger-03/">
-              <img src="../../assets/images/works/stranger-03-full.jpg" alt="The Stranger, Tong Yin — Stranger 03" width="2400" height="1917">
-            </a>
-          </figure>
         </div>
-        <figure class="stranger-overview-figure stranger-overview-large">
-          <a href="stranger-04/">
-            <img src="../../assets/images/works/stranger-04-full.jpg" alt="The Stranger, Tong Yin — Stranger 04" width="2400" height="1917">
+        <figure class="stranger-overview-figure stranger-overview-03">
+          <a href="stranger-03/">
+            <img src="../../assets/images/works/stranger-03-full.jpg" alt="The Stranger, Tong Yin — Stranger 03" width="2400" height="1917">
           </a>
         </figure>
       </div>

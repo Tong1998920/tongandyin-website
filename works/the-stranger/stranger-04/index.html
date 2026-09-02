@@ -40,14 +40,14 @@
     <!--
       THE STRANGER 04 — PREVIEW
       ---------------------------------------------------------------
-      Same dedicated "image only" template as Stranger 01/02/03 (see
-      style.css, .stranger-preview-stage) — no title, medium,
-      dimensions, year, or credit rendered; kept as data-* on
-      .stranger-preview-stage for future use only. See stranger-01 for
-      the full comment on the click/keyboard navigation and the
-      visually-hidden fallback links. No photography credit — only
-      Stranger 01 carries one. Last artwork in the series: no "next"
-      target.
+      Same dedicated "image only" stage as Stranger 01/02/03 (see
+      style.css, .stranger-preview-stage), with the same
+      .work-detail-info metadata block in the lower-left column as
+      every other work-detail page. See stranger-01 for the full
+      comment on both the metadata placement and the click/keyboard
+      navigation + visually-hidden fallback links. No photography
+      credit — only Stranger 01 carries one. Last artwork in the
+      series: no "next" target.
     -->
     <div class="work-detail">
       <aside class="work-detail-side">
@@ -60,15 +60,17 @@
             <a href="../../the-stranger/" aria-current="page">The Stranger</a>
           </nav>
         </div>
+        <div class="work-detail-info">
+          <p class="work-detail-title">The Stranger</p>
+          <p class="work-detail-meta">Acrylic on acrylic sheet,<br>Chinese silk</p>
+          <p class="work-detail-meta">115 × 77 cm</p>
+          <p class="work-detail-meta">2026</p>
+        </div>
       </aside>
 
       <div class="stranger-preview-stage"
            data-stranger-preview
-           data-prev-href="../stranger-03/"
-           data-title="The Stranger"
-           data-medium="Acrylic on acrylic sheet, Chinese silk"
-           data-dimensions="115 × 77 cm"
-           data-year="2026">
+           data-prev-href="../stranger-03/">
         <img class="stranger-preview-image" src="../../../assets/images/works/stranger-04-full.jpg" alt="The Stranger, Tong Yin — Stranger 04" width="2400" height="1917">
         <a class="visually-hidden" href="../stranger-03/">Previous: Stranger 03</a>
       </div>

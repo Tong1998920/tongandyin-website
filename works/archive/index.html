@@ -35,25 +35,60 @@
 </header>
 
 <main id="main">
-  <section class="section wrap">
-    <h1 class="eyebrow" style="margin-bottom: var(--space-6);">Archive</h1>
+  <section class="section wrap" data-archive>
 
     <!--
       ARCHIVE
       ---------------------------------------------------------------
-      A second, separate listing from Works — for earlier or archival
-      works, kept apart from the current "Selected Works" so nothing
-      on the site is organized by medium. Build it the same way as
-      works/index.html: duplicate a <div class="work-item work-item--
-      SIZE"> block per piece, point its link at a folder under
-      /works/archive/ (or /works/, if that reads better once there's
-      real content here), and remove the placeholder note below once
-      the first entry is added.
+      A second, separate browsing system from Works/Selected Works —
+      earlier works, shown as a flat thumbnail grid under two plain
+      text category tabs (2022-2026 / before-2022) rather than each
+      getting its own project page. Clicking a thumbnail opens a
+      full-screen lightbox (markup below, right after </main>) instead
+      of navigating anywhere; previous/next inside the lightbox moves
+      between works in the currently active category. All of this —
+      the grid, the tabs, the lightbox — is rendered by
+      assets/js/main.js's [data-archive] block, entirely from the
+      ARCHIVE_WORKS array declared in the <script> further down this
+      file. See style.css's "archive" section for the layout rules.
+
+      TO ADD A WORK LATER: add one object to the ARCHIVE_WORKS array
+      below (image, thumbnail, title, year, medium, dimensions,
+      category, and optionally width/height) — nothing on this page
+      or in style.css needs to change. No Archive artworks exist yet,
+      so ARCHIVE_WORKS starts empty and the placeholder note below is
+      what's visible until the first entry is added; do not add
+      placeholder or stock images to fill the grid.
     -->
-    <p class="placeholder-note">Archive works have not been added yet.</p>
+    <h1 class="eyebrow" style="margin-bottom: var(--space-3);">Archive</h1>
+
+    <nav class="archive-categories" aria-label="Archive categories">
+      <button type="button" class="archive-category-btn is-active" data-archive-category="2022-2026" aria-pressed="true">2022–2026</button>
+      <button type="button" class="archive-category-btn" data-archive-category="before-2022" aria-pressed="false">Before 2022</button>
+    </nav>
+
+    <div class="archive-grid" data-archive-grid></div>
+
+    <p class="placeholder-note" data-archive-empty>Archive works have not been added yet.</p>
 
   </section>
 </main>
+
+<!-- Archive lightbox: one overlay, shared by every work in the grid
+     above (see main.js, [data-archive-lightbox]). Starts hidden; JS
+     shows it and fills in the image/caption when a thumbnail (or a
+     #work-<id> deep link) opens it. -->
+<div class="archive-lightbox" data-archive-lightbox hidden>
+  <button type="button" class="archive-lightbox-close" data-archive-lightbox-close>Close</button>
+  <figure class="archive-lightbox-figure">
+    <img class="archive-lightbox-image" data-archive-lightbox-image alt="">
+    <!-- No src attribute here on purpose: an empty src="" resolves to
+         the current page URL and the browser will actually request it,
+         which briefly registers as a "broken image" on every page
+         load. JS sets a real src the first time a work is shown. -->
+    <figcaption class="archive-lightbox-meta" data-archive-lightbox-meta></figcaption>
+  </figure>
+</div>
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
@@ -63,6 +98,36 @@
   </div>
 </footer>
 
+<script>
+  /*
+    ARCHIVE DATA
+    ---------------------------------------------------------------
+    The only place Archive content lives. Each entry:
+
+      {
+        id:         unique string — becomes the shareable lightbox URL
+                    ("#work-<id>"), so keep it stable once published
+        image:      full-size artwork image, shown in the lightbox
+        thumbnail:  grid thumbnail (can be the same file as `image`,
+                    or a lighter version of it — never a cropped one)
+        title:      artwork title
+        year:       artwork year
+        medium:     medium description
+        dimensions: display dimensions
+        category:   '2022-2026' or 'before-2022' — which Archive tab
+                    the work appears under
+        width,
+        height:     optional, the image's intrinsic pixel size (avoids
+                    layout shift while it loads, same as every other
+                    image on the site)
+      }
+
+    Empty on purpose — no Archive artworks or metadata exist yet. Do
+    not populate this with placeholder, fake, or stock images; add
+    real entries here once the actual files and information arrive.
+  */
+  window.ARCHIVE_WORKS = [];
+</script>
 <script src="../../assets/js/main.js"></script>
 </body>
 </html>

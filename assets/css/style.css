@@ -15,30 +15,35 @@
    12. Contact
    13. Responsive
 
-   Visual language: artwork first, space second, typography third. A
-   deliberate two-family typographic system, real self-hosted webfonts
-   (no CDN, no system-font substitution): TeX Gyre Heros — a cold,
-   precise neo-grotesk — for everything structural (wordmark, nav,
-   Selected Works, artwork navigation, prev/next); Source Serif 4 — a
-   quiet, factual serif — for artwork and informational text (artwork
-   title/medium/dimensions/year/credit, captions, exhibition metadata,
-   body prose). See --font-sans / --font-serif below and the @font-face
-   block that backs them. Hierarchy comes from size and weight, not
-   from color or tracking. No hairline dividers — sections are
-   separated by space alone. Motion is kept to near-nothing: no
-   hover-zoom, no slides, no dramatic fades. A capped content column
-   (--content-max) keeps the page from simply stretching to fill wide
-   viewports — extra width becomes outer empty space instead, the way
-   it does on the site's reference.
+   Visual language: artwork first, space second, typography third. One
+   unified sans-serif system, a real self-hosted webfont (no CDN, no
+   system-font substitution): TeX Gyre Heros — a cold, precise, thin
+   neo-grotesk — for everything on the site, structural and
+   informational alike (wordmark, nav, Selected Works, artwork
+   navigation, prev/next, artwork title/medium/dimensions/year/credit,
+   captions, exhibition metadata, body prose). See --font-sans below
+   and the @font-face block that backs it. There is no separate serif
+   voice; --font-serif is kept only as an alias of --font-sans so older
+   rules that still reference it keep working without a second family
+   being reintroduced. Hierarchy comes from size, weight, spacing and
+   line-height, not from a change of typeface, and weights stay light
+   (400, occasionally 500) — no unnecessary bold. No hairline dividers
+   — sections are separated by space alone. Motion is kept to
+   near-nothing: no hover-zoom, no slides, no dramatic fades. A capped
+   content column (--content-max) keeps the page from simply
+   stretching to fill wide viewports — extra width becomes outer empty
+   space instead, the way it does on the site's reference.
    ========================================================================== */
 
-/* ---- webfonts: self-hosted, real font files (assets/fonts/) ----
+/* ---- webfont: self-hosted, real font files (assets/fonts/) ----
    TeX Gyre Heros (GUST e-foundry, GUST Font License — an open,
-   metrically-Helvetica sans) and Source Serif 4 (Adobe, SIL OFL). Four
-   weights/styles of each are loaded: Regular, Italic, Bold/SemiBold,
-   plus Heros Bold Italic — no synthesized/faux weights anywhere on the
-   site. font-display: swap avoids an invisible-text flash while these
-   load. */
+   metrically-Helvetica sans): the site's one and only typeface. Four
+   weights/styles are loaded: Regular, Italic, Bold, Bold Italic — no
+   synthesized/faux weights anywhere on the site. font-display: swap
+   avoids an invisible-text flash while these load. (A second family,
+   Source Serif 4, previously supplied a separate informational voice;
+   its font files and @font-face rules have been removed now that the
+   whole site reads in one sans-serif system.) */
 @font-face {
   font-family: 'TeX Gyre Heros';
   src: url('../fonts/TeXGyreHeros-Regular.woff2') format('woff2');
@@ -67,27 +72,6 @@
   font-style: italic;
   font-display: swap;
 }
-@font-face {
-  font-family: 'Source Serif 4';
-  src: url('../fonts/SourceSerif4-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Source Serif 4';
-  src: url('../fonts/SourceSerif4-Italic.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Source Serif 4';
-  src: url('../fonts/SourceSerif4-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
 
 :root {
   /* ---- palette: neutral off-white ground, soft gray ink throughout ---- */
@@ -98,16 +82,19 @@
   --color-line: #e2e0da;
   --color-active: #007AAA;   /* active/current navigation state only — not decorative elsewhere */
 
-  /* ---- type: two real webfonts (@font-face above), not system
-     substitutes. --font-sans (TeX Gyre Heros) is the structural voice —
-     wordmark, navigation, Selected Works, artwork-navigation lists,
-     prev/next, section labels. --font-serif (Source Serif 4) is the
-     artwork/information voice — artwork title, medium, dimensions,
-     year, photo credit, captions, exhibition metadata, body prose.
-     Fallbacks only cover the near-zero window before the self-hosted
-     file paints; Arial/Georgia are metrically closest to each. ---- */
+  /* ---- type: one real webfont (@font-face above), not a system
+     substitute, used everywhere on the site — wordmark, navigation,
+     Selected Works, artwork-navigation lists, prev/next, artwork
+     title/medium/dimensions/year/credit, captions, exhibition
+     metadata, body prose, Archive. --font-serif is kept as an alias
+     of --font-sans (not a second family) purely so any rule still
+     written as font-family: var(--font-serif) keeps resolving to the
+     same one typeface. The fallback stack ends in the generic
+     `sans-serif` keyword, which is also what lets Chinese text
+     (中文) render in the browser's own sans-serif system font, since
+     TeX Gyre Heros/Arial don't carry CJK glyphs. ---- */
   --font-sans: 'TeX Gyre Heros', Arial, sans-serif;
-  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-serif: var(--font-sans);
 
   /* ---- wordmark: structural, not decorative — same family as the
      nav (--font-sans). Kept as its own variable (rather than every
@@ -215,15 +202,16 @@ body {
   letter-spacing: 0;
 }
 
-/* Page heading = the artwork's (or exhibition's) own name, so it
-   takes the serif, informational voice — a compact, controlled size,
-   never an oversized editorial headline. font-weight 600 (real
-   SemiBold, not synthesized) gives it just enough presence to read as
-   a title without shouting. */
+/* Page heading = the artwork's (or exhibition's) own name — a compact,
+   controlled size, never an oversized editorial headline. font-weight
+   500 (resolving to the Regular file, since the site's one typeface
+   only ships Regular/Bold — no synthesized in-between weight) gives
+   it just enough presence to read as a title without shouting; the
+   distinction from body text is carried by size, not by real bold. */
 .page-title {
   font-family: var(--font-serif);
   font-size: clamp(1rem, 1.3vw, 1.1875rem);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0;
   line-height: 1.25;
   color: var(--color-ink);
@@ -244,7 +232,7 @@ body {
    context, so this base rule covers the more common structural/
    interface use (contact links, the About page's "full archive"
    link); .exhibition-venue and .carousel-caption (below) override it
-   back to the serif, informational voice where the text is describing
+   back to the informational voice where the text is describing
    a specific exhibition or artwork rather than acting as a control. */
 .meta-text {
   font-family: var(--font-sans);
@@ -256,7 +244,7 @@ body {
 }
 
 /* Always paired with .plate-caption (installation/artwork captions) —
-   informational, so serif. */
+   informational text. */
 .caption {
   font-family: var(--font-serif);
   font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
@@ -652,7 +640,7 @@ main { display: block; }
 
 /* The homepage caption names the artwork shown, so — like the
    artwork-info block on the single-work template — it takes the
-   serif, informational voice rather than the structural sans one,
+   informational voice rather than the structural one,
    overriding the .meta-text class it's paired with in the markup. */
 .carousel-caption {
   padding-top: var(--space-4);
@@ -722,7 +710,7 @@ main { display: block; }
 
 /* Works-overview index list — a navigational list of works, so it
    stays in the structural sans family (parallel to the Selected Works
-   list on the single-work template), not the serif informational one. */
+   list on the single-work template), not the informational one. */
 .index-row-title {
   font-family: var(--font-sans);
   font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
@@ -802,7 +790,7 @@ main { display: block; }
   max-width: 42em;
 }
 
-/* Project pages use the shared .page-title (serif, compact) as-is —
+/* Project pages use the shared .page-title (compact) as-is —
    the artwork's own name, sized to read as an identifying title, not
    an editorial headline. */
 .project-header .page-title {
@@ -886,12 +874,14 @@ main { display: block; }
    Horse — every other project page keeps the plain vertical
    .project-images sequence above, untouched.
 
-   Typography here is where the site's two-family system is clearest:
-   the left column's structural elements (nav, Selected Works heading
-   and list) stay in --font-wordmark/--font-sans (TeX Gyre Heros); the
+   Typography here uses the site's one typeface throughout: the left
+   column's structural elements (nav, Selected Works heading and list)
+   are set in --font-wordmark/--font-sans (TeX Gyre Heros), and the
    artwork's own information block (title, medium, dimensions, year,
-   credit) switches to --font-serif (Source Serif 4) — see
-   .work-detail-info below. The header/nav markup itself is unchanged
+   credit) uses the same family via --font-serif (an alias of
+   --font-sans, kept only so this markup didn't need rewriting) — see
+   .work-detail-info below; the two are told apart by size and weight,
+   not by a different face. The header/nav markup itself is unchanged
    (same file everywhere); these rules simply override its size only
    when body.work-detail-page is present, so no other page is
    affected. */
@@ -980,14 +970,14 @@ body.work-detail-page .primary-nav .submenu a {
 
 /* Artwork info + prev/next sit together at the foot of the left column
    (flex + justify-content: space-between on .work-detail-side puts
-   this block near the bottom, not immediately under the list). This
-   is the one place inside the structural left column that switches to
-   the serif, informational family — the artwork's own facts (title,
-   medium, dimensions, year, credit), not interface chrome. */
+   this block near the bottom, not immediately under the list). Same
+   one typeface as the structural column above it — the artwork's own
+   facts (title, medium, dimensions, year, credit) are set apart from
+   interface chrome by size and weight, not by a different family. */
 .work-detail-info .work-detail-title {
   font-family: var(--font-serif);
   font-size: clamp(0.875rem, 1vw, 0.9375rem);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0;
   line-height: 1.3;
   color: var(--color-ink);
@@ -1137,26 +1127,28 @@ body.work-detail-page .primary-nav .submenu a {
 }
 
 /* ----------------------------------------------------- Boundary overview */
-/* The Boundary work-detail page shows three clickable artwork groups
-   side by side instead of a single-image carousel, and no metadata at
-   all — same pattern as the Ignore overview (.work-detail-side keeps
-   only the heading + list, no .work-detail-info block). Unlike
-   Ignore's vertical stack, the three Boundary artworks read as one
-   row: one physically large work on the left, two substantially
-   smaller works spaced across the right. Sizing here (not just each
-   image's own aspect ratio) is what signals the real difference in
-   physical scale between the works, so — unlike every other
-   image on the site — these three intentionally do NOT all render at
-   the same width; .boundary-overview-large is deliberately larger
-   than .boundary-overview-small. Every image still keeps its own
-   natural aspect ratio (width:100%, height:auto, no object-fit), so
-   none of the three is ever cropped or stretched. */
+/* The Boundary work-detail page shows three clickable artworks read as
+   one continuous top-to-bottom exhibition sequence, not a grid — same
+   no-metadata pattern as the Ignore overview (.work-detail-side keeps
+   only the heading + list, no .work-detail-info block). The stage is a
+   single centered column: Boundary 02 and 03 (the two physically
+   smaller works) first, side by side near the top; Boundary 01 (by far
+   the largest) well below that, at the same displayed scale it has
+   always had. The large gap between the two groups (not a fixed
+   viewport height, not absolute positioning) is what keeps the large
+   work out of the first viewport and requires a scroll to reach it.
+   Sizing (not just each image's own aspect ratio) is what signals the
+   real difference in physical scale between the works, so — unlike
+   every other image on the site — these three intentionally do NOT all
+   render at the same width; .boundary-overview-large is deliberately
+   larger than .boundary-overview-small. Every image still keeps its
+   own natural aspect ratio (width:100%, height:auto, no object-fit),
+   so none of the three is ever cropped or stretched. */
 .boundary-overview-stage {
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: clamp(2rem, 4vw, 4rem);
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(5rem, 13vw, 11rem);
   width: 100%;
 }
 
@@ -1182,18 +1174,25 @@ body.work-detail-page .primary-nav .submenu a {
   opacity: 0.88;
 }
 
-/* Percentages of the row's own width (not the viewport), so the row
-   always resolves in one line regardless of how much space the left
-   Selected Works column happens to take — a vw-based width could
-   overflow and wrap the small group onto its own line, which would
-   read as two separate rows rather than one composition. */
-.boundary-overview-large { flex: 0 1 55%; min-width: 0; }
+/* Percentages of the stage's own width (not the viewport), matching
+   the displayed scale the row layout used to produce: the large work
+   at 55%, the small pair together at 42%. */
+.boundary-overview-large {
+  width: 55%;
+  min-width: 0;
+  /* Extra push on top of the stage gap, sized against viewport height
+     (not just width) so the large work reliably clears the fold on
+     both short, wide screens and tall, narrow ones, rather than only
+     sometimes depending on aspect ratio. */
+  margin-top: max(4rem, 62vh);
+}
 
 .boundary-overview-small-group {
-  flex: 0 1 42%;
+  width: 42%;
   min-width: 0;
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   gap: clamp(1.5rem, 3vw, 3rem);
 }
 
@@ -1206,24 +1205,24 @@ body.work-detail-page .primary-nav .submenu a {
 /* ----------------------------------------------------- Stranger overview */
 /* The Stranger work-detail page shows four clickable artworks — same
    no-metadata pattern as Ignore/Boundary above (.work-detail-side
-   keeps only the heading + list). Reuses the exact same shared-size
-   convention as .boundary-overview-* (one "large" treatment, one
-   "small" treatment — never four one-off per-image rules): Stranger
-   04 is by far the physically largest of the four (115 × 77 cm vs.
-   under 30 cm for the other three), so it gets the large treatment;
-   01/02/03 share the small-group treatment. Reading order (01→02→03
-   →04, matching the series' fixed navigation order) is kept as plain
-   DOM/visual order — the small group comes first, large last — a
-   mirror of .boundary-overview-stage's own row rather than a new
-   layout system. Every image keeps its own natural aspect ratio
-   (width:100%, height:auto, no object-fit), so none of the four is
-   ever cropped or stretched. */
+   keeps only the heading + list). Unlike Boundary's two-group row,
+   Stranger reads as a three-tier vertical sequence, in fixed series
+   order: Stranger 01 alone near the top, smaller; Stranger 04 and
+   Stranger 02 paired side by side below that, medium-large and
+   visually balanced; Stranger 03 alone lower still, the largest of
+   the four. All three tiers are centered in a single column
+   (.stranger-overview-stage) with generous gaps between them —
+   natural document flow, not fixed-viewport or absolute positioning
+   — so the page scrolls to move through the sequence rather than
+   showing all four works on one screen. Every image keeps its own
+   natural aspect ratio (width:100%, height:auto, no object-fit), so
+   none of the four is ever cropped or stretched, and no image uses a
+   one-off per-artwork width — each tier's sizing is a shared rule. */
 .stranger-overview-stage {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   justify-content: flex-start;
-  gap: clamp(2rem, 4vw, 4rem);
+  gap: clamp(4rem, 11vw, 9rem);
   width: 100%;
 }
 
@@ -1249,26 +1248,186 @@ body.work-detail-page .primary-nav .submenu a {
   opacity: 0.88;
 }
 
-.stranger-overview-small-group {
-  flex: 0 1 46%;
+/* Tier 1 — Stranger 01 alone, smaller, near the top. */
+.stranger-overview-01 { width: 30%; }
+
+/* Tier 2 — Stranger 04 and Stranger 02 paired, medium-large and
+   balanced; the pair container is wider than a single tier-1 or
+   tier-3 figure, and its two children split it evenly. */
+.stranger-overview-pair {
+  width: 82%;
   min-width: 0;
   display: flex;
-  flex-wrap: wrap;
   align-items: flex-end;
-  gap: clamp(1rem, 2.5vw, 2rem);
+  justify-content: center;
+  gap: clamp(2rem, 4vw, 4rem);
 }
 
-.stranger-overview-small { flex: 1 1 90px; min-width: 0; }
+.stranger-overview-pair .stranger-overview-figure { flex: 1 1 0; min-width: 0; }
 
-.stranger-overview-large { flex: 0 1 46%; min-width: 0; }
+/* Tier 3 — Stranger 03 alone, the largest, lower on the page. */
+.stranger-overview-03 {
+  width: 60%;
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .stranger-overview-figure img { transition: none; }
 }
 
+/* ------------------------------------------------------------- archive */
+/* The Archive is a separate browsing system from Selected Works: a
+   flat, data-driven thumbnail grid (works/archive/, rendered by
+   main.js's [data-archive] block from the ARCHIVE_WORKS array
+   declared inline in that page) with two plain-text category
+   filters, opening into a full-screen lightbox rather than a
+   dedicated project page per artwork. Nothing here is positioned by
+   hand — the grid is CSS Grid in natural document flow, and adding a
+   work later means adding one entry to that array (image, thumbnail,
+   title, year, medium, dimensions, category), never new CSS or
+   coordinates. Typography throughout uses the site's one shared
+   family; hierarchy is by size/weight only, same as every other
+   page. */
+.archive-categories {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+/* Plain text, not a control — same convention as .lang-toggle above:
+   no box, border, or background; the active category is simply
+   darker than the inactive one. */
+.archive-category-btn {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  padding: 0.2rem 0;
+}
+.archive-category-btn.is-active { color: var(--color-ink); }
+.archive-category-btn:hover,
+.archive-category-btn:focus-visible { color: var(--color-active); }
+
+/* Three columns on desktop, sitting inside the same capped .wrap
+   content column as the rest of the site (so the grid never stretches
+   edge to edge) with generous, controlled gaps rather than a tight
+   commercial card grid. Each image keeps width:100%/height:auto — its
+   own aspect ratio, never cropped or forced to a uniform box — so
+   .archive-figure/.archive-thumb carry no fixed height anywhere. */
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(2.5rem, 5vw, 4.5rem);
+  row-gap: clamp(3rem, 6vw, 5rem);
+  align-items: end;
+}
+
+.archive-figure { margin: 0; }
+
+.archive-thumb { display: block; width: 100%; }
+
+.archive-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.2s var(--ease);
+}
+
+.archive-thumb:hover img,
+.archive-thumb:focus-visible img { opacity: 0.88; }
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-thumb img { transition: none; }
+}
+
+/* ---- Archive lightbox ----
+   A full-screen overlay, one artwork centered with generous margins —
+   deliberately not the site's usual left-column/right-stage grid,
+   since an Archive work has no Selected Works sidebar or project
+   identity of its own. Navigation reuses the exact convention already
+   established by .work-carousel / .stranger-preview-stage elsewhere
+   on the site: click the image's own left/right half (quiet
+   arrow-cursor hint, set via JS) or use the Left/Right arrow keys.
+   Escape, or a click on the surrounding background (not the image or
+   caption), closes it. The small text "Close" control in the corner
+   is only a visible affordance for anyone who doesn't know about
+   Escape/background-click — never a large modal-style button. */
+.archive-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(40px, 8vh, 80px) clamp(24px, 8vw, 80px);
+}
+.archive-lightbox[hidden] { display: none; }
+
+body.archive-lightbox-open { overflow: hidden; }
+
+.archive-lightbox-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.archive-lightbox-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 160px);
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+}
+
+.archive-lightbox-meta {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.85vw, 0.8125rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-ink-soft);
+  text-align: center;
+  max-width: 46em;
+}
+
+.archive-lightbox-close {
+  position: absolute;
+  top: clamp(20px, 4vh, 40px);
+  right: var(--header-margin);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--color-ink-soft);
+}
+.archive-lightbox-close:hover,
+.archive-lightbox-close:focus-visible { color: var(--color-active); }
+
+@media (max-width: 900px) {
+  .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    row-gap: var(--space-6);
+  }
+  .archive-lightbox { padding: 24px 20px; }
+  .archive-lightbox-image { max-width: calc(100vw - 48px); max-height: calc(100vh - 140px); }
+  .archive-lightbox-close { top: 16px; right: var(--header-margin); }
+}
+
 /* ------------------------------------------------------------ exhibitions */
 /* The exhibitions index (year / title / venue) is a navigable list,
-   like the works overview — structural sans, not the serif
+   like the works overview — structural, not the informational
    information voice reserved for a single exhibition's own detail
    (see .exhibition-page-header .exhibition-venue below). */
 .exhibition-list { width: 100%; }
@@ -1312,7 +1471,7 @@ body.work-detail-page .primary-nav .submenu a {
 
 .exhibition-page-header { max-width: 42em; }
 /* A single exhibition's own venue/dates read as information about
-   that show, so — unlike the index list above — this takes the serif
+   that show, so — unlike the index list above — this takes the informational
    voice, overriding the .meta-text class it's paired with in the
    markup (see .carousel-caption for the same pattern). */
 .exhibition-page-header .exhibition-venue {
@@ -1343,7 +1502,7 @@ body.work-detail-page .primary-nav .submenu a {
 
 /* News is a dated index (like Works/Exhibitions), so date + headline
    stay structural sans; each entry's own announcement text is
-   .body-text, already serif by default. */
+   .body-text, already using the site's one typeface by default. */
 .news-date {
   font-family: var(--font-sans);
   font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
@@ -1376,7 +1535,7 @@ body.work-detail-page .primary-nav .submenu a {
 
 /* Section labels + the CV list are structural/index in character
    (like Exhibitions' own list), so sans; the bio paragraphs beside
-   them are .body-text, already serif by default. */
+   them are .body-text, already using the site's one typeface by default. */
 .about-block h2 {
   font-family: var(--font-sans);
   font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
@@ -1535,6 +1694,20 @@ body.work-detail-page .primary-nav .submenu a {
      Works, natural aspect ratio preserved (no fixed height). */
   .stranger-preview-stage { grid-column: 1; grid-row: 2; min-height: 0; }
   .stranger-preview-image { max-height: 70vh; }
+
+  /* Boundary / Stranger overview: the desktop proportions (percentages
+     of a wide content column) read as too narrow on a phone screen, so
+     widen every tier to use most of the available width while keeping
+     the same top-to-bottom sequence and gaps. */
+  .boundary-overview-stage,
+  .stranger-overview-stage {
+    gap: clamp(3.5rem, 22vw, 6rem);
+  }
+  .boundary-overview-large { width: 92%; margin-top: 0; }
+  .boundary-overview-small-group { width: 100%; gap: 1rem; }
+  .stranger-overview-01 { width: 60%; }
+  .stranger-overview-pair { width: 100%; gap: 1rem; }
+  .stranger-overview-03 { width: 88%; margin-top: 0; }
 }
 
 @media (max-width: 520px) {
