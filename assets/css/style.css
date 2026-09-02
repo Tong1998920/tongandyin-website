@@ -15,20 +15,79 @@
    12. Contact
    13. Responsive
 
-   Visual language: artwork first, space second, typography third. Body
-   copy, nav, and captions use one restrained sans-serif (Helvetica /
-   Arial / Univers territory); the wordmark alone uses a quiet, low-
-   contrast serif (Constantia, or the nearest system equivalent) sized
-   and colored to sit just slightly forward of the nav, never as a logo.
-   Hierarchy comes from size and weight, not from color or tracking. No
-   hairline dividers — sections are separated by space alone. Motion is
-   kept to near-nothing: no hover-zoom, no slides, no dramatic fades.
-   A capped content column (--content-max) keeps the page from simply
-   stretching to fill wide viewports — extra width becomes outer empty
-   space instead, the way it does on the site's reference.
+   Visual language: artwork first, space second, typography third. A
+   deliberate two-family typographic system, real self-hosted webfonts
+   (no CDN, no system-font substitution): TeX Gyre Heros — a cold,
+   precise neo-grotesk — for everything structural (wordmark, nav,
+   Selected Works, artwork navigation, prev/next); Source Serif 4 — a
+   quiet, factual serif — for artwork and informational text (artwork
+   title/medium/dimensions/year/credit, captions, exhibition metadata,
+   body prose). See --font-sans / --font-serif below and the @font-face
+   block that backs them. Hierarchy comes from size and weight, not
+   from color or tracking. No hairline dividers — sections are
+   separated by space alone. Motion is kept to near-nothing: no
+   hover-zoom, no slides, no dramatic fades. A capped content column
+   (--content-max) keeps the page from simply stretching to fill wide
+   viewports — extra width becomes outer empty space instead, the way
+   it does on the site's reference.
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+/* ---- webfonts: self-hosted, real font files (assets/fonts/) ----
+   TeX Gyre Heros (GUST e-foundry, GUST Font License — an open,
+   metrically-Helvetica sans) and Source Serif 4 (Adobe, SIL OFL). Four
+   weights/styles of each are loaded: Regular, Italic, Bold/SemiBold,
+   plus Heros Bold Italic — no synthesized/faux weights anywhere on the
+   site. font-display: swap avoids an invisible-text flash while these
+   load. */
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('../fonts/SourceSerif4-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('../fonts/SourceSerif4-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('../fonts/SourceSerif4-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* ---- palette: neutral off-white ground, soft gray ink throughout ---- */
@@ -39,22 +98,23 @@
   --color-line: #e2e0da;
   --color-active: #007AAA;   /* active/current navigation state only — not decorative elsewhere */
 
-  /* ---- type ----
-     Body copy, nav, and captions: system Helvetica Neue / Arial first,
-     Arimo (an Arial-metric grotesque) as the web-hosted fallback.
-     The wordmark alone uses a separate, quiet serif — see .wordmark. */
-  --font-sans: -apple-system, 'Helvetica Neue', Helvetica, Arial, Arimo, sans-serif;
-  --font-serif-quiet: Constantia, Cambria, Georgia, 'Times New Roman', serif;
+  /* ---- type: two real webfonts (@font-face above), not system
+     substitutes. --font-sans (TeX Gyre Heros) is the structural voice —
+     wordmark, navigation, Selected Works, artwork-navigation lists,
+     prev/next, section labels. --font-serif (Source Serif 4) is the
+     artwork/information voice — artwork title, medium, dimensions,
+     year, photo credit, captions, exhibition metadata, body prose.
+     Fallbacks only cover the near-zero window before the self-hosted
+     file paints; Arial/Georgia are metrically closest to each. ---- */
+  --font-sans: 'TeX Gyre Heros', Arial, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
 
-  /* ---- wordmark: previously a dedicated serif (Cormorant Garamond),
-     now removed sitewide in favor of one restrained neo-grotesk —
-     this variable (used by the wordmark and, scoped, by the
-     single-work detail template) now simply points at the same
-     Helvetica-family stack as the rest of the site's type. Kept as
-     its own variable rather than merged into --font-sans so the
-     wordmark and the work-detail template can still be retuned
+  /* ---- wordmark: structural, not decorative — same family as the
+     nav (--font-sans). Kept as its own variable (rather than every
+     rule referencing --font-sans directly) so the wordmark and the
+     work-detail template's structural column can still be retuned
      independently if needed later. ---- */
-  --font-wordmark: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-wordmark: var(--font-sans);
 
   /* ---- spacing scale: tighter, print-like rhythm ---- */
   --space-1: 0.3rem;
@@ -97,10 +157,13 @@
 
   /* ---- nav: sized and spaced independently of body copy — see
      .primary-nav a. Kept as its own variables so tightening body text
-     elsewhere never accidentally tightens the nav again. ---- */
-  --nav-font-size: 0.875rem;
+     elsewhere never accidentally tightens the nav again. Fluid
+     (clamp) rather than fixed, per this round's typography brief —
+     compact and controlled at every width, never jumping at a
+     breakpoint. ---- */
+  --nav-font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
   --nav-item-gap: 0.7rem;
-  --submenu-font-size: 0.875rem;
+  --submenu-font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
 
   /* ---- content column: the page stops growing past this width, so on
      wide monitors the extra space becomes margin, not more image ---- */
@@ -141,47 +204,65 @@ body {
   font-weight: 400;
 }
 
+/* Section label — structural, not content, so it stays in the sans
+   family: "Works", "Exhibitions", "News", "Contact", a year eyebrow
+   above a project title. */
 .eyebrow {
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
   color: var(--color-ink-soft);
   font-weight: 400;
+  letter-spacing: 0;
 }
 
+/* Page heading = the artwork's (or exhibition's) own name, so it
+   takes the serif, informational voice — a compact, controlled size,
+   never an oversized editorial headline. font-weight 600 (real
+   SemiBold, not synthesized) gives it just enough presence to read as
+   a title without shouting. */
 .page-title {
-  font-family: var(--font-sans);
-  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
-  font-weight: 700;
-  letter-spacing: -0.005em;
-  line-height: 1.3;
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.3vw, 1.1875rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.25;
   color: var(--color-ink);
 }
 
 .body-text {
   max-width: 38em;
-  font-size: 0.95rem;
+  font-family: var(--font-serif);
+  font-size: clamp(0.875rem, 0.95vw, 0.9688rem);
+  font-weight: 400;
+  line-height: 1.5;
   color: var(--color-ink);
 }
 
 .body-text p + p { margin-top: 1.3em; }
 
-/* Shared small-text scale — captions, footer, and other quiet
-   secondary text (exhibition/news meta, project-nav, etc). Sized and
-   spaced to read as part of the same typographic system as the
-   revised navigation: same sans stack, regular weight, no letter-
-   spacing, a relaxed line-height rather than the old cramped 1.6. */
+/* Shared small-text scale — used in two different roles depending on
+   context, so this base rule covers the more common structural/
+   interface use (contact links, the About page's "full archive"
+   link); .exhibition-venue and .carousel-caption (below) override it
+   back to the serif, informational voice where the text is describing
+   a specific exhibition or artwork rather than acting as a control. */
 .meta-text {
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
   font-weight: 400;
   color: var(--color-ink-soft);
-  line-height: 1.65;
+  line-height: 1.4;
   letter-spacing: 0;
 }
 
+/* Always paired with .plate-caption (installation/artwork captions) —
+   informational, so serif. */
 .caption {
-  font-size: 0.875rem;
+  font-family: var(--font-serif);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
   font-weight: 400;
   color: var(--color-ink-soft);
-  line-height: 1.65;
+  line-height: 1.4;
   letter-spacing: 0;
 }
 
@@ -251,19 +332,18 @@ main { display: block; }
   gap: var(--space-3);
 }
 
-/* The artist's name — a quiet, low-contrast serif (system Constantia,
-   or the nearest equivalent), sized a little larger than the nav so it
-   reads as the page's one point of identity, but kept pale and plain:
-   no tracking, no bold, no box or background. Its color is actually
-   softer than the nav's — size gives it presence, not weight or ink,
-   which is what keeps it from reading as a logo. */
+/* The artist's name — set as typography, not a logo: same structural
+   sans as the nav, sized only a little larger so it reads as the
+   page's one point of identity without competing for attention. No
+   tracking, no bold, no box or background — its color is actually
+   softer than the nav's, so size alone gives it presence. */
 .wordmark {
   position: relative;
   z-index: 61;
   font-family: var(--font-wordmark);
-  font-size: 1.3125rem;
+  font-size: clamp(1.125rem, 1.25vw, 1.25rem);
   font-weight: 400;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
   line-height: 1.2;
   color: var(--color-ink-soft);
   white-space: nowrap;
@@ -290,17 +370,16 @@ main { display: block; }
   flex-wrap: wrap;
 }
 
-/* Small, light, compact — matched directly against the reference
-   screenshot rather than a general "Helvetica-like" description: a
-   modest size, regular-to-light weight, and a tight gap between items
-   so the whole group reads as one small, delicate cluster rather than
-   spreading across the header. Never bold. */
+/* Compact and decisive, not light or airy — regular weight (never
+   300), a tight gap between items, and slightly negative tracking so
+   the whole group reads as one small, precise cluster rather than
+   spreading across the header. */
 .primary-nav a {
   font-family: var(--font-sans);
   font-size: var(--nav-font-size);
-  font-weight: 300;
-  line-height: 1.4;
-  letter-spacing: -0.005em;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
   padding: 0.3rem 0;
   transition: color 0.2s var(--ease);
@@ -352,17 +431,18 @@ main { display: block; }
   margin-top: 0.55rem;
 }
 
-/* Same small scale as the top-level nav — compact and editorial, not
-   a separate larger type style. The surrounding white plane (above)
-   is what creates the sense of space, not the text itself. */
+/* Same small scale as the top-level nav — compact, not a separate
+   larger type style. The surrounding white plane (above) is what
+   creates the sense of space, not the text itself. */
 .primary-nav .submenu a {
   display: block;
   white-space: nowrap;
   padding: 0;
+  font-family: var(--font-sans);
   font-size: var(--submenu-font-size);
   font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: 0;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
 }
 
@@ -570,9 +650,14 @@ main { display: block; }
   .carousel-figure img { transition: none; }
 }
 
+/* The homepage caption names the artwork shown, so — like the
+   artwork-info block on the single-work template — it takes the
+   serif, informational voice rather than the structural sans one,
+   overriding the .meta-text class it's paired with in the markup. */
 .carousel-caption {
   padding-top: var(--space-4);
   text-align: center;
+  font-family: var(--font-serif);
 }
 
 /* Prev/next controls: thin, quiet strokes near the true viewport
@@ -635,15 +720,22 @@ main { display: block; }
   opacity: 0.6;
 }
 
+/* Works-overview index list — a navigational list of works, so it
+   stays in the structural sans family (parallel to the Selected Works
+   list on the single-work template), not the serif informational one. */
 .index-row-title {
-  font-size: 1rem;
-  font-weight: 500;
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
   transition: opacity 0.2s var(--ease);
 }
 
 .index-row-meta {
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
   white-space: nowrap;
 }
@@ -697,7 +789,6 @@ main { display: block; }
   gap: 0.15em;
 }
 
-.work-item-caption .index-row-title { font-size: 0.95rem; }
 
 /* width + alignment — centered by default; two quiet, small nudges only */
 .work-item--lead          { max-width: 1080px; margin-left: auto; margin-right: auto; }
@@ -711,15 +802,11 @@ main { display: block; }
   max-width: 42em;
 }
 
-/* Quieter than the shared .page-title default: on a project page the
-   artwork itself is the subject, so the title should read as a caption
-   for it, not compete with it. Regular weight, a moderately smaller
-   size — the year above it stays small and understated as it already was. */
+/* Project pages use the shared .page-title (serif, compact) as-is —
+   the artwork's own name, sized to read as an identifying title, not
+   an editorial headline. */
 .project-header .page-title {
   margin-top: var(--space-2);
-  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-  font-weight: 400;
-  letter-spacing: 0;
 }
 
 .project-text {
@@ -765,7 +852,7 @@ main { display: block; }
   gap: 0.15em;
 }
 
-.plate-caption .work-title { font-style: italic; color: var(--color-ink); }
+.plate-caption .work-title { font-family: var(--font-serif); font-style: italic; color: var(--color-ink); }
 
 .installation-heading {
   padding-top: var(--space-2);
@@ -780,9 +867,12 @@ main { display: block; }
 }
 
 .project-nav a {
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
-  line-height: 1.6;
+  line-height: 1.3;
 }
 .project-nav a:hover, .project-nav a:focus-visible { color: var(--color-ink); }
 
@@ -796,23 +886,25 @@ main { display: block; }
    Horse — every other project page keeps the plain vertical
    .project-images sequence above, untouched.
 
-   Typography here shares the sitewide neo-grotesk (var(--font-wordmark)
-   now simply aliases the same Helvetica-family stack as --font-sans —
-   no serif anywhere on this page), kept small, restrained, and
-   institutional rather than editorial. The header/nav markup itself is
-   unchanged (same file everywhere); these rules simply override its
-   size only when body.work-detail-page is present, so no other page is
+   Typography here is where the site's two-family system is clearest:
+   the left column's structural elements (nav, Selected Works, prev/
+   next) stay in --font-wordmark/--font-sans (TeX Gyre Heros); the
+   artwork's own information block (title, medium, dimensions, year,
+   credit) switches to --font-serif (Source Serif 4) — see
+   .work-detail-info below. The header/nav markup itself is unchanged
+   (same file everywhere); these rules simply override its size only
+   when body.work-detail-page is present, so no other page is
    affected. */
 body.work-detail-page .primary-nav a {
   font-family: var(--font-wordmark);
-  font-size: 0.85rem;
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
   font-weight: 400;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
 }
 body.work-detail-page .primary-nav .submenu a {
   font-family: var(--font-wordmark);
-  font-size: 0.8125rem;
-  letter-spacing: 0;
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
+  letter-spacing: -0.01em;
 }
 
 /* Outer shell for the work-detail section only: unlike the rest of the
@@ -853,9 +945,9 @@ body.work-detail-page .primary-nav .submenu a {
 
 .selected-works-heading {
   font-family: var(--font-wordmark);
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 1vw, 1rem);
   font-weight: 500;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
   margin: 0 0 var(--space-4);
 }
@@ -867,9 +959,9 @@ body.work-detail-page .primary-nav .submenu a {
 }
 .selected-works-list a {
   font-family: var(--font-wordmark);
-  font-size: 0.875rem;
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
   font-weight: 400;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
   line-height: 1.3;
   color: var(--color-ink);
 }
@@ -881,19 +973,22 @@ body.work-detail-page .primary-nav .submenu a {
 
 /* Artwork info + prev/next sit together at the foot of the left column
    (flex + justify-content: space-between on .work-detail-side puts
-   this block near the bottom, not immediately under the list). */
+   this block near the bottom, not immediately under the list). This
+   is the one place inside the structural left column that switches to
+   the serif, informational family — the artwork's own facts (title,
+   medium, dimensions, year, credit), not interface chrome. */
 .work-detail-info .work-detail-title {
-  font-family: var(--font-wordmark);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-family: var(--font-serif);
+  font-size: clamp(0.875rem, 1vw, 0.9375rem);
+  font-weight: 600;
   letter-spacing: 0;
   line-height: 1.3;
   color: var(--color-ink);
   margin: 0;
 }
 .work-detail-info .work-detail-meta {
-  font-family: var(--font-wordmark);
-  font-size: 0.8125rem;
+  font-family: var(--font-serif);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
   font-weight: 400;
   letter-spacing: 0;
   line-height: 1.4;
@@ -901,8 +996,8 @@ body.work-detail-page .primary-nav .submenu a {
   margin: 0.35em 0 0;
 }
 .work-detail-info .work-detail-credit {
-  font-family: var(--font-wordmark);
-  font-size: 0.8125rem;
+  font-family: var(--font-serif);
+  font-size: clamp(0.75rem, 0.85vw, 0.8438rem);
   font-weight: 400;
   letter-spacing: 0;
   color: var(--color-ink-soft);
@@ -916,9 +1011,9 @@ body.work-detail-page .primary-nav .submenu a {
 }
 .work-detail-controls button {
   font-family: var(--font-wordmark);
-  font-size: 1rem;
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
   font-weight: 400;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
   line-height: 1;
   color: var(--color-ink-soft);
   padding: 0.3rem 0.1rem;
@@ -971,6 +1066,10 @@ body.work-detail-page .primary-nav .submenu a {
 }
 
 /* ------------------------------------------------------------ exhibitions */
+/* The exhibitions index (year / title / venue) is a navigable list,
+   like the works overview — structural sans, not the serif
+   information voice reserved for a single exhibition's own detail
+   (see .exhibition-page-header .exhibition-venue below). */
 .exhibition-list { width: 100%; }
 
 .exhibition-row {
@@ -983,14 +1082,18 @@ body.work-detail-page .primary-nav .submenu a {
 }
 
 .exhibition-year {
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
 }
 
 .exhibition-main .exhibition-title {
   display: block;
-  font-size: 1rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
   font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
 }
 .exhibition-main a.exhibition-title:hover,
@@ -998,14 +1101,25 @@ body.work-detail-page .primary-nav .submenu a {
 
 .exhibition-main .exhibition-venue {
   display: block;
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
   margin-top: 0.2em;
-  line-height: 1.6;
+  line-height: 1.3;
 }
 
 .exhibition-page-header { max-width: 42em; }
-.exhibition-page-header .exhibition-venue { margin-top: var(--space-1); }
+/* A single exhibition's own venue/dates read as information about
+   that show, so — unlike the index list above — this takes the serif
+   voice, overriding the .meta-text class it's paired with in the
+   markup (see .carousel-caption for the same pattern). */
+.exhibition-page-header .exhibition-venue {
+  font-family: var(--font-serif);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  line-height: 1.4;
+  margin-top: var(--space-1);
+}
 
 .exhibition-images {
   display: flex;
@@ -1026,8 +1140,23 @@ body.work-detail-page .primary-nav .submenu a {
   padding-bottom: var(--space-4);
 }
 
-.news-date { font-size: 0.9rem; color: var(--color-ink-soft); line-height: 1.65; }
-.news-entry .news-title { font-size: 1rem; font-weight: 500; color: var(--color-ink); }
+/* News is a dated index (like Works/Exhibitions), so date + headline
+   stay structural sans; each entry's own announcement text is
+   .body-text, already serif by default. */
+.news-date {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  line-height: 1.3;
+}
+.news-entry .news-title {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
 .news-entry .body-text { margin-top: var(--space-2); }
 
 /* ----------------------------------------------------------------- about */
@@ -1044,9 +1173,14 @@ body.work-detail-page .primary-nav .submenu a {
   margin-top: var(--space-5);
 }
 
+/* Section labels + the CV list are structural/index in character
+   (like Exhibitions' own list), so sans; the bio paragraphs beside
+   them are .body-text, already serif by default. */
 .about-block h2 {
-  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
   font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
   margin-bottom: var(--space-2);
 }
@@ -1057,13 +1191,17 @@ body.work-detail-page .primary-nav .submenu a {
   display: grid;
   grid-template-columns: 4.5em 1fr;
   gap: var(--space-3);
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
 }
 .cv-row .cv-year { color: var(--color-ink-soft); }
 
 .cv-subgroup + .cv-subgroup { margin-top: var(--space-3); }
 .cv-subgroup-label {
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.7188rem, 0.75vw, 0.75rem);
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
   margin-bottom: var(--space-1);
 }
@@ -1076,15 +1214,21 @@ body.work-detail-page .primary-nav .submenu a {
   max-width: 60em;
 }
 
+/* Contact fields are short interface links (a label + a click target),
+   not descriptive prose, so they stay in the structural sans family. */
 .contact-field + .contact-field { margin-top: var(--space-4); }
 .contact-field h2 {
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
   font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-ink-soft);
   margin-bottom: var(--space-1);
 }
 .contact-field a, .contact-field p {
-  font-size: 1rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.875rem, 0.95vw, 0.9375rem);
+  letter-spacing: -0.01em;
   color: var(--color-ink);
 }
 .contact-field a { border-bottom: 1px solid var(--color-line); transition: border-color 0.2s var(--ease), color .2s var(--ease); }
