@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Stranger — Tong Yin</title>
-<meta name="description" content="The Stranger — a work by Tong Yin.">
+<meta name="description" content="The Stranger — a body of work by Tong Yin.">
 <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
-<body>
+<body class="work-detail-page">
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -20,7 +20,7 @@
       <li class="has-submenu">
         <a href="../../works/calling-a-deer-a-horse/" aria-current="page" aria-haspopup="true">Works</a>
         <ul class="submenu">
-        <li><a href="../../works/calling-a-deer-a-horse/">Selected Works</a></li>
+        <li><a href="../../works/calling-a-deer-a-horse/" aria-current="page">Selected Works</a></li>
         <li><a href="../../works/archive/">Archive</a></li>
         </ul>
       </li>
@@ -35,37 +35,75 @@
 </header>
 
 <main id="main">
-  <section class="section wrap">
+  <section class="section work-detail-shell">
 
-    <div class="project-header">
-      <p class="eyebrow">[Add year]</p>
-      <h1 class="page-title">The Stranger</h1>
+    <!--
+      THE STRANGER OVERVIEW
+      ---------------------------------------------------------------
+      Sits inside the same left-column / right-stage grid as the
+      Calling A Deer A Horse detail template (.work-detail). Like
+      Ignore and The Boundary, this one has NO .work-detail-info block
+      — The Stranger is a group of four independent artworks, not one,
+      so no single title/medium/dimensions/year belongs here. Unlike
+      either of those two (one vertical stack, one single row), the
+      right column here is a deliberately asymmetrical, non-grid
+      composition (.stranger-overview-stage, style.css): Stranger 01
+      small, alone, upper-middle; 02 and 03 as a staggered medium pair
+      below it; Stranger 04 large, anchoring the whole composition at
+      the foot. Four static, linked images, each a plain link to its
+      own artwork's detail page. No captions, no hover text — images
+      only, by design, same as Ignore/Boundary.
+    -->
+    <div class="work-detail">
+      <aside class="work-detail-side">
+        <div>
+          <h1 class="selected-works-heading">Selected Works</h1>
+          <nav class="selected-works-list" aria-label="Selected works">
+            <a href="../calling-a-deer-a-horse/">Calling A Deer A Horse</a>
+            <a href="../ignore/">Ignore</a>
+            <a href="../the-boundary/">The Boundary</a>
+            <a href="../the-stranger/" aria-current="page">The Stranger</a>
+          </nav>
+        </div>
+      </aside>
+
+      <div class="work-detail-stage stranger-overview-stage">
+        <div class="stranger-overview-tier-01">
+          <figure class="stranger-overview-figure stranger-overview-01">
+            <a href="stranger-01/">
+              <img src="../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01" width="2400" height="1917">
+            </a>
+          </figure>
+        </div>
+
+        <div class="stranger-overview-tier-row">
+          <figure class="stranger-overview-figure stranger-overview-02">
+            <a href="stranger-02/">
+              <img src="../../assets/images/works/stranger-02-full.jpg" alt="The Stranger, Tong Yin — Stranger 02" width="2400" height="1917">
+            </a>
+          </figure>
+          <figure class="stranger-overview-figure stranger-overview-03">
+            <a href="stranger-03/">
+              <img src="../../assets/images/works/stranger-03-full.jpg" alt="The Stranger, Tong Yin — Stranger 03" width="2400" height="1917">
+            </a>
+          </figure>
+        </div>
+
+        <div class="stranger-overview-tier-04">
+          <figure class="stranger-overview-figure stranger-overview-04">
+            <a href="stranger-04/">
+              <img src="../../assets/images/works/stranger-04-full.jpg" alt="The Stranger 3, Tong Yin — Stranger 04" width="2400" height="1917">
+            </a>
+          </figure>
+        </div>
+      </div>
     </div>
-
-    <div class="project-images">
-
-      <figure class="plate plate--center">
-        <img src="../../assets/images/works/the-stranger-01.jpg"
-             alt="The Stranger, Tong Yin"
-             width="1520" height="1900" loading="lazy">
-      </figure>
-
-    </div>
-
-    <nav class="project-nav" aria-label="Other works">
-      <a href="../ignore/">← Ignore</a>
-      <a href="../the-boundary/">The Boundary →</a>
-    </nav>
 
   </section>
 </main>
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
-  <div class="footer-links">
-    <a href="../../contact/">Email</a>
-    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-  </div>
 </footer>
 
 <script src="../../assets/js/main.js"></script>
