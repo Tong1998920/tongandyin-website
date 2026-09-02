@@ -878,17 +878,17 @@ main { display: block; }
 
 /* ---------------------------------------------------- single-work detail
    A second, more spacious template for one individual artwork page: a
-   left column (the Selected Works list, this work's info, and its own
-   image prev/next) anchored near the true page margin, beside a large
-   single-image carousel reaching toward the right edge. Scoped entirely
-   to body.work-detail-page, so it only touches pages that opt into it
-   by carrying that class on <body> — currently only Calling A Deer A
+   left column (the Selected Works list, then this work's info)
+   anchored near the true page margin, beside a large single-image
+   carousel reaching toward the right edge. Scoped entirely to
+   body.work-detail-page, so it only touches pages that opt into it by
+   carrying that class on <body> — currently only Calling A Deer A
    Horse — every other project page keeps the plain vertical
    .project-images sequence above, untouched.
 
    Typography here is where the site's two-family system is clearest:
-   the left column's structural elements (nav, Selected Works, prev/
-   next) stay in --font-wordmark/--font-sans (TeX Gyre Heros); the
+   the left column's structural elements (nav, Selected Works heading
+   and list) stay in --font-wordmark/--font-sans (TeX Gyre Heros); the
    artwork's own information block (title, medium, dimensions, year,
    credit) switches to --font-serif (Source Serif 4) — see
    .work-detail-info below. The header/nav markup itself is unchanged
@@ -912,14 +912,16 @@ body.work-detail-page .primary-nav .submenu a {
    re-centered — that centering is what was pushing the left column
    toward the middle of wide viewports. Instead it spans full width with
    its own left/right padding, so the left column anchors at the same
-   --page-margin every other page's content starts at, while the right
-   side is free to run out toward the true viewport edge (only
-   --header-margin, the same tight inset the header itself uses). */
+   tight --header-margin inset the "Tong Yin" wordmark itself uses
+   (not the larger --page-margin every other page's body copy starts
+   at, which reads as too far toward center for this column), while
+   the right side is free to run out toward the true viewport edge
+   using that same --header-margin inset. */
 .work-detail-shell {
   width: 100%;
   max-width: none;
   margin: 0;
-  padding-left: var(--page-margin);
+  padding-left: var(--header-margin);
   padding-right: var(--header-margin);
 }
 
@@ -1002,26 +1004,6 @@ body.work-detail-page .primary-nav .submenu a {
   letter-spacing: 0;
   color: var(--color-ink-soft);
   margin: var(--space-3) 0 0;
-}
-
-.work-detail-controls {
-  display: flex;
-  gap: var(--space-4);
-  margin-top: var(--space-4);
-}
-.work-detail-controls button {
-  font-family: var(--font-wordmark);
-  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  color: var(--color-ink-soft);
-  padding: 0.3rem 0.1rem;
-  transition: color 0.2s var(--ease);
-}
-.work-detail-controls button:hover,
-.work-detail-controls button:focus-visible {
-  color: var(--color-active);
 }
 
 /* Right column: the artwork stage. A fixed box (width AND height, not

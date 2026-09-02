@@ -103,17 +103,24 @@
 (function () {
   // Single-work detail page carousel (see works/calling-a-deer-a-horse/
   // index.html) — same calm, fast cross-fade pattern as the homepage
-  // carousel above, but its own separate instance: the prev/next
-  // controls live in the left column, not beside the image, so they're
-  // found by [data-work-prev]/[data-work-next] rather than being
-  // adjacent DOM siblings. A no-op on every page that doesn't have a
-  // [data-work-carousel] element.
+  // carousel above, but its own separate instance. A no-op on every
+  // page that doesn't have a [data-work-carousel] element.
+  //
+  // Navigation is the artwork IMAGE itself: hovering the left half of
+  // the currently visible image shows a small, quiet left-arrow cursor
+  // and clicking goes to the previous image; the right half is the
+  // mirror. There is no visible button — .work-carousel has no padding
+  // of its own around the active slide (see style.css), so the
+  // element's own bounds already match the displayed image precisely.
+  // This is strictly an INTERNAL gallery control for one artwork's own
+  // images; switching between different artworks is a separate system
+  // (.selected-works-list, plain page links) and is never touched here.
   var carousel = document.querySelector('[data-work-carousel]');
   if (!carousel) return;
 
   var slides = Array.prototype.slice.call(carousel.querySelectorAll('.work-carousel-slide'));
-  var prevBtn = document.querySelector('[data-work-prev]');
-  var nextBtn = document.querySelector('[data-work-next]');
+  // A single-image artwork has nothing to navigate between — leave the
+  // cursor and click behavior alone entirely (normal cursor, no zones).
   if (slides.length < 2) return;
 
   var current = slides.findIndex(function (s) { return s.classList.contains('is-active'); });
@@ -150,11 +157,40 @@
     }, FADE_MS);
   }
 
+  // Always loops: first image's "previous" wraps to the last, and the
+  // last image's "next" wraps to the first (kept consistent for every
+  // artwork gallery, per the brief).
   function next() { goTo((current + 1) % slides.length); }
   function prev() { goTo((current - 1 + slides.length) % slides.length); }
 
-  if (nextBtn) nextBtn.addEventListener('click', next);
-  if (prevBtn) prevBtn.addEventListener('click', prev);
+  // Small, quiet, stroke-only left/right chevrons — the same shape
+  // already used for the homepage carousel's prev/next arrows — as
+  // cursor images rather than an on-screen button: no circle, no
+  // background, no border, no shadow. `w-resize`/`e-resize` is the
+  // fallback for browsers that ignore cursor images.
+  var LEFT_CURSOR = 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2357554f%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2215%206%209%2012%2015%2018%22%2F%3E%3C%2Fsvg%3E") 12 12, w-resize';
+  var RIGHT_CURSOR = 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2357554f%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%229%206%2015%2012%209%2018%22%2F%3E%3C%2Fsvg%3E") 12 12, e-resize';
+
+  // The element's own box is the interaction zone (see comment above):
+  // left half of that box = previous, right half = next.
+  function zoneFor(e) {
+    var r = carousel.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return null;
+    return (e.clientX - r.left) < r.width / 2 ? 'prev' : 'next';
+  }
+
+  carousel.addEventListener('mousemove', function (e) {
+    var zone = zoneFor(e);
+    carousel.style.cursor = zone === 'prev' ? LEFT_CURSOR : zone === 'next' ? RIGHT_CURSOR : '';
+  });
+  carousel.addEventListener('mouseleave', function () {
+    carousel.style.cursor = '';
+  });
+  carousel.addEventListener('click', function (e) {
+    var zone = zoneFor(e);
+    if (zone === 'prev') prev();
+    else if (zone === 'next') next();
+  });
 
   document.addEventListener('keydown', function (e) {
     var tag = document.activeElement && document.activeElement.tagName;

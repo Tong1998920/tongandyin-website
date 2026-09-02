@@ -42,13 +42,15 @@
       ---------------------------------------------------------------
       A second template alongside the plain vertical .project-images
       page used by every other work (see works/ignore/, etc.): a left
-      column (Selected Works list, then this work's info and its own
-      image prev/next, low in the column) anchored near the true page
-      margin, beside a large single-image carousel reaching toward the
-      right edge. Scoped by body.work-detail-page in style.css — only
-      this page carries that class, so no other page is affected by
-      its layout. Typography here uses the same sitewide neo-grotesk
-      as everywhere else (no serif) — see --font-wordmark in style.css.
+      column (Selected Works list, then this work's info, anchored
+      near the true page margin — see .work-detail-shell's left
+      padding, matched to the header's own --header-margin so this
+      column lines up with the "Tong Yin" wordmark) beside a large
+      single-image carousel reaching toward the right edge. Scoped by
+      body.work-detail-page in style.css — only this page carries that
+      class, so no other page is affected by its layout. Typography
+      here uses the same sitewide neo-grotesk as everywhere else (no
+      serif) — see --font-wordmark in style.css.
 
       The three carousel images are real photographs of this one work
       — a full frontal view, then a right-arm/hand detail, then a
@@ -56,10 +58,21 @@
       load eagerly and share one fixed-size stage (style.css), so
       switching between them never changes the page's layout.
 
-      The Selected Works list here is a second way to move between
-      works, alongside the existing "All works" / "next work" links
-      kept at the bottom of the page — both stayed, since removing
-      either wasn't asked for.
+      Navigating between these three images is the image itself: the
+      old permanent prev/next buttons were removed in favor of a
+      hover/click zone split across the displayed image's own left and
+      right halves (main.js, [data-work-carousel]) — no other page
+      structure changed. This is separate from .selected-works-list
+      just above, which moves between different ARTWORKS, not images
+      within one artwork; a plain page link, not a JS route.
+
+      No caption is shown under the image (kept that way deliberately;
+      artwork title/medium/dimensions/year/credit live only in the
+      left info block, once, rather than being repeated below the
+      image too), and the bottom of the page carries no "All works" /
+      next-work links or Email/Instagram footer — just the bare
+      copyright — since this page is now the sole, canonical Selected
+      Works destination rather than one stop in a work-to-work chain.
     -->
     <div class="work-detail">
       <aside class="work-detail-side">
@@ -78,11 +91,7 @@
           <p class="work-detail-meta">Acrylic on Chinese silk,<br>acrylic on cardboard</p>
           <p class="work-detail-meta">140 × 102 cm</p>
           <p class="work-detail-meta">2026</p>
-          <p class="work-detail-credit">Photo by Bonsai Peng</p>
-          <div class="work-detail-controls">
-            <button type="button" data-work-prev aria-label="Previous image">←</button>
-            <button type="button" data-work-next aria-label="Next image">→</button>
-          </div>
+          <p class="work-detail-credit">Photography by Bonsai Peng</p>
         </div>
       </aside>
 
@@ -103,20 +112,11 @@
       </div>
     </div>
 
-    <nav class="project-nav" aria-label="Other works">
-      <a href="../calling-a-deer-a-horse/">← All works</a>
-      <a href="../ignore/">Ignore →</a>
-    </nav>
-
   </section>
 </main>
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
-  <div class="footer-links">
-    <a href="../../contact/">Email</a>
-    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-  </div>
 </footer>
 
 <script src="../../assets/js/main.js"></script>
