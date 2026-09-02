@@ -777,6 +777,157 @@ main { display: block; }
 }
 .project-nav a:hover, .project-nav a:focus-visible { color: var(--color-ink); }
 
+/* ---------------------------------------------------- single-work detail
+   A second, more spacious template for one individual artwork page: a
+   fixed left column (the Selected Works list, this work's info, and
+   its own image prev/next) beside a large single-image carousel on the
+   right. Scoped entirely to body.work-detail-page, so it only touches
+   pages that opt into it by carrying that class on <body> — currently
+   only Calling A Deer A Horse — every other project page keeps the
+   plain vertical .project-images sequence above, untouched.
+
+   Typography on this template moves to Cormorant Garamond throughout,
+   per this page's own brief, restrained (Regular 400 only — it's the
+   only weight loaded), small, and archival rather than editorial. The
+   header/nav markup itself is unchanged (same file everywhere); these
+   rules simply override its type only when body.work-detail-page is
+   present, so no other page is affected. */
+body.work-detail-page .primary-nav a {
+  font-family: var(--font-wordmark);
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+body.work-detail-page .primary-nav .submenu a {
+  font-family: var(--font-wordmark);
+  font-size: 1rem;
+}
+
+/* Shared figure height for the artwork stage — also used by the left
+   column's min-height so its info block naturally settles low, "near
+   the lower-left area," echoing the right column's own height, rather
+   than the two columns being independently top-aligned and uneven. */
+.work-detail {
+  --work-detail-figure-h: 70vh;
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) 1fr;
+  gap: var(--space-7);
+  align-items: start;
+}
+
+.work-detail-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: var(--work-detail-figure-h);
+}
+
+.selected-works-heading {
+  font-family: var(--font-wordmark);
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--color-ink);
+  margin: 0 0 var(--space-4);
+}
+
+.selected-works-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+}
+.selected-works-list a {
+  font-family: var(--font-wordmark);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+.selected-works-list a:hover,
+.selected-works-list a:focus-visible,
+.selected-works-list a[aria-current="page"] {
+  color: var(--color-active);
+}
+
+/* Artwork info + prev/next sit together at the foot of the left column
+   (flex + justify-content: space-between on .work-detail-side puts
+   this block near the bottom, not immediately under the list). */
+.work-detail-info .work-detail-title {
+  font-family: var(--font-wordmark);
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--color-ink);
+  margin: 0;
+}
+.work-detail-info .work-detail-meta {
+  font-family: var(--font-wordmark);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--color-ink-soft);
+  margin: 0.35em 0 0;
+}
+.work-detail-info .work-detail-credit {
+  font-family: var(--font-wordmark);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  margin: var(--space-3) 0 0;
+}
+
+.work-detail-controls {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+.work-detail-controls button {
+  font-family: var(--font-wordmark);
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--color-ink-soft);
+  padding: 0.3rem 0.1rem;
+  transition: color 0.2s var(--ease);
+}
+.work-detail-controls button:hover,
+.work-detail-controls button:focus-visible {
+  color: var(--color-active);
+}
+
+/* Right column: the artwork stage. A fixed box (width AND height, not
+   just an aspect-ratio) so the display area never changes size between
+   the three images regardless of each one's own proportions — the page
+   never jumps or reflows on switch. Sized well under the viewport
+   (~54vw / ~70vh) per this page's brief, deliberately leaving generous
+   white space around it rather than filling the column. */
+.work-detail-stage {
+  display: flex;
+  justify-content: center;
+}
+
+.work-carousel-track { position: relative; }
+
+.work-carousel-slide {
+  display: none;
+  opacity: 0;
+  width: 54vw;
+  height: var(--work-detail-figure-h);
+}
+.work-carousel-slide.is-active { display: flex; align-items: center; justify-content: center; }
+.work-carousel-slide.is-visible { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .work-carousel-slide.is-active { transition: opacity 200ms linear; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-carousel-slide img { transition: none; }
+}
+
+.work-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
 /* ------------------------------------------------------------ exhibitions */
 .exhibition-list { width: 100%; }
 
@@ -982,6 +1133,15 @@ main { display: block; }
   .carousel { --carousel-figure-h: 62vh; padding: var(--space-5) 0 var(--space-4); }
   .carousel-arrow { width: 2.3rem; height: 2.3rem; }
   .carousel-arrow svg { width: 1.15rem; height: 1.15rem; }
+
+  /* Single-work detail template: stack instead of a fixed side column,
+     so the list/info aren't squeezed into a ~200px sliver on a phone
+     screen. Desktop composition (the point of this round's brief) is
+     otherwise untouched. */
+  .work-detail { grid-template-columns: 1fr; gap: var(--space-6); }
+  .work-detail-side { min-height: 0; }
+  .work-detail-info { margin-top: var(--space-5); }
+  .work-carousel-slide { width: 100%; height: 50vh; }
 }
 
 @media (max-width: 520px) {

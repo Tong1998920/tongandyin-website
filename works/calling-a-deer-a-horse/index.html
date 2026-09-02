@@ -7,7 +7,7 @@
 <meta name="description" content="Calling A Deer A Horse, 2026 — a work by Tong Yin.">
 <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
-<body>
+<body class="work-detail-page">
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -37,51 +37,68 @@
 <main id="main">
   <section class="section wrap">
 
-    <div class="project-header">
-      <p class="eyebrow">2026</p>
-      <h1 class="page-title">Calling A Deer A Horse</h1>
-    </div>
+    <!--
+      SINGLE-WORK DETAIL TEMPLATE
+      ---------------------------------------------------------------
+      A second template alongside the plain vertical .project-images
+      page used by every other work (see works/ignore/, etc.): a fixed
+      left column (Selected Works list, then this work's info and its
+      own image prev/next, low in the column) beside a large single-
+      image carousel on the right. Scoped by body.work-detail-page in
+      style.css — only this page carries that class, so no other page
+      is affected by its Cormorant Garamond typography or layout.
 
-    <div class="project-images">
+      The three carousel images are real photographs of this one work
+      — a full frontal view, then a right-arm/hand detail, then a
+      left-hand/upper-section detail, in that fixed order. All three
+      load eagerly and share one fixed-size stage (style.css), so
+      switching between them never changes the page's layout.
 
-      <figure class="plate plate--full">
-        <img src="../../assets/images/works/calling-a-deer-a-horse-01.jpg"
-             alt="Calling A Deer A Horse, Tong Yin — installation view"
-             width="1900" height="1306" loading="lazy">
-        <figcaption class="plate-caption caption">
-          <span>Installation view</span>
-        </figcaption>
-      </figure>
+      The Selected Works list here is a second way to move between
+      works, alongside the existing "All works" / "next work" links
+      kept at the bottom of the page — both stayed, since removing
+      either wasn't asked for.
+    -->
+    <div class="work-detail">
+      <aside class="work-detail-side">
+        <div>
+          <h1 class="selected-works-heading">Selected Works</h1>
+          <nav class="selected-works-list" aria-label="Selected works">
+            <a href="../calling-a-deer-a-horse/" aria-current="page">Calling A Deer A Horse</a>
+            <a href="../ignore/">Ignore</a>
+            <a href="../the-boundary/">The Boundary</a>
+            <a href="../the-stranger/">The Stranger</a>
+          </nav>
+        </div>
 
-      <figure class="plate plate--center">
-        <img src="../../assets/images/works/calling-a-deer-a-horse-02.jpg"
-             alt="Calling A Deer A Horse, Tong Yin"
-             width="1900" height="1520" loading="lazy">
-        <figcaption class="plate-caption caption">
-          <span class="work-title">Calling A Deer A Horse</span>
-          <span>2026 — Acrylic on Chinese silk, acrylic on cardboard</span>
-          <span>140 × 102 cm</span>
-        </figcaption>
-      </figure>
+        <div class="work-detail-info">
+          <p class="work-detail-title">Calling A Deer A Horse</p>
+          <p class="work-detail-meta">Acrylic on Chinese silk,<br>acrylic on cardboard</p>
+          <p class="work-detail-meta">140 × 102 cm</p>
+          <p class="work-detail-meta">2026</p>
+          <p class="work-detail-credit">Photo by Bonsai Peng</p>
+          <div class="work-detail-controls">
+            <button type="button" data-work-prev aria-label="Previous image">←</button>
+            <button type="button" data-work-next aria-label="Next image">→</button>
+          </div>
+        </div>
+      </aside>
 
-      <figure class="plate plate--left">
-        <img src="../../assets/images/works/calling-a-deer-a-horse-03.jpg"
-             alt="Calling A Deer A Horse, Tong Yin — detail"
-             width="1900" height="1520" loading="lazy">
-        <figcaption class="plate-caption caption">
-          <span>Detail</span>
-        </figcaption>
-      </figure>
-
-      <figure class="plate plate--right">
-        <img src="../../assets/images/works/calling-a-deer-a-horse-04.jpg"
-             alt="Calling A Deer A Horse, Tong Yin — detail"
-             width="1520" height="1900" loading="lazy">
-        <figcaption class="plate-caption caption">
-          <span>Detail</span>
-        </figcaption>
-      </figure>
-
+      <div class="work-detail-stage">
+        <div class="work-carousel" data-work-carousel>
+          <ul class="work-carousel-track">
+            <li class="work-carousel-slide is-active is-visible" data-index="0">
+              <img src="../../assets/images/works/calling-a-deer-a-horse-full.jpg" alt="Calling A Deer A Horse, Tong Yin — full view" width="2200" height="1757">
+            </li>
+            <li class="work-carousel-slide" data-index="1">
+              <img src="../../assets/images/works/calling-a-deer-a-horse-detail-right.jpg" alt="Calling A Deer A Horse, Tong Yin — detail, right arm and hand" width="1508" height="1126">
+            </li>
+            <li class="work-carousel-slide" data-index="2">
+              <img src="../../assets/images/works/calling-a-deer-a-horse-detail-left.jpg" alt="Calling A Deer A Horse, Tong Yin — detail, left hand and upper section" width="2200" height="1467">
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <nav class="project-nav" aria-label="Other works">

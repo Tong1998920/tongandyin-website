@@ -101,6 +101,70 @@
 })();
 
 (function () {
+  // Single-work detail page carousel (see works/calling-a-deer-a-horse/
+  // index.html) — same calm, fast cross-fade pattern as the homepage
+  // carousel above, but its own separate instance: the prev/next
+  // controls live in the left column, not beside the image, so they're
+  // found by [data-work-prev]/[data-work-next] rather than being
+  // adjacent DOM siblings. A no-op on every page that doesn't have a
+  // [data-work-carousel] element.
+  var carousel = document.querySelector('[data-work-carousel]');
+  if (!carousel) return;
+
+  var slides = Array.prototype.slice.call(carousel.querySelectorAll('.work-carousel-slide'));
+  var prevBtn = document.querySelector('[data-work-prev]');
+  var nextBtn = document.querySelector('[data-work-next]');
+  if (slides.length < 2) return;
+
+  var current = slides.findIndex(function (s) { return s.classList.contains('is-active'); });
+  if (current < 0) current = 0;
+  var animating = false;
+  var FADE_MS = 200;
+
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function goTo(index) {
+    if (index === current || animating) return;
+    var from = slides[current];
+    var to = slides[index];
+
+    if (prefersReducedMotion()) {
+      from.classList.remove('is-active', 'is-visible');
+      to.classList.add('is-active', 'is-visible');
+      current = index;
+      return;
+    }
+
+    animating = true;
+    from.classList.remove('is-visible');
+
+    window.setTimeout(function () {
+      from.classList.remove('is-active');
+      to.classList.add('is-active');
+      void to.offsetWidth;
+      to.classList.add('is-visible');
+      current = index;
+      animating = false;
+    }, FADE_MS);
+  }
+
+  function next() { goTo((current + 1) % slides.length); }
+  function prev() { goTo((current - 1 + slides.length) % slides.length); }
+
+  if (nextBtn) nextBtn.addEventListener('click', next);
+  if (prevBtn) prevBtn.addEventListener('click', prev);
+
+  document.addEventListener('keydown', function (e) {
+    var tag = document.activeElement && document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key === 'ArrowLeft') prev();
+    else if (e.key === 'ArrowRight') next();
+  });
+})();
+
+(function () {
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.querySelector('.primary-nav');
   if (!toggle || !nav) return;
