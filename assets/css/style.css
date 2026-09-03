@@ -1602,19 +1602,25 @@ body.archive-lightbox-open { overflow: hidden; }
 }
 
 /* --------------------------------------------------------------- contact */
-/* Portrait (left) + biography (right), top-aligned as one compact
-   editorial block — a contained artist-bio photo, never a hero image.
-   Quiet and spacious, no card/border/shadow. The portrait's width is
-   fixed by a clamp() on the <img> itself (not just a grid track), so
-   its size can't balloon regardless of what's beside it — the
-   figure/flex item is width: 0 0 auto and just wraps whatever size
-   the image resolves to. Email/Instagram/copyright are NOT part of
-   this block; they live in the page's own .site-footer (see
-   contact/index.html) using the same site-wide footer styling every
-   page already has. */
+/* Portrait (left) + biography (right), vertically centered as one
+   compact editorial block — a contained artist-bio photo, never a
+   hero image. Quiet and spacious, no card/border/shadow. The
+   portrait's width is fixed by a clamp() on the <img> itself (not
+   just a grid track), so its size can't balloon regardless of what's
+   beside it — the figure/flex item is width: 0 0 auto and just wraps
+   whatever size the image resolves to. Height is intentionally left
+   to resolve from that width via the image's own intrinsic ratio
+   (width + height:auto, NOTHING else constraining height — no
+   max-height) so the portrait can never be stretched/distorted; do
+   not reintroduce a max-height here without also handling the
+   width/height coupling, or the image will squash again. Email and
+   Instagram live inside .contact-bio, directly under the biography
+   paragraph (.contact-details) — NOT in the page footer; the
+   page's .site-footer (see contact/index.html) now carries only the
+   copyright. */
 .contact-intro {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-wrap: wrap;
   gap: clamp(1.6rem, 3vw, 2.8rem);
   max-width: 1080px;
@@ -1628,7 +1634,6 @@ body.archive-lightbox-open { overflow: hidden; }
   width: clamp(380px, 31vw, 500px);
   max-width: 100%;
   height: auto;
-  max-height: 70vh;
 }
 
 /* Photo credit — directly under the portrait, left-aligned with it;
@@ -1641,7 +1646,21 @@ body.archive-lightbox-open { overflow: hidden; }
   letter-spacing: 0;
 }
 
-.contact-bio { flex: 1 1 260px; max-width: 30em; padding-top: 0.2em; }
+.contact-bio { flex: 1 1 260px; max-width: 30em; }
+
+/* Email / Instagram, directly under the biography paragraph — plain
+   text-column flow (no position:fixed/absolute), left-aligned with
+   the biography, same quiet .meta-text register used for other
+   "contact link" style text on the site. */
+.contact-details {
+  margin-top: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.contact-details a { transition: color 0.2s var(--ease); }
+.contact-details a:hover, .contact-details a:focus-visible { color: var(--color-ink); }
 
 /* --------------------------------------------------------------- callout */
 .placeholder-note {
@@ -1661,8 +1680,8 @@ body.archive-lightbox-open { overflow: hidden; }
 @media (max-width: 900px) {
   .about-layout { grid-template-columns: 1fr; gap: var(--space-5); }
   .about-portrait { max-width: 320px; }
-  .contact-intro { flex-direction: column; gap: var(--space-5); }
-  .contact-portrait img { width: min(320px, 100%); max-height: 60vh; }
+  .contact-intro { flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+  .contact-portrait img { width: min(320px, 100%); }
 
   .plate--left, .plate--right, .plate--right-narrow, .plate--left-narrow, .plate--center {
     grid-column: 1 / -1;
