@@ -11,9 +11,10 @@
   // Homepage artwork carousel. One slide is shown at a time
   // (.carousel-slide.is-active); changing slides is a calm, sequential
   // cross-fade — the current slide fades out, then the next slide
-  // fades in — never a slide/zoom/bounce. Each slide carries its own
-  // caption and its own link (or no link, for a slide with no detail
-  // page yet), so swapping slides never needs to touch any text.
+  // fades in — never a slide/zoom/bounce. Slides are images only: no
+  // caption, and no click-through link to any artwork detail page —
+  // clicking an image does nothing (only the prev/next arrows, arrow
+  // keys, and swipe move between slides).
   var carousel = document.querySelector('[data-carousel]');
   if (!carousel) return;
 
