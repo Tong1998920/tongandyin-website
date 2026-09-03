@@ -36,29 +36,34 @@
 
 <main id="main">
   <section class="section wrap">
-    <h1 class="eyebrow" style="margin-bottom: var(--space-6);">Contact</h1>
+    <h1 class="eyebrow" style="margin-bottom: var(--space-4);">Contact</h1>
 
     <!--
       CONTACT
       ---------------------------------------------------------------
-      Portrait + a short biography, side by side (.contact-intro,
-      style.css's "contact" section) — quiet and spacious, no card/
-      border/shadow around either. Email and Instagram are carried by
-      this page's own footer below rather than a separate block: the
-      footer markup is the same site-wide .site-footer/.footer-links
-      structure every other page uses (© left, links right), just
-      with THIS page's two links showing the real address/handle as
-      their visible text instead of the generic "Email"/"Instagram"
-      labels every other page keeps — so only this file changed, nothing
-      site-wide. To update later: swap
+      Portrait + a short biography, top-aligned side by side
+      (.contact-intro, style.css's "contact" section) — a contained,
+      editorial-scale portrait (clamp(380px,31vw,500px), never a hero
+      image), not a card/border/shadow around either. The photo credit
+      sits directly under the portrait, left-aligned with it
+      (.contact-credit) — it is the ONLY photo credit on this page;
+      the footer below carries just the copyright, no second credit.
+      Email and Instagram are carried by this page's own footer below:
+      the footer markup is the same site-wide .site-footer/
+      .footer-links structure every other page uses (© left, links
+      right), just with THIS page's two links showing the real
+      address/handle as their visible text instead of the generic
+      "Email"/"Instagram" labels every other page keeps — so only this
+      file changed, nothing site-wide. To update later: swap
       assets/images/contact/portrait.jpg (keep its own aspect ratio —
       the <img> has no crop, just width/height driving the layout),
-      edit the biography paragraph directly, or edit the two footer
-      links' text/href below.
+      edit the credit line, edit the biography paragraph directly, or
+      edit the two footer links' text/href below.
     -->
     <div class="contact-intro">
       <figure class="contact-portrait">
         <img src="../assets/images/contact/portrait.jpg" alt="Tong Yin" width="1500" height="2000" loading="lazy">
+        <figcaption class="contact-credit">Photography by Bonsai Peng</figcaption>
       </figure>
       <div class="contact-bio body-text">
         <p>Tong Yin (b. 1998, Anhui, China) received her BFA in Oil Painting from the Central Academy of Fine Arts in 2020. She is currently studying at the Berlin University of the Arts and lives and works between Berlin and China.</p>

@@ -1602,32 +1602,46 @@ body.archive-lightbox-open { overflow: hidden; }
 }
 
 /* --------------------------------------------------------------- contact */
-.contact-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--space-6);
-  max-width: 60em;
+/* Portrait (left) + biography (right), top-aligned as one compact
+   editorial block — a contained artist-bio photo, never a hero image.
+   Quiet and spacious, no card/border/shadow. The portrait's width is
+   fixed by a clamp() on the <img> itself (not just a grid track), so
+   its size can't balloon regardless of what's beside it — the
+   figure/flex item is width: 0 0 auto and just wraps whatever size
+   the image resolves to. Email/Instagram/copyright are NOT part of
+   this block; they live in the page's own .site-footer (see
+   contact/index.html) using the same site-wide footer styling every
+   page already has. */
+.contact-intro {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: clamp(1.6rem, 3vw, 2.8rem);
+  max-width: 1080px;
+  margin-top: var(--space-5);
 }
 
-/* Contact fields are short interface links (a label + a click target),
-   not descriptive prose, so they stay in the structural sans family. */
-.contact-field + .contact-field { margin-top: var(--space-4); }
-.contact-field h2 {
+.contact-portrait { flex: 0 0 auto; margin: 0; }
+
+.contact-portrait img {
+  display: block;
+  width: clamp(380px, 31vw, 500px);
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh;
+}
+
+/* Photo credit — directly under the portrait, left-aligned with it;
+   same small/understated register as .caption elsewhere on the site. */
+.contact-credit {
+  margin-top: var(--space-2);
   font-family: var(--font-sans);
-  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-size: 0.8125rem;
   color: var(--color-ink-soft);
-  margin-bottom: var(--space-1);
+  letter-spacing: 0;
 }
-.contact-field a, .contact-field p {
-  font-family: var(--font-sans);
-  font-size: clamp(0.875rem, 0.95vw, 0.9375rem);
-  letter-spacing: -0.01em;
-  color: var(--color-ink);
-}
-.contact-field a { border-bottom: 1px solid var(--color-line); transition: border-color 0.2s var(--ease), color .2s var(--ease); }
-.contact-field a:hover, .contact-field a:focus-visible { border-color: var(--color-ink-soft); }
+
+.contact-bio { flex: 1 1 260px; max-width: 30em; padding-top: 0.2em; }
 
 /* --------------------------------------------------------------- callout */
 .placeholder-note {
@@ -1647,7 +1661,8 @@ body.archive-lightbox-open { overflow: hidden; }
 @media (max-width: 900px) {
   .about-layout { grid-template-columns: 1fr; gap: var(--space-5); }
   .about-portrait { max-width: 320px; }
-  .contact-layout { grid-template-columns: 1fr; }
+  .contact-intro { flex-direction: column; gap: var(--space-5); }
+  .contact-portrait img { width: min(320px, 100%); max-height: 60vh; }
 
   .plate--left, .plate--right, .plate--right-narrow, .plate--left-narrow, .plate--center {
     grid-column: 1 / -1;
