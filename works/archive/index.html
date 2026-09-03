@@ -88,6 +88,11 @@
          which briefly registers as a "broken image" on every page
          load. JS sets a real src the first time a work is shown. -->
     <figcaption class="archive-lightbox-meta" data-archive-lightbox-meta></figcaption>
+    <!-- Optional quiet "Video →" links for works that have one (see
+         the `videos` field on a few ARCHIVE_WORKS entries below, e.g.
+         "Don't bother me" / "Fire") — populated by JS alongside the
+         caption above; empty and not rendered for every other work. -->
+    <p class="archive-lightbox-videos" data-archive-lightbox-videos hidden></p>
   </figure>
 </div>
 
@@ -117,28 +122,58 @@
         dimensions: display dimensions
         category:   '2022-2026' or 'before-2022' — which Archive tab
                     the work appears under
+        videos:     optional array of { label, url } — renders as quiet
+                    "Video →" links under the caption (see main.js
+                    showWork() and .archive-lightbox-videos in
+                    style.css); only "Don't bother me" and "Fire" have
+                    this so far
         width,
         height:     optional, the image's intrinsic pixel size (avoids
                     layout shift while it loads, same as every other
                     image on the site)
       }
 
-    First batch of real Archive artwork, all category "2022-2026".
-    Order matches the sequence the artist specified by visually
-    describing each piece (not by upload order — the images arrive
-    with randomized filenames and no reliable order of their own, so
-    each file below was matched to its description by eye). Five of
-    the ten pieces (ids archive-01, 03, 07, 08, 09) were given only a
-    plain visual description with no title/year/medium/dimensions —
-    per instruction, those fields are left unset below rather than
-    guessed, and metaLine()/showWork() in main.js already handle
-    missing fields gracefully (filter(Boolean) drops empty parts).
+    archive-01 through archive-10: first batch, in the order the artist
+    specified by visually describing each piece. archive-08/09 are
+    still untitled — that first batch gave only a plain visual
+    description for those two, with no title/year/medium/dimensions,
+    so those fields stay unset per instruction rather than guessed
+    (metaLine()/showWork() in main.js already handle missing fields
+    gracefully via filter(Boolean)). archive-01/03/07 originally
+    shipped untitled too, but this second batch's real, preserved
+    filenames confirmed their title/year/medium (archive-01 and 03 are
+    two photographs of the same photography piece, "The entitlement to
+    become a person"; archive-07 is one of three photographs of
+    "Plastic Apple") — updated in place rather than left as separate
+    unlabeled entries now that the information is reliably known.
+
+    archive-11 through archive-32: second batch (22 works), added from
+    four uploaded ZIPs whose filenames preserved title/year/medium/
+    dimensions — used verbatim except one obvious typo fixed ("Digtal"
+    → "Digital" on archive-24's medium) and one number ("Digtal"
+    aside) nothing else altered. Per that batch's explicit instruction
+    this is a *temporary* append order, not a curated sequence — the
+    artist will specify final Archive ordering separately. Every image
+    here is its own grid entry/lightbox slide (the existing Archive
+    system has no multi-image-per-artwork grouping to preserve, so
+    several images that are alternate photographs of one piece — the
+    two further "Plastic Apple" photos archive-15/16, and the third
+    "The entitlement to become a person" photo archive-17 — simply
+    share that piece's title/metadata across their own separate
+    entries, same as archive-01/03/07 above). Some titles repeat
+    ("Go to heaven" at archive-12 and archive-20; "Persona" at
+    archive-21 and archive-24) with different year/medium/dimensions —
+    confirmed via the source filenames to be distinct works, not
+    duplicates, so both were kept.
   */
   window.ARCHIVE_WORKS = [
     {
       id: 'archive-01',
       image: '../../assets/images/archive/archive-01-full.jpg',
       thumbnail: '../../assets/images/archive/archive-01-thumb.jpg',
+      title: 'The entitlement to become a person',
+      year: '2023',
+      medium: 'Photography',
       category: '2022-2026',
       width: 2200,
       height: 1467
@@ -158,6 +193,9 @@
       id: 'archive-03',
       image: '../../assets/images/archive/archive-03-full.jpg',
       thumbnail: '../../assets/images/archive/archive-03-thumb.jpg',
+      title: 'The entitlement to become a person',
+      year: '2023',
+      medium: 'Photography',
       category: '2022-2026',
       width: 1467,
       height: 2200
@@ -170,6 +208,7 @@
       year: '2022',
       medium: 'Installation',
       dimensions: '28.5 × 15 cm',
+      videos: [{ label: 'Video →', url: 'https://youtu.be/wK5rQ_6ceSE' }],
       category: '2022-2026',
       width: 2200,
       height: 1650
@@ -202,6 +241,10 @@
       id: 'archive-07',
       image: '../../assets/images/archive/archive-07-full.jpg',
       thumbnail: '../../assets/images/archive/archive-07-thumb.jpg',
+      title: 'Plastic Apple',
+      year: '2024',
+      medium: 'Mural',
+      dimensions: '300 × 200 cm',
       category: '2022-2026',
       width: 2200,
       height: 1467
@@ -233,6 +276,270 @@
       category: '2022-2026',
       width: 2200,
       height: 1650
+    },
+    {
+      id: 'archive-11',
+      image: '../../assets/images/archive/archive-11-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-11-thumb.jpg',
+      title: 'Fire',
+      year: '2022',
+      medium: 'Installation',
+      dimensions: '28.5 × 15 cm',
+      videos: [
+        { label: 'Video 1 →', url: 'https://youtu.be/F9WiNE5fCRQ' },
+        { label: 'Video 2 →', url: 'https://youtu.be/FK39jOQV0-Y' }
+      ],
+      category: '2022-2026',
+      width: 1463,
+      height: 2200
+    },
+    {
+      id: 'archive-12',
+      image: '../../assets/images/archive/archive-12-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-12-thumb.jpg',
+      title: 'Go to heaven',
+      year: '2022',
+      medium: 'Video installation',
+      dimensions: '30 × 23 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-13',
+      image: '../../assets/images/archive/archive-13-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-13-thumb.jpg',
+      title: 'Please step on my face',
+      year: '2022',
+      medium: 'Video installation',
+      dimensions: '30 × 23 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-14',
+      image: '../../assets/images/archive/archive-14-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-14-thumb.jpg',
+      title: 'Love and tears',
+      year: '2022',
+      medium: 'Inkjet print and acrylic',
+      dimensions: '65 × 155 cm',
+      category: '2022-2026',
+      width: 1736,
+      height: 1052
+    },
+    {
+      id: 'archive-15',
+      image: '../../assets/images/archive/archive-15-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-15-thumb.jpg',
+      title: 'Plastic Apple',
+      year: '2024',
+      medium: 'Mural',
+      dimensions: '300 × 200 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1319
+    },
+    {
+      id: 'archive-16',
+      image: '../../assets/images/archive/archive-16-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-16-thumb.jpg',
+      title: 'Plastic Apple',
+      year: '2024',
+      medium: 'Mural',
+      dimensions: '300 × 200 cm',
+      category: '2022-2026',
+      width: 1730,
+      height: 1148
+    },
+    {
+      id: 'archive-17',
+      image: '../../assets/images/archive/archive-17-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-17-thumb.jpg',
+      title: 'The entitlement to become a person',
+      year: '2023',
+      medium: 'Photography',
+      category: '2022-2026',
+      width: 1198,
+      height: 1602
+    },
+    {
+      id: 'archive-18',
+      image: '../../assets/images/archive/archive-18-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-18-thumb.jpg',
+      title: 'I hate you',
+      year: '2022',
+      medium: 'Ink pen and motion picture',
+      dimensions: '30 × 20 cm',
+      category: '2022-2026',
+      width: 1678,
+      height: 1292
+    },
+    {
+      id: 'archive-19',
+      image: '../../assets/images/archive/archive-19-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-19-thumb.jpg',
+      title: 'skirt',
+      year: '2022',
+      medium: 'Ink pen and motion picture',
+      dimensions: '30 × 15 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1228
+    },
+    {
+      id: 'archive-20',
+      image: '../../assets/images/archive/archive-20-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-20-thumb.jpg',
+      title: 'Go to heaven',
+      year: '2021',
+      medium: 'Ink pen and motion picture',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      width: 1924,
+      height: 1352
+    },
+    {
+      id: 'archive-21',
+      image: '../../assets/images/archive/archive-21-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-21-thumb.jpg',
+      title: 'Persona',
+      medium: 'Ink pen and motion picture',
+      dimensions: '25 × 25 cm',
+      category: '2022-2026',
+      width: 1924,
+      height: 1368
+    },
+    {
+      id: 'archive-22',
+      image: '../../assets/images/archive/archive-22-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-22-thumb.jpg',
+      title: 'How can you do this to me',
+      year: '2022',
+      medium: 'Print',
+      category: '2022-2026',
+      width: 1714,
+      height: 1314
+    },
+    {
+      id: 'archive-23',
+      image: '../../assets/images/archive/archive-23-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-23-thumb.jpg',
+      title: 'Love',
+      year: '2022',
+      medium: 'Print',
+      category: '2022-2026',
+      width: 1714,
+      height: 1372
+    },
+    {
+      id: 'archive-24',
+      image: '../../assets/images/archive/archive-24-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-24-thumb.jpg',
+      title: 'Persona',
+      year: '2022',
+      medium: 'Digital Art',
+      dimensions: '30 × 30 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1278
+    },
+    {
+      id: 'archive-25',
+      image: '../../assets/images/archive/archive-25-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-25-thumb.jpg',
+      title: 'Tears',
+      year: '2021',
+      medium: 'Stickers',
+      dimensions: '30 × 21 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 964
+    },
+    {
+      id: 'archive-26',
+      image: '../../assets/images/archive/archive-26-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-26-thumb.jpg',
+      title: 'Angry apple',
+      year: '2022',
+      medium: 'Liquid acrylic and charcoal',
+      dimensions: '90 × 88 cm',
+      category: '2022-2026',
+      width: 1304,
+      height: 1378
+    },
+    {
+      id: 'archive-27',
+      image: '../../assets/images/archive/archive-27-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-27-thumb.jpg',
+      title: 'Baby girl',
+      year: '2022',
+      medium: 'Polymer and spray paint',
+      dimensions: '153 × 96 cm',
+      category: '2022-2026',
+      width: 2160,
+      height: 1148
+    },
+    {
+      id: 'archive-28',
+      image: '../../assets/images/archive/archive-28-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-28-thumb.jpg',
+      title: 'Bunny Girl',
+      year: '2022',
+      medium: 'Liquid acrylic and ink pen',
+      dimensions: '100 × 51 cm',
+      category: '2022-2026',
+      width: 842,
+      height: 1386
+    },
+    {
+      id: 'archive-29',
+      image: '../../assets/images/archive/archive-29-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-29-thumb.jpg',
+      title: 'Dream',
+      year: '2022',
+      medium: 'Polymer and spray paint',
+      dimensions: '52 × 110 cm',
+      category: '2022-2026',
+      width: 2156,
+      height: 1144
+    },
+    {
+      id: 'archive-30',
+      image: '../../assets/images/archive/archive-30-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-30-thumb.jpg',
+      title: 'Housemaid',
+      year: '2022',
+      medium: 'Polymer and spray paint',
+      dimensions: '161 × 120 cm',
+      category: '2022-2026',
+      width: 1238,
+      height: 1392
+    },
+    {
+      id: 'archive-31',
+      image: '../../assets/images/archive/archive-31-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-31-thumb.jpg',
+      title: "Spider-Maid's private time",
+      year: '2022',
+      medium: 'Polymer and spray paint',
+      dimensions: '145 × 135 cm',
+      category: '2022-2026',
+      width: 1244,
+      height: 1394
+    },
+    {
+      id: 'archive-32',
+      image: '../../assets/images/archive/archive-32-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-32-thumb.jpg',
+      title: 'The god of panties',
+      year: '2022',
+      medium: 'Liquid acrylic and ink pen',
+      dimensions: '70 × 55 cm',
+      category: '2022-2026',
+      width: 1660,
+      height: 1244
     }
   ];
 </script>

@@ -366,6 +366,7 @@
   var lightbox = document.querySelector('[data-archive-lightbox]');
   var lightboxImage = lightbox ? lightbox.querySelector('[data-archive-lightbox-image]') : null;
   var lightboxMeta = lightbox ? lightbox.querySelector('[data-archive-lightbox-meta]') : null;
+  var lightboxVideos = lightbox ? lightbox.querySelector('[data-archive-lightbox-videos]') : null;
   var lightboxClose = lightbox ? lightbox.querySelector('[data-archive-lightbox-close]') : null;
 
   if (!grid) return;
@@ -462,6 +463,29 @@
     if (w.width) lightboxImage.setAttribute('width', w.width); else lightboxImage.removeAttribute('width');
     if (w.height) lightboxImage.setAttribute('height', w.height); else lightboxImage.removeAttribute('height');
     if (lightboxMeta) lightboxMeta.textContent = metaLine(w);
+    // Optional "Video →" (or "Video 1 →" / "Video 2 →") links — only
+    // a couple of works have these (see the `videos` field on those
+    // ARCHIVE_WORKS entries). Rebuilt fresh each time so the element
+    // is genuinely empty/hidden for every other work rather than
+    // leftover-from-last-time.
+    if (lightboxVideos) {
+      lightboxVideos.innerHTML = '';
+      var vids = Array.isArray(w.videos) ? w.videos : [];
+      if (vids.length) {
+        vids.forEach(function (v, i) {
+          if (i > 0) lightboxVideos.appendChild(document.createTextNode('  '));
+          var a = document.createElement('a');
+          a.href = v.url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = v.label || 'Video →';
+          lightboxVideos.appendChild(a);
+        });
+        lightboxVideos.hidden = false;
+      } else {
+        lightboxVideos.hidden = true;
+      }
+    }
     // Keep the category tab in sync so a deep-linked or swiped-to work
     // from the other category still shows the right selection behind
     // the lightbox.

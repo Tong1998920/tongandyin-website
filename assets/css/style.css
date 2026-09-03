@@ -1180,11 +1180,16 @@ body.work-detail-page .primary-nav .submenu a {
 .boundary-overview-large {
   width: 55%;
   min-width: 0;
-  /* Extra push on top of the stage gap, sized against viewport height
-     (not just width) so the large work reliably clears the fold on
-     both short, wide screens and tall, narrow ones, rather than only
-     sometimes depending on aspect ratio. */
-  margin-top: max(4rem, 62vh);
+  /* Spacing above this figure comes from .boundary-overview-stage's own
+     `gap` only (see above) — this used to also carry its own
+     `margin-top: max(4rem, 62vh)` "extra push", which stacked on top of
+     that gap and pushed Boundary 01 nearly a full viewport-height
+     further down than intended, leaving a huge blank gap between the
+     small pair and the large work. Removed; the stage gap alone
+     already keeps Boundary 01 below the small pair without an
+     oversized empty span, and physical scale is still communicated by
+     width (55% vs. .boundary-overview-small-group's 42%), not by
+     spacing. */
 }
 
 .boundary-overview-small-group {
@@ -1398,6 +1403,22 @@ body.archive-lightbox-open { overflow: hidden; }
   max-width: 46em;
 }
 
+/* A couple of works carry one or two quiet "Video →" links below their
+   caption (see the `videos` field on those ARCHIVE_WORKS entries, and
+   main.js's showWork()) — same size/weight/color as the caption itself,
+   only distinguished by the same hover convention already used for the
+   category tabs and the Close control above, never a button/border/icon. */
+.archive-lightbox-videos {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.85vw, 0.8125rem);
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  text-align: center;
+}
+.archive-lightbox-videos[hidden] { display: none; }
+.archive-lightbox-videos a:hover,
+.archive-lightbox-videos a:focus-visible { color: var(--color-active); }
+
 .archive-lightbox-close {
   position: absolute;
   top: clamp(20px, 4vh, 40px);
@@ -1430,6 +1451,20 @@ body.archive-lightbox-open { overflow: hidden; }
    like the works overview — structural, not the informational
    information voice reserved for a single exhibition's own detail
    (see .exhibition-page-header .exhibition-venue below). */
+/* Solo/Group section labels above each .exhibition-list — same plain,
+   understated register as .selected-works-heading (no box, no rule,
+   no oversized type), just enough weight to read as a grouping label
+   rather than another exhibition row. */
+.exhibition-group-heading {
+  font-family: var(--font-sans);
+  font-size: clamp(0.875rem, 1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin: var(--space-7) 0 var(--space-3);
+}
+.exhibition-group-heading:first-of-type { margin-top: 0; }
+
 .exhibition-list { width: 100%; }
 
 .exhibition-row {
