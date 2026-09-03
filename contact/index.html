@@ -40,31 +40,28 @@
 
     <!--
       CONTACT
-      Edit the email address, Instagram handle/link, and gallery
-      representation line below. Delete the "Representation" block
-      entirely if there is no gallery to list yet.
+      ---------------------------------------------------------------
+      Portrait + a short biography, side by side (.contact-intro,
+      style.css's "contact" section) — quiet and spacious, no card/
+      border/shadow around either. Email and Instagram are carried by
+      this page's own footer below rather than a separate block: the
+      footer markup is the same site-wide .site-footer/.footer-links
+      structure every other page uses (© left, links right), just
+      with THIS page's two links showing the real address/handle as
+      their visible text instead of the generic "Email"/"Instagram"
+      labels every other page keeps — so only this file changed, nothing
+      site-wide. To update later: swap
+      assets/images/contact/portrait.jpg (keep its own aspect ratio —
+      the <img> has no crop, just width/height driving the layout),
+      edit the biography paragraph directly, or edit the two footer
+      links' text/href below.
     -->
-    <div class="contact-layout">
-      <div>
-        <div class="contact-field">
-          <h2>Email</h2>
-          <a href="mailto:studio@tongandyin.com">studio@tongandyin.com</a>
-          <p class="meta-text" style="margin-top:0.4em;">[Placeholder — replace with your real email address]</p>
-        </div>
-
-        <div class="contact-field">
-          <h2>Instagram</h2>
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener">@tongyin</a>
-          <p class="meta-text" style="margin-top:0.4em;">[Placeholder — replace with your real handle and link]</p>
-        </div>
-      </div>
-
-      <div>
-        <div class="contact-field">
-          <h2>Representation</h2>
-          <p>[Placeholder Gallery Name]</p>
-          <p class="meta-text" style="margin-top:0.4em;">[Placeholder contact name / email for gallery or studio inquiries]</p>
-        </div>
+    <div class="contact-intro">
+      <figure class="contact-portrait">
+        <img src="../assets/images/contact/portrait.jpg" alt="Tong Yin" width="1500" height="2000" loading="lazy">
+      </figure>
+      <div class="contact-bio body-text">
+        <p>Tong Yin (b. 1998, Anhui, China) received her BFA in Oil Painting from the Central Academy of Fine Arts in 2020. She is currently studying at the Berlin University of the Arts and lives and works between Berlin and China.</p>
       </div>
     </div>
 
@@ -74,8 +71,8 @@
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
   <div class="footer-links">
-    <a href="../contact/">Email</a>
-    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+    <a href="mailto:y630239920@gmail.com">Email: y630239920@gmail.com</a>
+    <a href="https://www.instagram.com/tong_yin_/" target="_blank" rel="noopener noreferrer">Instagram: tong_yin_</a>
   </div>
 </footer>
 
