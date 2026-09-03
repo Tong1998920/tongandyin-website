@@ -165,6 +165,41 @@
     archive-21 and archive-24) with different year/medium/dimensions —
     confirmed via the source filenames to be distinct works, not
     duplicates, so both were kept.
+
+    archive-33 through archive-54: third batch (22 works), the first
+    to add any "before-2022" entries — added from four uploaded ZIPs,
+    two for each category (2022-2026 / before-2022), confirmed by md5
+    hash to contain zero duplicates against archive-01..32 or against
+    each other. archive-33..40 (2022-2026) came from filenames written
+    in Chinese — title in 《》 brackets, dimensions, medium — with no
+    year given, so `year` is left unset on all eight (category alone
+    places them in the 2022-2026 tab, per instruction, without
+    inventing a year). Their titles and medium/material descriptions
+    are ENGLISH TRANSLATIONS of the original Chinese filenames,
+    provided as a best-effort courtesy, not a literal preservation of
+    the filename text — flagged to the artist for confirmation/
+    correction: 假感性2/3 → "False Sensibility 2/3", 脏骑士 → "Dirty
+    Knight", 漂移 → "Drift", 红色给家人，绿色给祖山 → "Red for Family,
+    Green for Ancestral Mountain", 转述火焰10/70 → "Relayed Flame
+    10/70"; 亚克力板上丙烯、中国绢 → "Acrylic on acrylic board, Chinese
+    silk" (亚克力板上丙烯 alone → "Acrylic on acrylic board"), 木板上丙烯
+    → "Acrylic on wood panel". archive-41..54 (before-2022) mix
+    English-titled filenames (used verbatim: "On The Street" ×2 with
+    different media — Ink pen/paper vs. pencil — kept as two distinct
+    works, not a duplicate; "Persona", "Rocket Man", "Toy" — a second,
+    distinct "Toy" from the one at archive-33, different category/
+    dimensions/medium/year; "Bum!", "Dance", "Princess") with four more
+    Chinese filenames whose titles are likewise best-effort English
+    translations flagged for confirmation: 家 → "Home", 新闻稿 → "Press
+    Release", 未命名作品16 → "Untitled 16", 逃离房间 → "Escape Room"; 印刷
+    后铅笔、纸 → "Pencil on print, paper", 印刷、水彩、纸 → "Print,
+    watercolor, paper", 数字艺术 → "Digital art", 综合材料 → "Mixed
+    media", 游戏 → "Game". archive-51's dimensions field preserves the
+    filename's own "A4 size" rather than converting it to a guessed cm
+    figure. archive-41/42 (IMG_6246.JPG, IMG_6254.JPG) carried no
+    embedded metadata at all, so — same as archive-08/09 — they are
+    added with no title/year/medium/dimensions rather than guessed
+    ones. As with the prior batch, this append order is temporary.
   */
   window.ARCHIVE_WORKS = [
     {
@@ -540,6 +575,249 @@
       category: '2022-2026',
       width: 1660,
       height: 1244
+    },
+    {
+      id: 'archive-33',
+      image: '../../assets/images/archive/archive-33-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-33-thumb.jpg',
+      title: 'Toy',
+      medium: 'Acrylic on wood panel',
+      dimensions: '28.9 × 30 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1805
+    },
+    {
+      id: 'archive-34',
+      image: '../../assets/images/archive/archive-34-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-34-thumb.jpg',
+      title: 'False Sensibility 2',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '19 × 27 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-35',
+      image: '../../assets/images/archive/archive-35-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-35-thumb.jpg',
+      title: 'Dirty Knight',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '26.2 × 31.5 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-36',
+      image: '../../assets/images/archive/archive-36-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-36-thumb.jpg',
+      title: 'False Sensibility 3',
+      medium: 'Acrylic on acrylic board',
+      dimensions: '26.6 × 48.7 cm',
+      category: '2022-2026',
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-37',
+      image: '../../assets/images/archive/archive-37-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-37-thumb.jpg',
+      title: 'Drift',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '31 × 37 cm',
+      category: '2022-2026',
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-38',
+      image: '../../assets/images/archive/archive-38-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-38-thumb.jpg',
+      title: 'Red for Family, Green for Ancestral Mountain',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '30 × 40 cm',
+      category: '2022-2026',
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-39',
+      image: '../../assets/images/archive/archive-39-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-39-thumb.jpg',
+      title: 'Relayed Flame 10',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '23 × 39.5 cm',
+      category: '2022-2026',
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-40',
+      image: '../../assets/images/archive/archive-40-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-40-thumb.jpg',
+      title: 'Relayed Flame 70',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '59 × 62.7 cm',
+      category: '2022-2026',
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-41',
+      image: '../../assets/images/archive/archive-41-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-41-thumb.jpg',
+      category: 'before-2022',
+      width: 2101,
+      height: 2200
+    },
+    {
+      id: 'archive-42',
+      image: '../../assets/images/archive/archive-42-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-42-thumb.jpg',
+      category: 'before-2022',
+      width: 1730,
+      height: 1223
+    },
+    {
+      id: 'archive-43',
+      image: '../../assets/images/archive/archive-43-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-43-thumb.jpg',
+      title: 'On The Street',
+      year: '2020',
+      medium: 'Ink pen, paper',
+      dimensions: '25 × 18 cm',
+      category: 'before-2022',
+      width: 1474,
+      height: 2200
+    },
+    {
+      id: 'archive-44',
+      image: '../../assets/images/archive/archive-44-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-44-thumb.jpg',
+      title: 'On The Street',
+      year: '2020',
+      medium: 'Pencil',
+      dimensions: '25 × 18 cm',
+      category: 'before-2022',
+      width: 1032,
+      height: 1422
+    },
+    {
+      id: 'archive-45',
+      image: '../../assets/images/archive/archive-45-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-45-thumb.jpg',
+      title: 'Persona',
+      year: '2020',
+      medium: 'Pencil',
+      dimensions: '25 × 18 cm',
+      category: 'before-2022',
+      width: 1086,
+      height: 1402
+    },
+    {
+      id: 'archive-46',
+      image: '../../assets/images/archive/archive-46-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-46-thumb.jpg',
+      title: 'Rocket Man',
+      year: '2020',
+      medium: 'Ink pen, paper',
+      dimensions: '30 × 42 cm',
+      category: 'before-2022',
+      width: 1038,
+      height: 1376
+    },
+    {
+      id: 'archive-47',
+      image: '../../assets/images/archive/archive-47-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-47-thumb.jpg',
+      title: 'Toy',
+      year: '2020',
+      medium: 'Mixed media',
+      dimensions: '92 × 66 cm',
+      category: 'before-2022',
+      width: 2200,
+      height: 1570
+    },
+    {
+      id: 'archive-48',
+      image: '../../assets/images/archive/archive-48-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-48-thumb.jpg',
+      title: 'Bum!',
+      year: '2019',
+      medium: 'Ink pen on paper',
+      dimensions: '21 × 29.7 cm',
+      category: 'before-2022',
+      width: 2116,
+      height: 1288
+    },
+    {
+      id: 'archive-49',
+      image: '../../assets/images/archive/archive-49-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-49-thumb.jpg',
+      title: 'Dance',
+      year: '2020',
+      medium: 'Mixed media',
+      dimensions: '92 × 73 cm',
+      category: 'before-2022',
+      width: 2200,
+      height: 1805
+    },
+    {
+      id: 'archive-50',
+      image: '../../assets/images/archive/archive-50-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-50-thumb.jpg',
+      title: 'Princess',
+      year: '2020',
+      medium: 'Pencil on print, paper',
+      dimensions: '32 × 15 cm',
+      category: 'before-2022',
+      width: 2200,
+      height: 1235
+    },
+    {
+      id: 'archive-51',
+      image: '../../assets/images/archive/archive-51-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-51-thumb.jpg',
+      title: 'Home',
+      year: '2020',
+      medium: 'Print, watercolor, paper',
+      dimensions: 'A4 size',
+      category: 'before-2022',
+      width: 2200,
+      height: 1461
+    },
+    {
+      id: 'archive-52',
+      image: '../../assets/images/archive/archive-52-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-52-thumb.jpg',
+      title: 'Press Release',
+      year: '2020',
+      medium: 'Digital art',
+      category: 'before-2022',
+      width: 2200,
+      height: 1815
+    },
+    {
+      id: 'archive-53',
+      image: '../../assets/images/archive/archive-53-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-53-thumb.jpg',
+      title: 'Untitled 16',
+      category: 'before-2022',
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-54',
+      image: '../../assets/images/archive/archive-54-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-54-thumb.jpg',
+      title: 'Escape Room',
+      year: '2020',
+      medium: 'Game',
+      category: 'before-2022',
+      width: 2116,
+      height: 1279
     }
   ];
 </script>
