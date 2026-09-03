@@ -599,12 +599,6 @@ main { display: block; }
   margin: 0;
 }
 
-.carousel-figure-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 .carousel-figure img {
   width: 100%;
   height: 100%;
@@ -629,23 +623,8 @@ main { display: block; }
   max-height: 42%;
 }
 
-/* A quiet hover affordance on the linked image — opacity only, no scale. */
-.carousel-figure-link:hover img,
-.carousel-figure-link:focus-visible img {
-  opacity: 0.88;
-}
 @media (prefers-reduced-motion: reduce) {
   .carousel-figure img { transition: none; }
-}
-
-/* The homepage caption names the artwork shown, so — like the
-   artwork-info block on the single-work template — it takes the
-   informational voice rather than the structural one,
-   overriding the .meta-text class it's paired with in the markup. */
-.carousel-caption {
-  padding-top: var(--space-4);
-  text-align: center;
-  font-family: var(--font-serif);
 }
 
 /* Prev/next controls: thin, quiet strokes near the true viewport
