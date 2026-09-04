@@ -378,10 +378,43 @@
     (two other archive works under gallery lighting) is exactly what
     its position in the reference screenshot's row 2 shows.
 
-    Section 6 onward, and any reordering of sections 1-5, are left for
-    a future update — nothing about this structure needs to change to
-    append another group later (see the `group` field description
-    above).
+    SECTION REORDER: group 5 (the 3x3 block described just above) was
+    moved from the last section on the page to the first, at the
+    artist's request — the page now reads group 5, then groups 1-4 in
+    their original relative order (previously it was groups 1-4, then
+    5). This was done by physically moving group 5's nine object
+    literals earlier in this array, to right after the last
+    "before-2022" entry and right before group 1's first entry —
+    nothing else changed: same nine works, same internal 3x3 order,
+    same `group: 5` number on each (deliberately left as "5" rather
+    than renumbered to "0" or "1", since renderGrid() orders groups by
+    where each one's first work appears in this array, not by the
+    numeric value of `group` — that number is only ever used as an
+    opaque lookup key for ARCHIVE_LARGE_GAP_AFTER/ARCHIVE_GROUP_LAYOUT,
+    so leaving it as 5 costs nothing and avoids touching five other
+    groups' worth of entries and every reference to "group 1"/"group 4"
+    elsewhere in these comments and in main.js). Because
+    ARCHIVE_LARGE_GAP_AFTER (['2022-2026:1']) and ARCHIVE_GROUP_LAYOUT
+    ({'2022-2026:4': 'cols-2'}) key off that same group number rather
+    than position, moving group 5 didn't require touching either of
+    them: the large gap still lands between group 1 and group 2
+    wherever they render (they're still adjacent to each other in the
+    array), and group 4 still renders as the compact 2-column block —
+    both completely unaffected by group 5 now sitting in front of them.
+    Group 5 itself is still absent from both of those, so it renders
+    with the plain inter-group gap on both sides — no gap before it
+    (nothing precedes the first group in a category, per the sibling-
+    selector gap rule described above) and the normal gap after it,
+    now between it and group 1 instead of between group 4 and it.
+    Group 4 (the compact 2x2 block) is now the last section on the
+    page, so there is no leftover gap at group 5's old location — the
+    page simply ends after group 4, same as it would have regardless
+    of which group happened to render last.
+
+    Section 6 onward, and any further reordering, are left for a
+    future update — nothing about this structure needs to change to
+    append another group or move an existing one again (see the
+    `group` field description above).
 
     LARGE GAP after group 1 (the three-sculpture removal): when
     archive-69/70/71 were removed just above, the artist specifically
@@ -590,6 +623,111 @@
       category: 'before-2022',
       width: 2116,
       height: 1279
+    },
+    {
+      id: 'archive-94',
+      image: '../../assets/images/archive/archive-94-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-94-thumb.jpg',
+      title: 'Red for Family, Green for Ancestral Mountain',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '30 × 40 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-95',
+      image: '../../assets/images/archive/archive-95-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-95-thumb.jpg',
+      title: 'The Stranger',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '28.9 × 30 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1669
+    },
+    {
+      id: 'archive-96',
+      image: '../../assets/images/archive/archive-96-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-96-thumb.jpg',
+      title: 'Drift',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '31 × 37 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-97',
+      image: '../../assets/images/archive/archive-97-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-97-thumb.jpg',
+      title: 'Dirty Knight',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '27.5 × 38.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-98',
+      image: '../../assets/images/archive/archive-98-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-98-thumb.jpg',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-99',
+      image: '../../assets/images/archive/archive-99-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-99-thumb.jpg',
+      title: 'The Stranger',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '23.8 × 25 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-100',
+      image: '../../assets/images/archive/archive-100-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-100-thumb.jpg',
+      title: 'Relayed Flame 10',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '23 × 39.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-101',
+      image: '../../assets/images/archive/archive-101-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-101-thumb.jpg',
+      title: 'Relayed Flame 70',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '59 × 62.7 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-102',
+      image: '../../assets/images/archive/archive-102-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-102-thumb.jpg',
+      title: 'Dirty Knight',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '26.2 × 31.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1650
     },
     {
       id: 'archive-61',
@@ -955,111 +1093,6 @@
       group: 4,
       width: 2200,
       height: 1649
-    },
-    {
-      id: 'archive-94',
-      image: '../../assets/images/archive/archive-94-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-94-thumb.jpg',
-      title: 'Red for Family, Green for Ancestral Mountain',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '30 × 40 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 2200,
-      height: 1650
-    },
-    {
-      id: 'archive-95',
-      image: '../../assets/images/archive/archive-95-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-95-thumb.jpg',
-      title: 'The Stranger',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '28.9 × 30 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 2200,
-      height: 1669
-    },
-    {
-      id: 'archive-96',
-      image: '../../assets/images/archive/archive-96-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-96-thumb.jpg',
-      title: 'Drift',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '31 × 37 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 1650,
-      height: 2200
-    },
-    {
-      id: 'archive-97',
-      image: '../../assets/images/archive/archive-97-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-97-thumb.jpg',
-      title: 'Dirty Knight',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '27.5 × 38.5 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 2200,
-      height: 1467
-    },
-    {
-      id: 'archive-98',
-      image: '../../assets/images/archive/archive-98-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-98-thumb.jpg',
-      category: '2022-2026',
-      group: 5,
-      width: 2200,
-      height: 1467
-    },
-    {
-      id: 'archive-99',
-      image: '../../assets/images/archive/archive-99-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-99-thumb.jpg',
-      title: 'The Stranger',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '23.8 × 25 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 1650,
-      height: 2200
-    },
-    {
-      id: 'archive-100',
-      image: '../../assets/images/archive/archive-100-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-100-thumb.jpg',
-      title: 'Relayed Flame 10',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '23 × 39.5 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 1650,
-      height: 2200
-    },
-    {
-      id: 'archive-101',
-      image: '../../assets/images/archive/archive-101-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-101-thumb.jpg',
-      title: 'Relayed Flame 70',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '59 × 62.7 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 1650,
-      height: 2200
-    },
-    {
-      id: 'archive-102',
-      image: '../../assets/images/archive/archive-102-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-102-thumb.jpg',
-      title: 'Dirty Knight',
-      medium: 'Acrylic on acrylic board, Chinese silk',
-      dimensions: '26.2 × 31.5 cm',
-      category: '2022-2026',
-      group: 5,
-      width: 2200,
-      height: 1650
     },
   ];
 </script>
