@@ -1486,6 +1486,26 @@ body.work-detail-page .primary-nav .submenu a {
   margin-top: clamp(18rem, 45vw, 42rem);
 }
 
+/* A second, smaller opt-in gap tier — separate from --gap-large above,
+   which is already tuned for a specific, much taller ~650px case and
+   isn't reused here. Applied when a group is listed in window.
+   ARCHIVE_XL_GAP_AFTER (see the "Section 1 / Section 2 gap" note in
+   works/archive/index.html): today, the group that renders first on
+   the page, so the two "first-look" groups of works read as clearly
+   separate bodies of work right from the top of the page. Targets
+   ~300-350px on a common desktop width and scales down proportionally
+   on narrower screens, the same vw-scaling approach as --gap-large,
+   just with its own smaller min/preferred/max — 22.5vw lands at 324px
+   at 1440px wide (inside the requested range), the 22rem (352px) cap
+   keeps very wide screens close to that same range instead of growing
+   unbounded, and the 8rem (128px) floor keeps it visibly bigger than
+   the plain inter-group gap above even on small screens. Must come
+   after ".archive-grid + .archive-grid" for the same source-order
+   reason --gap-large does. */
+.archive-grid--gap-xl + .archive-grid {
+  margin-top: clamp(8rem, 22.5vw, 22rem);
+}
+
 .archive-figure { margin: 0; }
 
 .archive-thumb { display: block; width: 100%; }

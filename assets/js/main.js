@@ -732,12 +732,18 @@ var TY_I18N = (function () {
   // where this array is declared (window.ARCHIVE_LARGE_GAP_AFTER).
   var LARGE_GAP_AFTER = Array.isArray(window.ARCHIVE_LARGE_GAP_AFTER) ? window.ARCHIVE_LARGE_GAP_AFTER : [];
 
+  // A second, smaller opt-in gap tier — independent of LARGE_GAP_AFTER,
+  // which targets a different, much taller size for a different case.
+  // See the "Section 1 / Section 2 gap" note in works/archive/index.html
+  // and ".archive-grid--gap-xl" in style.css (window.ARCHIVE_XL_GAP_AFTER).
+  var XL_GAP_AFTER = Array.isArray(window.ARCHIVE_XL_GAP_AFTER) ? window.ARCHIVE_XL_GAP_AFTER : [];
+
   // '<category>:<group>' -> a style.css modifier suffix, applied as
   // "archive-grid--<suffix>" on that group's grid element — e.g.
   // 'cols-2' for the compact two-column variant (see the "SECTION 4"
   // note in works/archive/index.html and .archive-grid--cols-2 in
-  // style.css). Separate from LARGE_GAP_AFTER because a group can want
-  // a layout change, a bigger gap, both, or neither.
+  // style.css). Separate from LARGE_GAP_AFTER/XL_GAP_AFTER because a
+  // group can want a layout change, a bigger gap, both, or neither.
   var GROUP_LAYOUT = (window.ARCHIVE_GROUP_LAYOUT && typeof window.ARCHIVE_GROUP_LAYOUT === 'object')
     ? window.ARCHIVE_GROUP_LAYOUT
     : {};
@@ -752,11 +758,12 @@ var TY_I18N = (function () {
   // ".archive-grid + .archive-grid" gap only ever appears BETWEEN
   // groups, never before the first one — no JS-computed spacing, no
   // visible label, just plain whitespace from that CSS rule. A group
-  // whose '<category>:<group>' combo is listed in LARGE_GAP_AFTER
-  // additionally gets an "archive-grid--gap-large" class, and one
-  // listed in GROUP_LAYOUT gets an "archive-grid--<suffix>" class —
-  // both are just extra classes on the same element, style.css does
-  // the rest.
+  // whose '<category>:<group>' combo is listed in LARGE_GAP_AFTER gets
+  // an "archive-grid--gap-large" class, one listed in XL_GAP_AFTER
+  // gets "archive-grid--gap-xl", and one listed in GROUP_LAYOUT gets
+  // "archive-grid--<suffix>" — all are just extra classes on the same
+  // element (a group could in principle carry more than one), style.css
+  // does the rest.
   function renderGrid() {
     visible = works.filter(function (w) { return w.category === activeCategory; });
     grid.innerHTML = '';
@@ -777,6 +784,9 @@ var TY_I18N = (function () {
         var layoutKey = activeCategory + ':' + key;
         if (LARGE_GAP_AFTER.indexOf(layoutKey) !== -1) {
           gridEl.classList.add('archive-grid--gap-large');
+        }
+        if (XL_GAP_AFTER.indexOf(layoutKey) !== -1) {
+          gridEl.classList.add('archive-grid--gap-xl');
         }
         if (GROUP_LAYOUT[layoutKey]) {
           gridEl.classList.add('archive-grid--' + GROUP_LAYOUT[layoutKey]);

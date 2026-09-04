@@ -411,6 +411,45 @@
     page simply ends after group 4, same as it would have regardless
     of which group happened to render last.
 
+    IMAGE REPLACEMENT, group 5 (now "Section 1"): all nine of group 5's
+    images (archive-94 through archive-102) were replaced with newer
+    versions the artist supplied — same nine real artworks, same ids,
+    same titles/medium/dimensions/order, only the underlying jpg files
+    (and, where the new photo was framed differently, the `width`/
+    `height` fields) changed. Matched to their existing entries by
+    filename (all nine replacement files use the exact same filenames
+    as the batch that originally created this group) and confirmed by
+    opening and visually comparing each one against its current entry
+    before replacing anything — several are tighter or differently
+    cropped documentation shots of the same piece (most visibly
+    archive-95 and archive-99, both "The Stranger," which went from a
+    wider landscape crop to a tighter near-square one), which is why
+    their `width`/`height` needed updating even though nothing else
+    about the entry did. Resized the same way as every other jpg/png
+    batch on this page — long edge capped at 2200px for `image`, 900px
+    for `thumbnail`, aspect ratio of the NEW source untouched, re-
+    encoded as JPEG. The old versions of these nine files were simply
+    overwritten in place at the same archive-94..102-full/thumb.jpg
+    paths (same convention as every prior "replace," e.g. round 24's
+    sculpture removal, of leaving no orphaned old file — here there's
+    no old file to orphan, since the filename never changes on a
+    same-slot replacement, only its contents do). No entries were
+    added, removed, or reordered.
+
+    Section 1 / Section 2 gap: with group 5 now first (see "SECTION
+    REORDER" above), the artist asked for a visibly larger separation
+    specifically between it and the group that now follows it, on top
+    of the standard inter-group gap already described above — see
+    window.ARCHIVE_XL_GAP_AFTER just above ARCHIVE_WORKS and
+    ".archive-grid--gap-xl" in style.css. This is a second, independent
+    gap tier alongside ARCHIVE_LARGE_GAP_AFTER/.archive-grid--gap-large
+    (the ~650px gap already used elsewhere in this file) — that one's
+    clamp() is tuned for a specific, much taller case and wasn't
+    reused here; this tier targets ~300-350px on a typical desktop
+    width instead, and like the other gap tier, is just a plain
+    whitespace margin with no box, border, caption, or clickable
+    element.
+
     Section 6 onward, and any further reordering, are left for a
     future update — nothing about this structure needs to change to
     append another group or move an existing one again (see the
@@ -463,6 +502,16 @@
   // instead of the normal one (renderGrid() / .archive-grid--gap-large
   // in style.css). Empty array = no category currently needs this.
   window.ARCHIVE_LARGE_GAP_AFTER = ['2022-2026:1'];
+  // See the "Section 1 / Section 2 gap" note above: a second, smaller
+  // opt-in gap tier, independent of ARCHIVE_LARGE_GAP_AFTER (that one's
+  // clamp() is tuned for a much taller ~650px case and isn't reused
+  // here) — '<category>:<group>' keys listed here get a ~300-350px
+  // desktop gap after that group's grid (renderGrid() /
+  // .archive-grid--gap-xl in style.css). Group 5 is now the first
+  // group rendered in "2022-2026" (see the "SECTION REORDER" note
+  // above), so this is what separates it from the group that now
+  // follows it.
+  window.ARCHIVE_XL_GAP_AFTER = ['2022-2026:5'];
   // '<category>:<group>' -> a style.css layout-modifier suffix (see the
   // "SECTION 4" note above and .archive-grid--cols-2 in style.css).
   // Today only group 4 opts into the compact two-column variant; every
@@ -634,7 +683,7 @@
       category: '2022-2026',
       group: 5,
       width: 2200,
-      height: 1650
+      height: 1632
     },
     {
       id: 'archive-95',
@@ -645,8 +694,8 @@
       dimensions: '28.9 × 30 cm',
       category: '2022-2026',
       group: 5,
-      width: 2200,
-      height: 1669
+      width: 2111,
+      height: 2200
     },
     {
       id: 'archive-96',
@@ -657,7 +706,7 @@
       dimensions: '31 × 37 cm',
       category: '2022-2026',
       group: 5,
-      width: 1650,
+      width: 1866,
       height: 2200
     },
     {
@@ -690,8 +739,8 @@
       dimensions: '23.8 × 25 cm',
       category: '2022-2026',
       group: 5,
-      width: 1650,
-      height: 2200
+      width: 2200,
+      height: 2158
     },
     {
       id: 'archive-100',
@@ -714,8 +763,8 @@
       dimensions: '59 × 62.7 cm',
       category: '2022-2026',
       group: 5,
-      width: 1650,
-      height: 2200
+      width: 2200,
+      height: 2145
     },
     {
       id: 'archive-102',
@@ -727,7 +776,7 @@
       category: '2022-2026',
       group: 5,
       width: 2200,
-      height: 1650
+      height: 1817
     },
     {
       id: 'archive-61',
