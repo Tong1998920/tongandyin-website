@@ -1396,19 +1396,28 @@ body.work-detail-page .primary-nav .submenu a {
 .archive-category-btn:hover,
 .archive-category-btn:focus-visible { color: var(--color-active); }
 
-/* Three columns on desktop (back from a brief two-column change),
-   sitting inside the same capped .wrap content column as the rest of
-   the site (so the grid never stretches edge to edge) with generous,
-   controlled gaps rather than a tight commercial card grid. Each
-   image keeps width:100%/height:auto — its own aspect ratio, never
-   cropped or forced to a uniform box — so .archive-figure/
-   .archive-thumb carry no fixed height anywhere. This is prepared for
-   a currently-empty "2022-2026" category (see the ARCHIVE_WORKS
-   comment in works/archive/index.html) — the grid itself doesn't care
-   how many works are in it, so whatever's added there next lays out
-   as 3-per-row on desktop with no further CSS changes needed. The
-   900px "tablet" breakpoint just below steps this down to 2 columns;
-   the 520px "phone" breakpoint further down (1 column) is unchanged. */
+/* [data-archive-grid] (".archive-groups" in the HTML) is a plain
+   wrapper — main.js's renderGrid() fills it with one or more child
+   .archive-grid elements, one per group of works (see the `group`
+   field described in the ARCHIVE_WORKS comment in
+   works/archive/index.html). A category with no groups still gets
+   exactly one .archive-grid child, so this is a strict superset of
+   the old always-one-grid behavior, not a different system. */
+.archive-groups {
+  display: block;
+}
+
+/* Three columns on desktop, sitting inside the same capped .wrap
+   content column as the rest of the site (so the grid never stretches
+   edge to edge) with generous, controlled gaps rather than a tight
+   commercial card grid. Each image keeps width:100%/height:auto — its
+   own aspect ratio, never cropped or forced to a uniform box — so
+   .archive-figure/.archive-thumb carry no fixed height anywhere. A
+   group with a count not divisible by 3 (e.g. 11 or 8 works) simply
+   ends its last row short — CSS grid doesn't add filler cells, so no
+   empty placeholder appears. The 900px "tablet" breakpoint just below
+   steps this down to 2 columns; the 520px "phone" breakpoint further
+   down (1 column) is unchanged. */
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1419,6 +1428,19 @@ body.work-detail-page .primary-nav .submenu a {
 
 @media (max-width: 900px) {
   .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* The ONLY thing that visually separates one group from the next —
+   deliberately larger than the normal row-gap above, but still a
+   plain whitespace break: no heading, label, line, or border. The
+   sibling combinator means this never applies before the first group
+   (nothing to separate it from), so a category with only one group —
+   every category except "2022-2026" today — renders with no extra gap
+   at all, identical to before groups existed. Reuses the site's
+   existing --space-8 token (the same large structural gap used
+   elsewhere, e.g. above the footer) rather than a one-off value. */
+.archive-grid + .archive-grid {
+  margin-top: var(--space-8);
 }
 
 .archive-figure { margin: 0; }

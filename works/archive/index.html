@@ -70,7 +70,19 @@
       <button type="button" class="archive-category-btn" data-archive-category="before-2022" aria-pressed="false">Before 2022</button>
     </nav>
 
-    <div class="archive-grid" data-archive-grid></div>
+    <!-- data-archive-grid is now a wrapper, not the grid itself: JS
+         (renderGrid() in main.js) fills it with one or more child
+         .archive-grid elements, one per `group` present in the active
+         category's works (see the ARCHIVE_WORKS comment below for
+         what `group` means and how to add more). A category with no
+         `group` field on its works (e.g. "before-2022" today) still
+         renders as a single .archive-grid child, identical to before
+         this existed. No visible heading/label is ever added for a
+         group — the only thing that marks a group boundary is the
+         larger gap in style.css's ".archive-grid + .archive-grid"
+         rule, which only applies between two sibling grids, so a
+         single-group category gets no extra gap at all. -->
+    <div class="archive-groups" data-archive-grid></div>
 
     <p class="placeholder-note" data-archive-empty>Archive works have not been added yet.</p>
 
@@ -136,6 +148,20 @@
         height:     optional, the image's intrinsic pixel size (avoids
                     layout shift while it loads, same as every other
                     image on the site)
+        group:      optional number — works sharing the same `group`
+                    (within the same category) are laid out together
+                    as one 3-column grid, with a visibly larger gap
+                    before the next group's grid (see style.css,
+                    ".archive-grid + .archive-grid") — no heading or
+                    label is ever rendered for a group, purely a
+                    whitespace break. Groups render in the order their
+                    first work appears in this array; works within a
+                    group render in their own order in this array — so
+                    a group's works should stay contiguous here. Omit
+                    `group` entirely for a category that isn't
+                    (or isn't yet) organized into groups — see
+                    "before-2022" below, which has none and renders as
+                    one plain grid, exactly as it always has.
       }
 
     "2022-2026" RESET: this category previously held four batches
@@ -161,6 +187,57 @@
     the new collection later is exactly the "TO ADD A WORK LATER" case
     described above this comment block — new objects appended to this
     array — nothing here or in style.css needs to change for that.
+
+    "2022-2026" REBUILD, group 1 (archive-61 through archive-71, 11
+    works) and group 2 (archive-72 through archive-79, 8 works): the
+    first two groups of the new, from-scratch "2022-2026" collection,
+    each in the exact order the artist specified (by numbered
+    filename, 1 through 11 and 1 through 8 — NOT alphabetical, date,
+    dimension, or composition order). Sourced from two freshly
+    uploaded ZIPs, not from any pre-reset archive-01..40/55..60 file
+    above, per instruction — new image files, new ids, even where a
+    work's title/medium/dimensions happens to match one from before
+    the reset (several clearly do; that's the same real artwork being
+    reintroduced deliberately, not a coincidence, but it's still a new
+    entry with its own fresh asset files rather than a pointer back to
+    the old ones). group 1's images (jpg/png) were resized the same
+    way as every prior batch on this page — long edge capped at 2200px
+    for the lightbox `image`, 900px for the grid `thumbnail`, aspect
+    ratio untouched, re-encoded as JPEG (the two PNG source files were
+    fully opaque, so flattening to JPEG changes nothing visible) —
+    never cropped or stretched. group 2's six .gif files are copied
+    through unchanged (same convention as the pre-reset GIF batch:
+    `image` and `thumbnail` point at the identical original .gif, no
+    resize, no first-frame extraction, no separate thumbnail file) —
+    two of these six are actually byte-identical to the removed
+    archive-55/57/59/56/58/60 files from before the reset (same
+    animations, re-supplied fresh per instruction rather than re-
+    linked to the old paths); its remaining two works are static jpg
+    photos, resized the same way as group 1.
+
+    Titles/medium here are taken verbatim from THIS batch's own
+    filenames, not copied from the pre-reset entries even when the
+    same work was documented differently there — e.g. this batch
+    spells the group-2 GIF titles "Please step on my face" and "Go to
+    heaven" (sentence case) and "Don't Bother Me" (title case),
+    inconsistent with each other and with the title-case versions the
+    pre-reset GIF batch used ("Please Step on My Face", "Go to
+    Heaven") — left exactly as this batch's filenames give them,
+    same don't-alter-given-titles rule as everywhere else in this
+    file. archive-64 ("Relayed Flame") and archive-69 ("Baby girl")
+    repeat a title used by an earlier, different work in this same
+    file (the pre-reset "Relayed Flame 10"/"Relayed Flame 70", and
+    "Baby Girl" at archive-61 right above it) with different
+    dimensions/medium — kept as distinct works, per the same
+    repeated-title handling used throughout this file. archive-64's
+    dimensions ("45-70 × 120 cm") and archive-69's filename (the only
+    one in group 1 with no leading number — its position as #9 comes
+    from the artist's reference screenshot, not the filename) are
+    both worth the artist double-checking against their own records.
+    Sections 3 onward, and any reordering of sections 1-2, are left
+    for a future update — nothing about this structure needs to change
+    to append a group 3 later (see the `group` field description
+    above).
 
     before-2022 (archive-41 through archive-54, 14 works) is NOT part
     of this reset and is completely unchanged — added as the third of
@@ -337,6 +414,252 @@
       category: 'before-2022',
       width: 2116,
       height: 1279
+    },
+    {
+      id: 'archive-61',
+      image: '../../assets/images/archive/archive-61-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-61-thumb.jpg',
+      title: 'Baby Girl',
+      year: '2022',
+      medium: 'Acrylic on paper',
+      dimensions: '92 × 66 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 2200,
+      height: 1589
+    },
+    {
+      id: 'archive-62',
+      image: '../../assets/images/archive/archive-62-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-62-thumb.jpg',
+      title: 'Driver',
+      year: '2022',
+      medium: 'Acrylic on paper',
+      dimensions: '68 × 88 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1554,
+      height: 1266
+    },
+    {
+      id: 'archive-63',
+      image: '../../assets/images/archive/archive-63-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-63-thumb.jpg',
+      title: 'Love and tears',
+      year: '2022',
+      medium: 'Inkjet print and acrylic',
+      dimensions: '65 × 155 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1736,
+      height: 1052
+    },
+    {
+      id: 'archive-64',
+      image: '../../assets/images/archive/archive-64-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-64-thumb.jpg',
+      title: 'Relayed Flame',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '45-70 × 120 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-65',
+      image: '../../assets/images/archive/archive-65-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-65-thumb.jpg',
+      title: 'Bunny Girl',
+      year: '2022',
+      medium: 'Liquid acrylic and ink pen',
+      dimensions: '100 × 51 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 842,
+      height: 1386
+    },
+    {
+      id: 'archive-66',
+      image: '../../assets/images/archive/archive-66-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-66-thumb.jpg',
+      title: 'Birthday',
+      year: '2022',
+      medium: 'Inkjet print and acrylic',
+      dimensions: '85 × 75 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-67',
+      image: '../../assets/images/archive/archive-67-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-67-thumb.jpg',
+      title: 'Angry apple',
+      year: '2022',
+      medium: 'Liquid acrylic and charcoal',
+      dimensions: '90 × 88 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1304,
+      height: 1378
+    },
+    {
+      id: 'archive-68',
+      image: '../../assets/images/archive/archive-68-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-68-thumb.jpg',
+      title: 'The god of panties',
+      year: '2022',
+      medium: 'Liquid acrylic and ink pen',
+      dimensions: '70 × 55 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1660,
+      height: 1244
+    },
+    {
+      id: 'archive-69',
+      image: '../../assets/images/archive/archive-69-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-69-thumb.jpg',
+      title: 'Baby girl',
+      year: '2022',
+      medium: 'Polymer and spray paint',
+      dimensions: '153 × 96 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 2160,
+      height: 1148
+    },
+    {
+      id: 'archive-70',
+      image: '../../assets/images/archive/archive-70-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-70-thumb.jpg',
+      title: 'Dream',
+      year: '2022',
+      medium: 'Polymer and spray paint',
+      dimensions: '52 × 110 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 2156,
+      height: 1144
+    },
+    {
+      id: 'archive-71',
+      image: '../../assets/images/archive/archive-71-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-71-thumb.jpg',
+      title: "Spider-Maid's private time",
+      year: '2022',
+      medium: 'Polymer and spray paint',
+      dimensions: '145 × 135 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1244,
+      height: 1394
+    },
+    {
+      id: 'archive-72',
+      image: '../../assets/images/archive/archive-72-full.gif',
+      thumbnail: '../../assets/images/archive/archive-72-full.gif',
+      title: 'Please step on my face',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1200,
+      height: 900
+    },
+    {
+      id: 'archive-73',
+      image: '../../assets/images/archive/archive-73-full.gif',
+      thumbnail: '../../assets/images/archive/archive-73-full.gif',
+      title: 'Fire',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1440,
+      height: 990
+    },
+    {
+      id: 'archive-74',
+      image: '../../assets/images/archive/archive-74-full.gif',
+      thumbnail: '../../assets/images/archive/archive-74-full.gif',
+      title: "Don't Bother Me",
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 2400,
+      height: 1800
+    },
+    {
+      id: 'archive-75',
+      image: '../../assets/images/archive/archive-75-full.gif',
+      thumbnail: '../../assets/images/archive/archive-75-full.gif',
+      title: 'Love',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1600,
+      height: 1200
+    },
+    {
+      id: 'archive-76',
+      image: '../../assets/images/archive/archive-76-full.gif',
+      thumbnail: '../../assets/images/archive/archive-76-full.gif',
+      title: 'Go to heaven',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1200,
+      height: 900
+    },
+    {
+      id: 'archive-77',
+      image: '../../assets/images/archive/archive-77-full.gif',
+      thumbnail: '../../assets/images/archive/archive-77-full.gif',
+      title: 'Boy',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 2400,
+      height: 1800
+    },
+    {
+      id: 'archive-78',
+      image: '../../assets/images/archive/archive-78-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-78-thumb.jpg',
+      title: 'Go to heaven',
+      year: '2022',
+      medium: 'Video installation',
+      dimensions: '30 × 23 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-79',
+      image: '../../assets/images/archive/archive-79-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-79-thumb.jpg',
+      title: 'Fire',
+      year: '2022',
+      medium: 'Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1463,
+      height: 2200
     },
   ];
 </script>

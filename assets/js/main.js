@@ -609,18 +609,24 @@ var TY_I18N = (function () {
 
 (function () {
   // Archive: a separate, data-driven browsing system from Selected
-  // Works — a flat thumbnail grid (see style.css, .archive-grid) with
-  // two plain-text category filters, opening into a full-screen
-  // lightbox instead of a dedicated project page per artwork. The
-  // grid is rendered entirely from the ARCHIVE_WORKS array declared
-  // inline in works/archive/index.html — adding a future work means
-  // adding one entry there (image, thumbnail, title, year, medium,
-  // dimensions, category), never new CSS, coordinates, or a new
+  // Works — one or more thumbnail grids (see style.css, .archive-grid,
+  // and renderGrid() below for how a category's works split into
+  // several grids by their optional `group` field) under two plain-
+  // text category filters, opening into a full-screen lightbox
+  // instead of a dedicated project page per artwork. Everything is
+  // rendered entirely from the ARCHIVE_WORKS array declared inline in
+  // works/archive/index.html — adding a future work means adding one
+  // entry there (image, thumbnail, title, year, medium, dimensions,
+  // category, optionally group), never new CSS, coordinates, or a new
   // detail route. A no-op on every page without [data-archive].
   var root = document.querySelector('[data-archive]');
   if (!root) return;
 
   var works = Array.isArray(window.ARCHIVE_WORKS) ? window.ARCHIVE_WORKS : [];
+  // `grid`: the [data-archive-grid] wrapper — NOT itself a CSS grid.
+  // renderGrid() below fills it with one or more child .archive-grid
+  // elements (one per group of works). Variable name kept as `grid`
+  // for a minimal diff against every place below that already uses it.
   var grid = root.querySelector('[data-archive-grid]');
   var emptyNote = root.querySelector('[data-archive-empty]');
   var categoryButtons = Array.prototype.slice.call(root.querySelectorAll('[data-archive-category]'));
@@ -692,33 +698,62 @@ var TY_I18N = (function () {
     return parts.join(' | ');
   }
 
+  function buildFigure(w) {
+    var figure = document.createElement('figure');
+    figure.className = 'archive-figure';
+    var a = document.createElement('a');
+    a.className = 'archive-thumb';
+    a.href = '#work-' + encodeURIComponent(w.id);
+    var label = [zhTitle(w.title), w.year].filter(Boolean).join(', ');
+    var openWord = TY_I18N.isZh() ? '打开 ' : 'Open ';
+    a.setAttribute('aria-label', label ? openWord + label : (TY_I18N.isZh() ? '打开作品' : 'Open artwork'));
+    var img = document.createElement('img');
+    var src = w.thumbnail || w.image;
+    img.src = src;
+    img.alt = label || '';
+    if (w.width) img.width = w.width;
+    if (w.height) img.height = w.height;
+    // GIF thumbnails (the animated Archive works added alongside this
+    // comment) run heavier than the site's jpg thumbnails, so those
+    // specifically are hinted to the browser as lazy-loadable rather
+    // than fetched immediately with the rest of the grid — every
+    // other, non-.gif thumbnail is untouched, still eager as before.
+    if (/\.gif($|\?)/i.test(src)) img.loading = 'lazy';
+    a.appendChild(img);
+    figure.appendChild(a);
+    return figure;
+  }
+
+  // `grid` (the [data-archive-grid] element) is a plain wrapper, not a
+  // grid itself — see the HTML comment above it. Works in the active
+  // category are split into ordered groups by their optional `group`
+  // field (works with no `group` all fall into one shared, unlabeled
+  // group, so a category that doesn't use grouping renders exactly
+  // like it always did: one .archive-grid). Each group becomes its
+  // own .archive-grid child in DOM order, so CSS's sibling-only
+  // ".archive-grid + .archive-grid" gap only ever appears BETWEEN
+  // groups, never before the first one — no JS-computed spacing, no
+  // visible label, just plain whitespace from that CSS rule.
   function renderGrid() {
     visible = works.filter(function (w) { return w.category === activeCategory; });
     grid.innerHTML = '';
+    var groupOrder = [];
+    var groupWorks = {};
     visible.forEach(function (w) {
-      var figure = document.createElement('figure');
-      figure.className = 'archive-figure';
-      var a = document.createElement('a');
-      a.className = 'archive-thumb';
-      a.href = '#work-' + encodeURIComponent(w.id);
-      var label = [zhTitle(w.title), w.year].filter(Boolean).join(', ');
-      var openWord = TY_I18N.isZh() ? '打开 ' : 'Open ';
-      a.setAttribute('aria-label', label ? openWord + label : (TY_I18N.isZh() ? '打开作品' : 'Open artwork'));
-      var img = document.createElement('img');
-      var src = w.thumbnail || w.image;
-      img.src = src;
-      img.alt = label || '';
-      if (w.width) img.width = w.width;
-      if (w.height) img.height = w.height;
-      // GIF thumbnails (the animated Archive works added alongside this
-      // comment) run heavier than the site's jpg thumbnails, so those
-      // specifically are hinted to the browser as lazy-loadable rather
-      // than fetched immediately with the rest of the grid — every
-      // other, non-.gif thumbnail is untouched, still eager as before.
-      if (/\.gif($|\?)/i.test(src)) img.loading = 'lazy';
-      a.appendChild(img);
-      figure.appendChild(a);
-      grid.appendChild(figure);
+      var key = w.group != null ? String(w.group) : '';
+      if (!Object.prototype.hasOwnProperty.call(groupWorks, key)) {
+        groupOrder.push(key);
+        groupWorks[key] = [];
+      }
+      groupWorks[key].push(w);
+    });
+    groupOrder.forEach(function (key) {
+      var gridEl = document.createElement('div');
+      gridEl.className = 'archive-grid';
+      groupWorks[key].forEach(function (w) {
+        gridEl.appendChild(buildFigure(w));
+      });
+      grid.appendChild(gridEl);
     });
     if (emptyNote) emptyNote.hidden = visible.length > 0;
   }
