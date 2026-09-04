@@ -201,8 +201,9 @@
     added with no title/year/medium/dimensions rather than guessed
     ones. As with the prior batch, this append order is temporary.
 
-    archive-55 through archive-60: fourth batch (6 works), the first
-    GIFs in the Archive - original animated documentation of six 2022
+    archive-56, archive-58, archive-60: what remains of a fourth batch
+    of 6 GIFs (originally archive-55 through archive-60), the first
+    GIFs in the Archive - original animated documentation of 2022
     "Pen, Acrylic Sheet, Animation Installation" pieces (28.5 x 15 cm
     each), given title/medium/dimensions/year verbatim by the artist.
     Each entry's `image` and `thumbnail` point at the SAME .gif file
@@ -211,23 +212,34 @@
     it losing frames) - see main.js, renderGrid(), for the matching
     loading="lazy" this batch prompted for every grid thumbnail, added
     because these run heavier than the site's jpg thumbnails.
-    Three of these six share a title with an existing, older, already-
-    documented entry - "Fire" (archive-11), "Go to Heaven"/"Go to
-    heaven" (archive-12, archive-20) and "Please Step on My
-    Face"/"Please step on my face" (archive-13) - but with different
-    medium text and (for Go to Heaven / Please Step on My Face)
-    different dimensions than what's recorded there, so - same
-    reasoning as the repeated "Go to heaven"/"Persona" titles in the
-    second batch above - these are kept as distinct new entries rather
-    than merged into or replacing those older ones. "Don't Bother Me"
-    (archive-60) similarly sits alongside the existing archive-04
-    ("Don't bother me") the same way. Capitalization ("Go to Heaven",
-    "Please Step on My Face", "Don't Bother Me") is given verbatim as
-    the artist typed it for this batch, title case rather than the
-    sentence case those older same-titled entries happen to use -
-    left as-is rather than "corrected" to match, per the same
-    don't-alter-given-titles rule as everywhere else in this file.
-    "Boy" (archive-55) has no earlier Archive entry under that title.
+    "Fire" (archive-56) and "Please Step on My Face"/"Please step on
+    my face" shared a title with an existing, older, already-
+    documented entry ("Fire" at archive-11; "Please step on my face"
+    at archive-13) but with different medium text and (for Please Step
+    on My Face) different dimensions than what's recorded there, so -
+    same reasoning as the repeated "Go to heaven"/"Persona" titles in
+    the second batch above - "Fire" (archive-56) was kept as a
+    distinct entry rather than merged into or replacing the older one.
+    "Go to Heaven" (archive-58) sits the same way alongside archive-12/
+    archive-20 ("Go to heaven"), and "Don't Bother Me" (archive-60)
+    alongside archive-04 ("Don't bother me"). Capitalization ("Go to
+    Heaven", "Don't Bother Me") is given verbatim as the artist typed
+    it for this batch, title case rather than the sentence case those
+    older same-titled entries happen to use - left as-is rather than
+    "corrected" to match, per the same don't-alter-given-titles rule
+    as everywhere else in this file.
+
+    "Boy" (archive-55), "Love" (archive-57) and "Please Step on My
+    Face" (archive-59) - three of the original six GIFs in this batch -
+    were removed at the artist's request shortly after being added
+    (identified visually from a marked-up screenshot of the grid, not
+    by title). Their .gif files were left in assets/images/archive/
+    (archive-55-full.gif, archive-57-full.gif, archive-59-full.gif) in
+    case they're wanted again; they're simply unreferenced by any
+    ARCHIVE_WORKS entry now, so nothing on the page loads or links to
+    them. The id numbering keeps its gaps (55, 57, 59 unused) rather
+    than renumbering archive-56/58/60, consistent with ids elsewhere
+    in this file being stable identifiers, not a dense sequence.
   */
   window.ARCHIVE_WORKS = [
     {
@@ -848,18 +860,6 @@
       height: 1279
     },
     {
-      id: 'archive-55',
-      image: '../../assets/images/archive/archive-55-full.gif',
-      thumbnail: '../../assets/images/archive/archive-55-full.gif',
-      title: 'Boy',
-      year: '2022',
-      medium: 'Pen, Acrylic Sheet, Animation Installation',
-      dimensions: '28.5 × 15 cm',
-      category: '2022-2026',
-      width: 2400,
-      height: 1800
-    },
-    {
       id: 'archive-56',
       image: '../../assets/images/archive/archive-56-full.gif',
       thumbnail: '../../assets/images/archive/archive-56-full.gif',
@@ -872,34 +872,10 @@
       height: 990
     },
     {
-      id: 'archive-57',
-      image: '../../assets/images/archive/archive-57-full.gif',
-      thumbnail: '../../assets/images/archive/archive-57-full.gif',
-      title: 'Love',
-      year: '2022',
-      medium: 'Pen, Acrylic Sheet, Animation Installation',
-      dimensions: '28.5 × 15 cm',
-      category: '2022-2026',
-      width: 1600,
-      height: 1200
-    },
-    {
       id: 'archive-58',
       image: '../../assets/images/archive/archive-58-full.gif',
       thumbnail: '../../assets/images/archive/archive-58-full.gif',
       title: 'Go to Heaven',
-      year: '2022',
-      medium: 'Pen, Acrylic Sheet, Animation Installation',
-      dimensions: '28.5 × 15 cm',
-      category: '2022-2026',
-      width: 1200,
-      height: 900
-    },
-    {
-      id: 'archive-59',
-      image: '../../assets/images/archive/archive-59-full.gif',
-      thumbnail: '../../assets/images/archive/archive-59-full.gif',
-      title: 'Please Step on My Face',
       year: '2022',
       medium: 'Pen, Acrylic Sheet, Animation Installation',
       dimensions: '28.5 × 15 cm',

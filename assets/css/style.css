@@ -944,10 +944,24 @@ body.work-detail-page .primary-nav .submenu a {
 
 .work-detail-stage { grid-column: 2; grid-row: 1; }
 
+/* "Selected Works" reads as the section label, distinctly heavier than
+   the artwork names beneath it — but NOT true bold. The site's only
+   webfont ("TeX Gyre Heros") only ships Regular (400) and Bold (700)
+   faces (see the @font-face rules above) — nothing in between. A
+   declared font-weight of 500 resolves to the 400 face under normal
+   CSS font-weight matching (there is no 500 face to pick), so this
+   heading was actually painting at the exact same visual weight as
+   the list below it despite the "500" in the CSS — which is why the
+   hierarchy wasn't reading. Rather than jump to true 700 (heavy, and
+   explicitly not what was asked for here), the weight is declared as
+   the 400 that's actually rendered and nudged optically heavier with
+   a hairline text-stroke — a small, deliberate thickening of the same
+   Regular glyphs, not a different, heavier face. */
 .selected-works-heading {
   font-family: var(--font-wordmark);
   font-size: clamp(0.875rem, 1vw, 1rem);
-  font-weight: 500;
+  font-weight: 400;
+  -webkit-text-stroke: 0.4px currentColor;
   letter-spacing: -0.01em;
   color: var(--color-ink);
   margin: 0 0 var(--space-4);
@@ -958,9 +972,14 @@ body.work-detail-page .primary-nav .submenu a {
   flex-direction: column;
   gap: 0.55em;
 }
+/* Sized a touch smaller than the heading above (and than this list's
+   own previous size) so the artwork names read as a quieter, secondary
+   index next to "Selected Works" — weight stays regular (400) and
+   unstroked; the active item is still indicated only by
+   var(--color-active), never by weight. */
 .selected-works-list a {
   font-family: var(--font-wordmark);
-  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-size: clamp(0.78125rem, 0.85vw, 0.8125rem);
   font-weight: 400;
   letter-spacing: -0.01em;
   line-height: 1.3;
@@ -970,6 +989,32 @@ body.work-detail-page .primary-nav .submenu a {
 .selected-works-list a:focus-visible,
 .selected-works-list a[aria-current="page"] {
   color: var(--color-active);
+}
+
+/* Modest, intentional gap between the "Selected Works" heading and the
+   artwork list beneath it — desktop only, matching the side-by-side
+   layout the reference screenshots were taken from. Added as
+   margin-top on the list itself (on top of the heading's own
+   unchanged margin-bottom above) rather than by enlarging that
+   heading's margin, so "Selected Works" itself never moves. Because
+   .work-detail-side lays its two children out with justify-content:
+   space-between, this extra height at the top of the column is
+   absorbed entirely by the gap above .work-detail-info below — the
+   artwork metadata block's own position is unaffected. Below 701px
+   the column stacks (see the max-width: 700px block further down,
+   .work-detail-info's own margin-top there) and is deliberately left
+   at its existing, tighter rhythm.
+
+   40px, not a literal 40px-on-top-of-existing-gap: the heading's own
+   22.4px margin-bottom (--space-4) and this margin-top collapse
+   together per normal CSS margin-collapsing rules (both are plain
+   block-level siblings), so the rendered gap is whichever value is
+   larger, not their sum — 40px here is the actual rendered gap, a
+   modest ~18px increase over the original ~22px. */
+@media (min-width: 701px) {
+  .selected-works-list {
+    margin-top: 40px;
+  }
 }
 
 /* Artwork info + prev/next sit together at the foot of the left column
@@ -1351,15 +1396,21 @@ body.work-detail-page .primary-nav .submenu a {
 .archive-category-btn:hover,
 .archive-category-btn:focus-visible { color: var(--color-active); }
 
-/* Three columns on desktop, sitting inside the same capped .wrap
-   content column as the rest of the site (so the grid never stretches
-   edge to edge) with generous, controlled gaps rather than a tight
-   commercial card grid. Each image keeps width:100%/height:auto — its
-   own aspect ratio, never cropped or forced to a uniform box — so
-   .archive-figure/.archive-thumb carry no fixed height anywhere. */
+/* Two columns on desktop (was three), sitting inside the same capped
+   .wrap content column as the rest of the site (so the grid never
+   stretches edge to edge) with generous, controlled gaps rather than
+   a tight commercial card grid. Each image keeps width:100%/
+   height:auto — its own aspect ratio, never cropped or forced to a
+   uniform box — so .archive-figure/.archive-thumb carry no fixed
+   height anywhere. The old 900px "tablet" breakpoint below this used
+   to step 3 columns down to 2 for narrower screens; now that 2 is
+   already the default, that breakpoint would just repeat the same
+   rule, so it's removed rather than kept as a no-op — the 520px
+   "phone" breakpoint further down (1 column) is unaffected and still
+   applies at the same width it always did. */
 .archive-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: clamp(2.5rem, 5vw, 4.5rem);
   row-gap: clamp(3rem, 6vw, 5rem);
   align-items: end;
@@ -1466,9 +1517,6 @@ body.archive-lightbox-open { overflow: hidden; }
 .archive-lightbox-close:hover,
 .archive-lightbox-close:focus-visible { color: var(--color-active); }
 
-@media (max-width: 900px) {
-  .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 @media (max-width: 520px) {
   .archive-grid {
     grid-template-columns: 1fr;
