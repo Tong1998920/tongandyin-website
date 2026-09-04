@@ -200,6 +200,34 @@
     embedded metadata at all, so — same as archive-08/09 — they are
     added with no title/year/medium/dimensions rather than guessed
     ones. As with the prior batch, this append order is temporary.
+
+    archive-55 through archive-60: fourth batch (6 works), the first
+    GIFs in the Archive - original animated documentation of six 2022
+    "Pen, Acrylic Sheet, Animation Installation" pieces (28.5 x 15 cm
+    each), given title/medium/dimensions/year verbatim by the artist.
+    Each entry's `image` and `thumbnail` point at the SAME .gif file
+    (no separate static/first-frame thumbnail was made - a resized
+    "thumbnail" version wasn't generated either, to avoid any risk of
+    it losing frames) - see main.js, renderGrid(), for the matching
+    loading="lazy" this batch prompted for every grid thumbnail, added
+    because these run heavier than the site's jpg thumbnails.
+    Three of these six share a title with an existing, older, already-
+    documented entry - "Fire" (archive-11), "Go to Heaven"/"Go to
+    heaven" (archive-12, archive-20) and "Please Step on My
+    Face"/"Please step on my face" (archive-13) - but with different
+    medium text and (for Go to Heaven / Please Step on My Face)
+    different dimensions than what's recorded there, so - same
+    reasoning as the repeated "Go to heaven"/"Persona" titles in the
+    second batch above - these are kept as distinct new entries rather
+    than merged into or replacing those older ones. "Don't Bother Me"
+    (archive-60) similarly sits alongside the existing archive-04
+    ("Don't bother me") the same way. Capitalization ("Go to Heaven",
+    "Please Step on My Face", "Don't Bother Me") is given verbatim as
+    the artist typed it for this batch, title case rather than the
+    sentence case those older same-titled entries happen to use -
+    left as-is rather than "corrected" to match, per the same
+    don't-alter-given-titles rule as everywhere else in this file.
+    "Boy" (archive-55) has no earlier Archive entry under that title.
   */
   window.ARCHIVE_WORKS = [
     {
@@ -818,6 +846,78 @@
       category: 'before-2022',
       width: 2116,
       height: 1279
+    },
+    {
+      id: 'archive-55',
+      image: '../../assets/images/archive/archive-55-full.gif',
+      thumbnail: '../../assets/images/archive/archive-55-full.gif',
+      title: 'Boy',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      width: 2400,
+      height: 1800
+    },
+    {
+      id: 'archive-56',
+      image: '../../assets/images/archive/archive-56-full.gif',
+      thumbnail: '../../assets/images/archive/archive-56-full.gif',
+      title: 'Fire',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      width: 1440,
+      height: 990
+    },
+    {
+      id: 'archive-57',
+      image: '../../assets/images/archive/archive-57-full.gif',
+      thumbnail: '../../assets/images/archive/archive-57-full.gif',
+      title: 'Love',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      width: 1600,
+      height: 1200
+    },
+    {
+      id: 'archive-58',
+      image: '../../assets/images/archive/archive-58-full.gif',
+      thumbnail: '../../assets/images/archive/archive-58-full.gif',
+      title: 'Go to Heaven',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      width: 1200,
+      height: 900
+    },
+    {
+      id: 'archive-59',
+      image: '../../assets/images/archive/archive-59-full.gif',
+      thumbnail: '../../assets/images/archive/archive-59-full.gif',
+      title: 'Please Step on My Face',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      width: 1200,
+      height: 900
+    },
+    {
+      id: 'archive-60',
+      image: '../../assets/images/archive/archive-60-full.gif',
+      thumbnail: '../../assets/images/archive/archive-60-full.gif',
+      title: "Don't Bother Me",
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      width: 2400,
+      height: 1800
     }
   ];
 </script>

@@ -705,10 +705,17 @@ var TY_I18N = (function () {
       var openWord = TY_I18N.isZh() ? '打开 ' : 'Open ';
       a.setAttribute('aria-label', label ? openWord + label : (TY_I18N.isZh() ? '打开作品' : 'Open artwork'));
       var img = document.createElement('img');
-      img.src = w.thumbnail || w.image;
+      var src = w.thumbnail || w.image;
+      img.src = src;
       img.alt = label || '';
       if (w.width) img.width = w.width;
       if (w.height) img.height = w.height;
+      // GIF thumbnails (the animated Archive works added alongside this
+      // comment) run heavier than the site's jpg thumbnails, so those
+      // specifically are hinted to the browser as lazy-loadable rather
+      // than fetched immediately with the rest of the grid — every
+      // other, non-.gif thumbnail is untouched, still eager as before.
+      if (/\.gif($|\?)/i.test(src)) img.loading = 'lazy';
       a.appendChild(img);
       figure.appendChild(a);
       grid.appendChild(figure);
