@@ -161,6 +161,19 @@
   --ease-reveal: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+/* ---- Chinese (中文) type fallback ----
+   Overrides --font-sans/--font-serif (and, through them, every rule
+   that references either — nothing else changes) only when the page
+   is in Chinese, via TY_I18N in main.js setting <html lang="zh">. All
+   the same size/weight/spacing rules as the English type continue to
+   apply unchanged — only the family swaps to a clean system CJK
+   stack; no new webfont, and every other :root value above (colors,
+   spacing, layout) is untouched here. */
+html[lang="zh"] {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-serif: var(--font-sans);
+}
+
 /* Smooth, subtle same-origin page transitions where supported.
    Pure progressive enhancement — does nothing in browsers that
    don't understand it, no JS required. */
@@ -445,9 +458,9 @@ main { display: block; }
 
 /* ---- language toggle ----
    Plain text, not a control: no box, border, or background. The
-   active language is simply darker than the inactive one. Chinese
-   content doesn't exist yet (see main.js) — switching to 中文 today
-   is a no-op until that content is added. */
+   active language is simply darker than the inactive one — driven by
+   aria-pressed, which TY_I18N in main.js keeps in sync with the
+   actual page language. */
 .lang-toggle {
   display: flex;
   align-items: baseline;

@@ -326,25 +326,222 @@
   });
 })();
 
-(function () {
-  // Language toggle: structure only, per the current brief — no
-  // Chinese content has been supplied yet, so this just tracks which
-  // option is selected (aria-pressed) and is a no-op otherwise. Once
-  // Chinese copy exists, swap the no-op branch below for the real
-  // content switch (e.g. toggling a `lang-zh` class on <body> and
-  // showing/hiding matching [data-lang="zh"] content blocks).
-  var options = document.querySelectorAll('.lang-option');
-  if (!options.length) return;
+/* ============================================================ i18n */
+// Lightweight, scoped bilingual (EN / 中文) support — no framework, no
+// separate page-per-language, no build step. Nearly all site text is
+// short closed-set UI/metadata (nav labels, artwork titles, medium
+// descriptions, exhibition locations), so it's translated generically
+// here by exact-text or substring match against the dictionaries
+// below, directly on whatever the current page already renders —
+// almost no page needed any HTML changes for this. The one piece of
+// real freeform prose on the whole site — the Contact page biography
+// — is marked up explicitly with data-i18n-en/data-i18n-zh in that
+// page. Every lookup is closed-set with no invented fallback:
+// anything not in a dictionary (an unconfirmed exhibition title, an
+// artwork with no supplied Chinese name) is simply left in English.
+//
+// Language choice persists in localStorage and re-applies on every
+// page load — same URL, same page, never a redirect to a translated
+// path — and instantly on toggle click via apply(). Other
+// self-contained blocks on the page (the Archive grid/lightbox below)
+// listen for the 'ty:langchange' event to re-render their own dynamic
+// text through the same TY_I18N helpers.
+var TY_I18N = (function () {
+  var STORAGE_KEY = 'ty-lang';
 
+  // Exact-text UI labels — nav, headings, buttons.
+  var LABELS = {
+    'Works': '作品',
+    'Selected Works': '精选作品',
+    'Archive': '档案',
+    'Exhibitions': '展览',
+    'Contact': '联系',
+    'Menu': '菜单',
+    'Skip to content': '跳转到内容',
+    'Close': '关闭',
+    'Solo Exhibitions': '个展',
+    'Group Exhibitions': '群展',
+    'Before 2022': '2022年之前',
+    'Archive works have not been added yet.': '档案作品尚未添加。'
+  };
+
+  // Confirmed artwork-title translations only — anything else keeps
+  // its English title rather than inventing one.
+  var TITLES = {
+    'Calling A Deer A Horse': '指鹿为马',
+    'Ignore': '无视',
+    'The Boundary': '边界',
+    'The Stranger': '异乡人',
+    'The Stranger 3': '异乡人 3'
+  };
+
+  // Ordered [English, Chinese] medium/material phrases, substring-
+  // replaced inside .work-detail-meta lines — a dimensions line
+  // ("140 × 102 cm") or a bare year ("2026") never matches anything
+  // here, so those pass through completely unchanged.
+  var MEDIUM = [
+    ['Acrylic on Chinese silk', '中国绢上丙烯'],
+    ['acrylic on Chinese silk', '中国绢上丙烯'],
+    ['Acrylic on cardboard', '纸板上丙烯'],
+    ['acrylic on cardboard', '纸板上丙烯'],
+    ['Acrylic on wood panel', '木板上丙烯'],
+    ['acrylic on wood panel', '木板上丙烯'],
+    ['Acrylic on canvas board', '画布板上丙烯'],
+    ['acrylic on canvas board', '画布板上丙烯'],
+    ['Acrylic on acrylic sheet', '亚克力板上丙烯'],
+    ['acrylic on acrylic sheet', '亚克力板上丙烯'],
+    ['Gold ink', '金色墨水'],
+    ['gold ink', '金色墨水'],
+    ['Chinese silk and acrylic', '中国绢、丙烯']
+  ];
+
+  // "City, Country" → Chinese, matched only at the very END of a
+  // venue string, so an institution name that happens to contain a
+  // city name too (e.g. "Universität der Künste Berlin, Berlin,
+  // Germany") only has its trailing location replaced, never its own
+  // name.
+  var LOCATIONS = [
+    ['Berlin, Germany', '德国柏林'],
+    ['Guangzhou, China', '中国广州'],
+    ['Beijing, China', '中国北京'],
+    ['Hefei, China', '中国合肥']
+  ];
+
+  function getLang() {
+    try { return localStorage.getItem(STORAGE_KEY) || 'en'; } catch (e) { return 'en'; }
+  }
+
+  function setLang(lang) {
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+  }
+
+  function translateMediumHTML(html) {
+    var hit = false;
+    MEDIUM.forEach(function (pair) {
+      if (html.indexOf(pair[0]) !== -1) {
+        html = html.split(pair[0]).join(pair[1]);
+        hit = true;
+      }
+    });
+    // Once at least one phrase translated, the "," list separator
+    // between phrases reads more naturally as the Chinese enumeration
+    // comma, and any now-orphaned trailing comma is dropped.
+    if (hit) {
+      html = html.replace(/,\s*<br>/g, '、<br>').replace(/,\s*$/, '');
+    }
+    return html;
+  }
+
+  function translateVenue(text) {
+    for (var i = 0; i < LOCATIONS.length; i++) {
+      var en = LOCATIONS[i][0], zh = LOCATIONS[i][1];
+      if (text.length >= en.length && text.slice(-en.length) === en) {
+        return text.slice(0, text.length - en.length) + zh;
+      }
+    }
+    return text;
+  }
+
+  function translateCredit(text) {
+    var m = /^Photography by (.+)$/.exec(text);
+    return m ? ('摄影：' + m[1]) : text;
+  }
+
+  // Applies (lang === 'zh') or reverts (lang === 'en') translations
+  // across whatever the current page contains. Safe to run on any
+  // page, including ones with none of these elements — every
+  // querySelectorAll below is simply empty there.
+  function apply(lang) {
+    var zh = lang === 'zh';
+    document.documentElement.lang = zh ? 'zh' : 'en';
+
+    document.querySelectorAll('.lang-option').forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang));
+    });
+
+    var exactSelectors = [
+      '.primary-nav a', '.nav-toggle', '.skip-link',
+      'h1.eyebrow', '.selected-works-heading', '.exhibition-group-heading',
+      '.archive-category-btn', '.archive-lightbox-close', '[data-archive-empty]',
+      '.selected-works-list a', '.work-detail-title'
+    ];
+    document.querySelectorAll(exactSelectors.join(',')).forEach(function (el) {
+      if (!el.dataset.enText) el.dataset.enText = el.textContent.trim();
+      var en = el.dataset.enText;
+      var zhText = LABELS[en] || TITLES[en];
+      el.textContent = zh && zhText ? zhText : en;
+    });
+
+    document.querySelectorAll('.work-detail-meta').forEach(function (el) {
+      if (!el.dataset.enHtml) el.dataset.enHtml = el.innerHTML;
+      el.innerHTML = zh ? translateMediumHTML(el.dataset.enHtml) : el.dataset.enHtml;
+    });
+
+    document.querySelectorAll('.work-detail-credit, .contact-credit').forEach(function (el) {
+      if (!el.dataset.enText) el.dataset.enText = el.textContent.trim();
+      el.textContent = zh ? translateCredit(el.dataset.enText) : el.dataset.enText;
+    });
+
+    document.querySelectorAll('.exhibition-venue').forEach(function (el) {
+      if (!el.dataset.enText) el.dataset.enText = el.textContent.trim();
+      el.textContent = zh ? translateVenue(el.dataset.enText) : el.dataset.enText;
+    });
+
+    // Footer links: the Contact page's own "Email: x" / "Instagram: x"
+    // (value preserved, label switched) vs. every other page's
+    // generic placeholder "Email" / "Instagram" labels.
+    document.querySelectorAll('.footer-links a, .contact-details a').forEach(function (el) {
+      if (!el.dataset.enText) el.dataset.enText = el.textContent.trim();
+      var en = el.dataset.enText, out = en;
+      if (zh) {
+        if (en === 'Email') out = '邮箱';
+        else if (/^Email:\s/.test(en)) out = en.replace(/^Email:\s/, '邮箱：');
+        else if (/^Instagram:\s/.test(en)) out = en.replace(/^Instagram:\s/, 'Instagram：');
+      }
+      el.textContent = out;
+    });
+
+    // Contact biography — the one real piece of freeform prose,
+    // explicitly marked up in contact/index.html.
+    document.querySelectorAll('[data-i18n-en]').forEach(function (el) {
+      var zhText = el.getAttribute('data-i18n-zh');
+      var enText = el.getAttribute('data-i18n-en');
+      el.textContent = (zh && zhText) ? zhText : enText;
+    });
+
+    document.dispatchEvent(new CustomEvent('ty:langchange', { detail: { lang: lang } }));
+  }
+
+  var options = document.querySelectorAll('.lang-option');
+  apply(getLang());
   options.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      if (btn.getAttribute('aria-pressed') === 'true') return;
-      options.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
-      btn.setAttribute('aria-pressed', 'true');
-      // No Chinese content exists yet — English stays the functional
-      // default regardless of which option is selected.
+      var next = btn.dataset.lang === 'zh' ? 'zh' : 'en';
+      if (next === getLang()) return;
+      setLang(next);
+      apply(next);
     });
   });
+
+  // Plain-text (no <br>, no enumeration-comma reformatting) substring
+  // medium translation — for contexts like the Archive lightbox
+  // caption below, which builds a single-line "Title, Year | Medium |
+  // Dimensions" string rather than the work-detail pages' own
+  // multi-line HTML.
+  function translateMediumPlain(text, extraPairs) {
+    var pairs = MEDIUM.concat(extraPairs || []);
+    pairs.forEach(function (pair) {
+      if (text.indexOf(pair[0]) !== -1) text = text.split(pair[0]).join(pair[1]);
+    });
+    return text;
+  }
+
+  return {
+    getLang: getLang,
+    isZh: function () { return getLang() === 'zh'; },
+    translateTitle: function (t) { return TITLES[t] || t; },
+    translateMediumPlain: translateMediumPlain
+  };
 })();
 
 (function () {
@@ -390,11 +587,44 @@
   // back into — see closeLightbox().
   var hashIsOurs = false;
 
+  // Archive titles/mediums translated ONLY where a Chinese original
+  // is genuinely on record (the four Chinese-filename batches this
+  // data was built from — see the long comment above ARCHIVE_WORKS in
+  // works/archive/index.html for exactly where each of these came
+  // from) — every other Archive work keeps its English title/medium,
+  // same as the "don't invent a title" rule everywhere else on the
+  // site. TY_I18N.translateMediumPlain also still applies the shared,
+  // confirmed medium dictionary (Acrylic on wood panel, etc.).
+  var ARCHIVE_TITLES = {
+    'False Sensibility 2': '假感性2',
+    'False Sensibility 3': '假感性3',
+    'Dirty Knight': '脏骑士',
+    'Drift': '漂移',
+    'Red for Family, Green for Ancestral Mountain': '红色给家人，绿色给祖山',
+    'Relayed Flame 10': '转述火焰10',
+    'Relayed Flame 70': '转述火焰70',
+    'Home': '家',
+    'Press Release': '新闻稿',
+    'Untitled 16': '未命名作品16',
+    'Escape Room': '逃离房间'
+  };
+  var ARCHIVE_MEDIUM_EXTRA = [
+    ['Acrylic on acrylic board, Chinese silk', '亚克力板上丙烯、中国绢'],
+    ['Acrylic on acrylic board', '亚克力板上丙烯']
+  ];
+
+  function zhTitle(title) {
+    return (TY_I18N.isZh() && ARCHIVE_TITLES[title]) || title;
+  }
+  function zhMedium(medium) {
+    return TY_I18N.isZh() ? TY_I18N.translateMediumPlain(medium, ARCHIVE_MEDIUM_EXTRA) : medium;
+  }
+
   function metaLine(w) {
     var parts = [];
-    var titleYear = [w.title, w.year].filter(Boolean).join(', ');
+    var titleYear = [zhTitle(w.title), w.year].filter(Boolean).join(', ');
     if (titleYear) parts.push(titleYear);
-    if (w.medium) parts.push(w.medium);
+    if (w.medium) parts.push(zhMedium(w.medium));
     if (w.dimensions) parts.push(w.dimensions);
     return parts.join(' | ');
   }
@@ -408,8 +638,9 @@
       var a = document.createElement('a');
       a.className = 'archive-thumb';
       a.href = '#work-' + encodeURIComponent(w.id);
-      var label = [w.title, w.year].filter(Boolean).join(', ');
-      a.setAttribute('aria-label', label ? 'Open ' + label : 'Open artwork');
+      var label = [zhTitle(w.title), w.year].filter(Boolean).join(', ');
+      var openWord = TY_I18N.isZh() ? '打开 ' : 'Open ';
+      a.setAttribute('aria-label', label ? openWord + label : (TY_I18N.isZh() ? '打开作品' : 'Open artwork'));
       var img = document.createElement('img');
       img.src = w.thumbnail || w.image;
       img.alt = label || '';
@@ -459,7 +690,7 @@
   function showWork(w) {
     openId = w.id;
     lightboxImage.src = w.image || w.thumbnail;
-    var label = [w.title, w.year].filter(Boolean).join(', ');
+    var label = [zhTitle(w.title), w.year].filter(Boolean).join(', ');
     lightboxImage.alt = label || '';
     if (w.width) lightboxImage.setAttribute('width', w.width); else lightboxImage.removeAttribute('width');
     if (w.height) lightboxImage.setAttribute('height', w.height); else lightboxImage.removeAttribute('height');
@@ -479,7 +710,9 @@
           a.href = v.url;
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
-          a.textContent = v.label || 'Video →';
+          var vLabel = v.label || 'Video →';
+          if (TY_I18N.isZh()) vLabel = vLabel.replace(/^Video\b/, '视频');
+          a.textContent = vLabel;
           lightboxVideos.appendChild(a);
         });
         lightboxVideos.hidden = false;
@@ -605,4 +838,18 @@
   // Deep link on initial page load, e.g. /works/archive/#work-<id>.
   var initial = /^#work-(.+)$/.exec(location.hash);
   if (initial) openById(decodeURIComponent(initial[1]), false);
+
+  // Re-render Archive's own JS-built content (grid labels/aria-labels,
+  // and the open lightbox's caption/alt/video labels, if one is open)
+  // when the language toggles — this content is generated dynamically
+  // from window.ARCHIVE_WORKS, so it isn't covered by TY_I18N.apply()'s
+  // generic DOM-selector pass and needs its own re-render on the same
+  // ty:langchange event that pass fires.
+  document.addEventListener('ty:langchange', function () {
+    renderGrid();
+    if (openId != null) {
+      var w = findById(openId);
+      if (w) showWork(w);
+    }
+  });
 })();
