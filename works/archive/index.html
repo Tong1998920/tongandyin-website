@@ -293,6 +293,24 @@
     page (".archive-section + .archive-section" in style.css) — every
     group boundary on this page gets identical spacing, no exceptions.
 
+    ORIENTATION FIX, archive-82: the original source file's pixel data
+    was landscape (6000x4000) but carried an EXIF Orientation tag (a
+    Sony ILCE-6000 camera-set rotation instruction meant to be applied
+    at display/processing time) indicating the photo is actually
+    portrait. That tag was missed during the original resize, so the
+    published image — and the width/height recorded here — ended up
+    sideways (2200x1467). The artist supplied the same photo again and
+    asked for a real fix, not a CSS rotation on the live page: this
+    entry's image/thumbnail files were reprocessed from the freshly
+    supplied source with the EXIF rotation actually applied to the
+    pixel data first (Pillow's ImageOps.exif_transpose), then resized
+    using the same long-edge-capped convention as every other work here
+    (2200px full / 900px thumbnail, aspect ratio untouched, no crop).
+    The result is genuinely portrait — width/height below updated to
+    1467x2200 to match — with nothing rotated in CSS. archive-81 (the
+    other "The entitlement to become a person" work, already correctly
+    portrait) was not touched.
+
     "2022-2026" REBUILD, group 4 (archive-90 through archive-93, 4
     works): a small, deliberately compact 2x2 block — Tears above Love,
     Persona above "How can you do this to me" — rather than the page's
@@ -1024,8 +1042,8 @@
       medium: 'Photography',
       category: '2022-2026',
       group: 3,
-      width: 2200,
-      height: 1467
+      width: 1467,
+      height: 2200
     },
     {
       id: 'archive-83',
