@@ -243,9 +243,49 @@
     leading number, positioned as #9 per the artist's reference
     screenshot rather than its filename — both now moot, since
     archive-69 was removed; see the large-gap note below.)
-    Sections 3 onward, and any reordering of sections 1-2, are left
-    for a future update — nothing about this structure needs to change
-    to append a group 3 later (see the `group` field description
+    "2022-2026" REBUILD, group 3 (archive-80 through archive-89, 10
+    works): the third group of the collection, laid out as a 4-row,
+    3-column block per the artist's reference screenshot (10 works in
+    a 3-column grid naturally leaves the last row with a single item
+    in the left column and nothing else — no special-case CSS needed,
+    that's just how CSS Grid auto-placement fills a 3-column track).
+    Sourced from three freshly uploaded ZIPs (10 files total, one work
+    each — matched to the artist's numbered reference screenshot by
+    filename, and each one visually opened and compared against the
+    screenshot's thumbnail before being added, the same verification
+    practice used for every prior identify-by-filename batch on this
+    page); array order here is the row-by-row, left-to-right reading
+    order from that screenshot (80/81/82 = row 1, 83/84/85 = row 2,
+    86/87/88 = row 3, 89 = row 4 alone), which is also exactly the DOM
+    order the 3-column grid needs to reproduce that layout. Resized the
+    same way as every prior jpg/png batch on this page — long edge
+    capped at 2200px for `image`, 900px for `thumbnail`, aspect ratio
+    untouched, re-encoded as JPEG (the three PNG sources were fully
+    opaque, so flattening to JPEG changes nothing visible) — never
+    cropped, stretched, or upscaled (archive-81, whose source was
+    already under the 2200px cap, was left at its original size rather
+    than enlarged). Several works in this group carry incomplete
+    metadata and were left that way rather than guessed, same rule as
+    archive-41/42 above: archive-84 ("3. Plastic Apple") has a title
+    but no year/medium/dimensions in its filename, unlike its two
+    same-titled siblings archive-83/85 which do; archive-86, -87, -88
+    and -89 are auto-named camera/phone files (IMG_####, a bare "18",
+    a 照片_YYYY-MM-DD_###### timestamp) with no artwork title, year,
+    medium, or dimensions embedded at all, so none of those fields are
+    guessed from the file's date-like numbers. archive-81 and -82 share
+    the title "The entitlement to become a person" for two visually
+    distinct photographs — same repeated-title handling used throughout
+    this file (see archive-64/68's note above); archive-83/84/85 share
+    "Plastic Apple" the same way. Section 3 sits below group 2 with the
+    normal inter-group gap (".archive-grid + .archive-grid" in
+    style.css, the same spacing used between sections 1 and 2) — it is
+    not listed in ARCHIVE_LARGE_GAP_AFTER, so it does not get the
+    oversized gap described below (that gap is specific to the group-1
+    sculpture removal, not a general "between every section" rule).
+
+    Section 4 onward, and any reordering of sections 1-3, are left for
+    a future update — nothing about this structure needs to change to
+    append another group later (see the `group` field description
     above).
 
     LARGE GAP after group 1 (the three-sculpture removal): when
@@ -657,6 +697,114 @@
       group: 2,
       width: 1463,
       height: 2200
+    },
+    {
+      id: 'archive-80',
+      image: '../../assets/images/archive/archive-80-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-80-thumb.jpg',
+      title: 'Dream of Success',
+      year: '2023',
+      medium: 'Indoor installation',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-81',
+      image: '../../assets/images/archive/archive-81-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-81-thumb.jpg',
+      title: 'The entitlement to become a person',
+      year: '2023',
+      medium: 'Photography',
+      category: '2022-2026',
+      group: 3,
+      width: 1198,
+      height: 1602
+    },
+    {
+      id: 'archive-82',
+      image: '../../assets/images/archive/archive-82-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-82-thumb.jpg',
+      title: 'The entitlement to become a person',
+      year: '2023',
+      medium: 'Photography',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-83',
+      image: '../../assets/images/archive/archive-83-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-83-thumb.jpg',
+      title: 'Plastic Apple',
+      year: '2024',
+      medium: 'Mural',
+      dimensions: '300 × 200 cm',
+      category: '2022-2026',
+      group: 3,
+      width: 1730,
+      height: 1148
+    },
+    {
+      id: 'archive-84',
+      image: '../../assets/images/archive/archive-84-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-84-thumb.jpg',
+      title: 'Plastic Apple',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-85',
+      image: '../../assets/images/archive/archive-85-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-85-thumb.jpg',
+      title: 'Plastic Apple',
+      year: '2024',
+      medium: 'Mural',
+      dimensions: '300 × 200 cm',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1319
+    },
+    {
+      id: 'archive-86',
+      image: '../../assets/images/archive/archive-86-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-86-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 1842,
+      height: 1279
+    },
+    {
+      id: 'archive-87',
+      image: '../../assets/images/archive/archive-87-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-87-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 2004,
+      height: 1600
+    },
+    {
+      id: 'archive-88',
+      image: '../../assets/images/archive/archive-88-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-88-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1608
+    },
+    {
+      id: 'archive-89',
+      image: '../../assets/images/archive/archive-89-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-89-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1636
     },
   ];
 </script>
