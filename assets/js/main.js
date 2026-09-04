@@ -736,11 +736,13 @@ var TY_I18N = (function () {
   // and XL_GAP_AFTER) that gave individual groups their own oversized
   // section gap. Those were removed — every section now gets the same
   // single gap value, set once in style.css (.archive-groups's
-  // --archive-section-gap, consumed by ".archive-grid + .archive-grid")
-  // — because per-group gap overrides were exactly what produced the
-  // inconsistent, sometimes-huge spacing the artist asked to fix. If a
-  // future request wants a one-off gap again, don't resurrect the old
-  // per-group array pattern for it; it's gone for a reason.
+  // --archive-section-gap, consumed by ".archive-section +
+  // .archive-section" — see the explicit per-group wrapper renderGrid()
+  // builds below) — because per-group gap overrides were exactly what
+  // produced the inconsistent, sometimes-huge spacing the artist asked
+  // to fix. If a future request wants a one-off gap again, don't
+  // resurrect the old per-group array pattern for it; it's gone for a
+  // reason.
   var GROUP_LAYOUT = (window.ARCHIVE_GROUP_LAYOUT && typeof window.ARCHIVE_GROUP_LAYOUT === 'object')
     ? window.ARCHIVE_GROUP_LAYOUT
     : {};
@@ -750,14 +752,23 @@ var TY_I18N = (function () {
   // category are split into ordered groups by their optional `group`
   // field (works with no `group` all fall into one shared, unlabeled
   // group, so a category that doesn't use grouping renders exactly
-  // like it always did: one .archive-grid). Each group becomes its
-  // own .archive-grid child in DOM order, so CSS's sibling-only
-  // ".archive-grid + .archive-grid" gap only ever appears BETWEEN
-  // groups, never before the first one, and is the same fixed value
-  // for every group boundary — no JS-computed spacing, no visible
-  // label, just plain whitespace from that CSS rule. A group whose
-  // '<category>:<group>' combo is listed in GROUP_LAYOUT additionally
-  // gets an "archive-grid--<suffix>" class; style.css does the rest.
+  // like it always did: one .archive-grid). Each group becomes its own
+  // <div class="archive-section"> child of `grid`, containing exactly
+  // one <div class="archive-grid"> — an explicit wrapper per group,
+  // deliberately, rather than relying only on an adjacent-sibling CSS
+  // selector between bare .archive-grid elements: a group's section
+  // boundary is now a real container in the DOM, not just an inferred
+  // gap between two same-class siblings, which is easier to verify
+  // (inspect the markup, see the wrappers) and easier to keep correct
+  // if this rendering logic ever changes again. style.css's
+  // ".archive-section + .archive-section" rule puts the single,
+  // consistent section gap between consecutive wrappers — it only ever
+  // matches BETWEEN groups, never before the first one, and is the
+  // same fixed value for every group boundary; no JS-computed spacing,
+  // no visible label, just plain whitespace from that one CSS rule. A
+  // group whose '<category>:<group>' combo is listed in GROUP_LAYOUT
+  // additionally gets an "archive-grid--<suffix>" class on its inner
+  // .archive-grid; style.css does the rest.
   function renderGrid() {
     visible = works.filter(function (w) { return w.category === activeCategory; });
     grid.innerHTML = '';
@@ -772,6 +783,8 @@ var TY_I18N = (function () {
       groupWorks[key].push(w);
     });
     groupOrder.forEach(function (key) {
+      var sectionEl = document.createElement('div');
+      sectionEl.className = 'archive-section';
       var gridEl = document.createElement('div');
       gridEl.className = 'archive-grid';
       if (key) {
@@ -783,7 +796,8 @@ var TY_I18N = (function () {
       groupWorks[key].forEach(function (w) {
         gridEl.appendChild(buildFigure(w));
       });
-      grid.appendChild(gridEl);
+      sectionEl.appendChild(gridEl);
+      grid.appendChild(sectionEl);
     });
     if (emptyNote) emptyNote.hidden = visible.length > 0;
   }

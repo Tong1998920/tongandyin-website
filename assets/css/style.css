@@ -1398,19 +1398,29 @@ body.work-detail-page .primary-nav .submenu a {
 
 /* [data-archive-grid] (".archive-groups" in the HTML) is a plain
    wrapper — main.js's renderGrid() fills it with one or more child
-   .archive-grid elements, one per group of works (see the `group`
+   .archive-section elements, one per group of works (see the `group`
    field described in the ARCHIVE_WORKS comment in
-   works/archive/index.html). A category with no groups still gets
-   exactly one .archive-grid child, so this is a strict superset of
-   the old always-one-grid behavior, not a different system. */
+   works/archive/index.html), each containing exactly one .archive-grid.
+   A category with no groups still gets exactly one .archive-section /
+   .archive-grid pair, so this is a strict superset of the old
+   always-one-grid behavior, not a different system. */
 .archive-groups {
   display: block;
   /* The single, consistent section-to-section gap value — see the
      longer explanation further down, right above where it's consumed
-     by ".archive-grid + .archive-grid". Declared here (inherited down
-     to every .archive-grid child) so there is exactly one place to
-     change it. */
+     by ".archive-section + .archive-section". Declared here (inherited
+     down to every .archive-section child) so there is exactly one
+     place to change it. */
   --archive-section-gap: 10rem;
+}
+
+/* Each .archive-section is a plain block wrapper around one group's
+   .archive-grid — an explicit per-group container in the DOM (see
+   renderGrid() in main.js), not just an inferred boundary between two
+   bare .archive-grid siblings. Carries no visual styling of its own;
+   the gap between sections below is the only thing it's for. */
+.archive-section {
+  display: block;
 }
 
 /* Three columns on desktop, sitting inside the same capped .wrap
@@ -1466,9 +1476,19 @@ body.work-detail-page .primary-nav .submenu a {
 /* The ONLY thing that visually separates one group from the next —
    still a plain whitespace break: no heading, label, line, or border.
    The sibling combinator means this never applies before the first
-   group (nothing to separate it from), so a category with only one
+   section (nothing to separate it from), so a category with only one
    group — every category except "2022-2026" today — renders with no
    extra gap at all, identical to before groups existed.
+
+   Targets ".archive-section", the explicit per-group wrapper (see the
+   comment above .archive-groups), rather than ".archive-grid" directly
+   — each .archive-grid now sits alone inside its own .archive-section,
+   so it no longer has a same-level .archive-grid sibling to match
+   against. This selector is what actually creates the section gap;
+   moving it to the wrapper level, instead of leaving it on the inner
+   .archive-grid elements, means a group's boundary is never dependent
+   on exactly which element happens to be adjacent to which — the
+   wrapper structure itself is the section boundary.
 
    A SINGLE, CONSISTENT value on purpose: earlier this had two extra
    opt-in "bigger gap" tiers (an ".archive-grid--gap-large" modifier at
@@ -1495,8 +1515,8 @@ body.work-detail-page .primary-nav .submenu a {
    ".archive-grid--cols-2" above (group 4's compact-width layout) — a
    group can still use that column-layout variant while getting the
    exact same section gap as everyone else, since the two rules target
-   different properties. */
-.archive-grid + .archive-grid {
+   different elements and different properties. */
+.archive-section + .archive-section {
   margin-top: var(--archive-section-gap);
 }
 

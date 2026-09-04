@@ -72,15 +72,17 @@
 
     <!-- data-archive-grid is now a wrapper, not the grid itself: JS
          (renderGrid() in main.js) fills it with one or more child
-         .archive-grid elements, one per `group` present in the active
-         category's works (see the ARCHIVE_WORKS comment below for
-         what `group` means and how to add more). A category with no
-         `group` field on its works (e.g. "before-2022" today) still
-         renders as a single .archive-grid child, identical to before
-         this existed. No visible heading/label is ever added for a
-         group — the only thing that marks a group boundary is the
-         larger gap in style.css's ".archive-grid + .archive-grid"
-         rule, which only applies between two sibling grids, so a
+         .archive-section elements, one per `group` present in the
+         active category's works (see the ARCHIVE_WORKS comment below
+         for what `group` means and how to add more) — each
+         .archive-section contains exactly one .archive-grid. A
+         category with no `group` field on its works (e.g.
+         "before-2022" today) still renders as a single
+         .archive-section/.archive-grid pair, identical to before this
+         existed. No visible heading/label is ever added for a group —
+         the only thing that marks a group boundary is the section gap
+         in style.css's ".archive-section + .archive-section" rule,
+         which only applies between two sibling sections, so a
          single-group category gets no extra gap at all. -->
     <div class="archive-groups" data-archive-grid></div>
 
@@ -150,10 +152,11 @@
                     image on the site)
         group:      optional number — works sharing the same `group`
                     (within the same category) are laid out together
-                    as one grid (3 columns by default), with a gap
-                    before the next group's grid (see style.css,
-                    ".archive-grid + .archive-grid") — no heading or
-                    label is ever rendered for a group, purely a
+                    as one grid (3 columns by default), wrapped in its
+                    own <div class="archive-section"> with a gap before
+                    the next group's section (see style.css,
+                    ".archive-section + .archive-section") — no heading
+                    or label is ever rendered for a group, purely a
                     whitespace break. Groups render in the order their
                     first work appears in this array; works within a
                     group render in their own order in this array — so
@@ -163,8 +166,8 @@
                     "before-2022" below, which has none and renders as
                     one plain grid, exactly as it always has. Every
                     group gets the exact same section-to-section gap
-                    (style.css's ".archive-grid + .archive-grid", a
-                    single fixed value — see the note further down for
+                    (style.css's ".archive-section + .archive-section",
+                    a single fixed value — see the note further down for
                     why per-group gap overrides were removed). A
                     group's column layout can still be individually
                     overridden — see window.ARCHIVE_GROUP_LAYOUT (a
@@ -287,8 +290,8 @@
     this file (see archive-64/68's note above); archive-83/84/85 share
     "Plastic Apple" the same way. Section 3 sits below group 2 with the
     same single section-to-section gap used everywhere else on this
-    page (".archive-grid + .archive-grid" in style.css) — every group
-    boundary on this page gets identical spacing, no exceptions.
+    page (".archive-section + .archive-section" in style.css) — every
+    group boundary on this page gets identical spacing, no exceptions.
 
     "2022-2026" REBUILD, group 4 (archive-90 through archive-93, 4
     works): a small, deliberately compact 2x2 block — Tears above Love,
@@ -449,10 +452,36 @@
     boundary on this page — including the group-1→group-2 and
     group-5→group-1 boundaries that used to be special-cased — now gets
     the exact same single gap, set once via style.css's
-    "--archive-section-gap" custom property (currently 160px) and
-    applied by ".archive-grid + .archive-grid". See that rule in
-    style.css for the full current explanation; nothing group-specific
-    remains to describe here.
+    "--archive-section-gap" custom property (currently 160px). See the
+    "SECTION-WRAPPER CORRECTION" note just below for exactly which CSS
+    rule applies it today; nothing group-specific remains to describe
+    here.
+
+    SECTION-WRAPPER CORRECTION: shortly after the gap unification above
+    shipped, the artist reported the section gaps looked like they'd
+    disappeared entirely on the live site — groups appearing to run into
+    each other. Inspecting the live repository directly showed the CSS
+    and JS were both already correct and internally consistent (a single
+    ".archive-grid + .archive-grid { margin-top: var(--archive-section-
+    gap) }" rule, no leftover overrides), but the live
+    works/archive/index.html was an older, out-of-sync copy — this file
+    is hand-uploaded to GitHub Pages (see the artist's own workflow, not
+    a build step), so the three files this system spans can drift out of
+    sync if they're not all uploaded together in the same pass. Rather
+    than leave the correctness of "every section visibly separated"
+    dependent on all three files staying in lockstep, renderGrid() (in
+    main.js) now wraps each group's .archive-grid in its own explicit
+    <div class="archive-section">, and the section gap rule targets
+    ".archive-section + .archive-section" instead of ".archive-grid +
+    .archive-grid" — see the comment above the "archive-groups" wrapper
+    <div> further up this file, and the fuller explanation on that rule
+    in style.css. This doesn't change what renders (still the same
+    160px gap between every group, same as the gap-unification round
+    intended) — it makes each group's section boundary an explicit
+    container in the markup rather than an inferred relationship between
+    same-class siblings, so it's easier to verify directly (view-source
+    and see the wrapper) and more resilient to a future partial or
+    out-of-order upload only touching some of these three files.
 
     Section 6 onward, and any further reordering, are left for a
     future update — nothing about this structure needs to change to
@@ -479,14 +508,16 @@
     medium/dimensions rather than guessed ones. This append order is
     still temporary, same as it was before this reset.
   */
-  // See the "GAP UNIFICATION (history)" note above: this page used to
-  // carry two per-group "bigger gap" opt-in arrays here
-  // (ARCHIVE_LARGE_GAP_AFTER, ARCHIVE_XL_GAP_AFTER). Both were removed
-  // — every section now gets the same single gap, set once in
-  // style.css (--archive-section-gap on .archive-groups, consumed by
-  // ".archive-grid + .archive-grid"). Don't re-add a per-group gap
-  // array for a future one-off request; see the removal note in
-  // main.js's renderGrid() for why.
+  // See the "GAP UNIFICATION (history)" and "SECTION-WRAPPER
+  // CORRECTION" notes above: this page used to carry two per-group
+  // "bigger gap" opt-in arrays here (ARCHIVE_LARGE_GAP_AFTER,
+  // ARCHIVE_XL_GAP_AFTER). Both were removed — every section now gets
+  // the same single gap, set once in style.css (--archive-section-gap
+  // on .archive-groups, consumed by ".archive-section +
+  // .archive-section" — main.js's renderGrid() wraps each group's
+  // .archive-grid in its own .archive-section). Don't re-add a
+  // per-group gap array for a future one-off request; see the removal
+  // note in main.js's renderGrid() for why.
   // '<category>:<group>' -> a style.css layout-modifier suffix (see the
   // "SECTION 4" note above and .archive-grid--cols-2 in style.css).
   // Today only group 4 opts into the compact two-column variant; every
