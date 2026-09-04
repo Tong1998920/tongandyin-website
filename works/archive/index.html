@@ -161,14 +161,16 @@
                     `group` entirely for a category that isn't
                     (or isn't yet) organized into groups — see
                     "before-2022" below, which has none and renders as
-                    one plain grid, exactly as it always has. A given
-                    group's gap and column layout can each be
-                    individually overridden — see
-                    window.ARCHIVE_LARGE_GAP_AFTER (an oversized gap
-                    after a specific group) and window.
-                    ARCHIVE_GROUP_LAYOUT (a different column layout for
-                    a specific group, e.g. group 4's compact 2-column
-                    block) just above ARCHIVE_WORKS below.
+                    one plain grid, exactly as it always has. Every
+                    group gets the exact same section-to-section gap
+                    (style.css's ".archive-grid + .archive-grid", a
+                    single fixed value — see the note further down for
+                    why per-group gap overrides were removed). A
+                    group's column layout can still be individually
+                    overridden — see window.ARCHIVE_GROUP_LAYOUT (a
+                    different column layout for a specific group, e.g.
+                    group 4's compact 2-column block) just above
+                    ARCHIVE_WORKS below.
       }
 
     "2022-2026" RESET: this category previously held four batches
@@ -284,11 +286,9 @@
     distinct photographs — same repeated-title handling used throughout
     this file (see archive-64/68's note above); archive-83/84/85 share
     "Plastic Apple" the same way. Section 3 sits below group 2 with the
-    normal inter-group gap (".archive-grid + .archive-grid" in
-    style.css, the same spacing used between sections 1 and 2) — it is
-    not listed in ARCHIVE_LARGE_GAP_AFTER, so it does not get the
-    oversized gap described below (that gap is specific to the group-1
-    sculpture removal, not a general "between every section" rule).
+    same single section-to-section gap used everywhere else on this
+    page (".archive-grid + .archive-grid" in style.css) — every group
+    boundary on this page gets identical spacing, no exceptions.
 
     "2022-2026" REBUILD, group 4 (archive-90 through archive-93, 4
     works): a small, deliberately compact 2x2 block — Tears above Love,
@@ -318,28 +318,25 @@
     used there for "Home"/家, "Press Release"/新闻稿, etc.
 
     Group 4's compact 2x2 layout, instead of the page's normal 3-column
-    grid, is a new, general per-group mechanism: window.
-    ARCHIVE_GROUP_LAYOUT (declared right before ARCHIVE_WORKS below,
-    alongside ARCHIVE_LARGE_GAP_AFTER) maps a '<category>:<group>' key
-    to a style.css modifier suffix; main.js's renderGrid() adds an
-    "archive-grid--<suffix>" class to that group's rendered
-    <div class="archive-grid">, alongside the existing gap-large
-    mechanism (a group can use either, both, or neither — they're
-    independent). Group 4 maps to 'cols-2' — see
+    grid, is a general per-group mechanism: window.ARCHIVE_GROUP_LAYOUT
+    (declared right before ARCHIVE_WORKS below) maps a
+    '<category>:<group>' key to a style.css modifier suffix; main.js's
+    renderGrid() adds an "archive-grid--<suffix>" class to that group's
+    rendered <div class="archive-grid">. Group 4 maps to 'cols-2' — see
     ".archive-grid--cols-2" in style.css: exactly two columns, width
     capped to what two of the normal three columns would measure, so
     Tears/Persona/Love/"How can you do this to me" render at the same
     size as every other Archive thumbnail, just arranged as a small
-    self-contained block instead of spanning the full row. Group 4
-    itself is not listed in ARCHIVE_LARGE_GAP_AFTER, so the gap before
-    it is the normal inter-group one, the same spacing used between
-    every other section on this page.
+    self-contained block instead of spanning the full row. This is
+    independent of section spacing — group 4 gets the exact same
+    section-to-section gap as every other group, just with a different
+    column count inside its own grid.
 
     "2022-2026" REBUILD, group 5 (archive-94 through archive-102, 9
-    works): back to the page's normal 3-column layout (no LARGE_GAP_AFTER
-    or ARCHIVE_GROUP_LAYOUT entry, so it gets the plain inter-group gap,
-    same spacing used between every other section) — a straightforward
-    3x3 block, laid out in the artist's exact reference-screenshot
+    works): back to the page's normal 3-column layout (no
+    ARCHIVE_GROUP_LAYOUT entry, so it renders with the default 3-column
+    grid) — a straightforward 3x3 block, laid out in the artist's exact
+    reference-screenshot
     reading order (row by row, left to right), which is also the DOM
     order the grid needs. Sourced from two uploaded ZIPs (9 files, one
     work each, each opened and visually compared against the reference
@@ -390,26 +387,21 @@
     than renumbered to "0" or "1", since renderGrid() orders groups by
     where each one's first work appears in this array, not by the
     numeric value of `group` — that number is only ever used as an
-    opaque lookup key for ARCHIVE_LARGE_GAP_AFTER/ARCHIVE_GROUP_LAYOUT,
-    so leaving it as 5 costs nothing and avoids touching five other
-    groups' worth of entries and every reference to "group 1"/"group 4"
-    elsewhere in these comments and in main.js). Because
-    ARCHIVE_LARGE_GAP_AFTER (['2022-2026:1']) and ARCHIVE_GROUP_LAYOUT
-    ({'2022-2026:4': 'cols-2'}) key off that same group number rather
-    than position, moving group 5 didn't require touching either of
-    them: the large gap still lands between group 1 and group 2
-    wherever they render (they're still adjacent to each other in the
-    array), and group 4 still renders as the compact 2-column block —
-    both completely unaffected by group 5 now sitting in front of them.
-    Group 5 itself is still absent from both of those, so it renders
-    with the plain inter-group gap on both sides — no gap before it
-    (nothing precedes the first group in a category, per the sibling-
-    selector gap rule described above) and the normal gap after it,
-    now between it and group 1 instead of between group 4 and it.
-    Group 4 (the compact 2x2 block) is now the last section on the
-    page, so there is no leftover gap at group 5's old location — the
-    page simply ends after group 4, same as it would have regardless
-    of which group happened to render last.
+    opaque lookup key for ARCHIVE_GROUP_LAYOUT, so leaving it as 5
+    costs nothing and avoids touching five other groups' worth of
+    entries and every reference to "group 1"/"group 4" elsewhere in
+    these comments and in main.js). Because ARCHIVE_GROUP_LAYOUT
+    ({'2022-2026:4': 'cols-2'}) keys off that same group number rather
+    than position, moving group 5 didn't require touching it at all:
+    group 4 still renders as the compact 2-column block, completely
+    unaffected by group 5 now sitting in front of it. Every group
+    boundary, including the two newly-adjacent ones this move created,
+    gets the same single section gap (see the gap-unification note
+    below), so no gap-specific bookkeeping was needed either. Group 4
+    (the compact 2x2 block) is now the last section on the page, so
+    there is no leftover gap at group 5's old location — the page
+    simply ends after group 4, same as it would have regardless of
+    which group happened to render last.
 
     IMAGE REPLACEMENT, group 5 (now "Section 1"): all nine of group 5's
     images (archive-94 through archive-102) were replaced with newer
@@ -436,46 +428,36 @@
     same-slot replacement, only its contents do). No entries were
     added, removed, or reordered.
 
-    Section 1 / Section 2 gap: with group 5 now first (see "SECTION
-    REORDER" above), the artist asked for a visibly larger separation
-    specifically between it and the group that now follows it, on top
-    of the standard inter-group gap already described above — see
-    window.ARCHIVE_XL_GAP_AFTER just above ARCHIVE_WORKS and
-    ".archive-grid--gap-xl" in style.css. This is a second, independent
-    gap tier alongside ARCHIVE_LARGE_GAP_AFTER/.archive-grid--gap-large
-    (the ~650px gap already used elsewhere in this file) — that one's
-    clamp() is tuned for a specific, much taller case and wasn't
-    reused here; this tier targets ~300-350px on a typical desktop
-    width instead, and like the other gap tier, is just a plain
-    whitespace margin with no box, border, caption, or clickable
-    element.
+    GAP UNIFICATION (history): at two earlier points this page grew a
+    per-group "bigger gap" override — first when archive-69/70/71 (three
+    sculpture photos) were removed from the end of group 1 and the
+    artist wanted that lost vertical space preserved as an intentionally
+    large blank gap before group 2 (~650px, an "ARCHIVE_LARGE_GAP_AFTER"
+    /".archive-grid--gap-large" opt-in on '2022-2026:1'); then again when
+    group 5 was moved to the front (see "SECTION REORDER" above) and the
+    artist wanted a visibly larger separation specifically between it and
+    the group that then followed it (~300-350px, a second, independent
+    "ARCHIVE_XL_GAP_AFTER"/".archive-grid--gap-xl" opt-in on
+    '2022-2026:5'). With both of those in place at once, the page's
+    section gaps ended up visually inconsistent — some boundaries at the
+    normal spacing, one around 650px, one around 300-350px — which the
+    artist then asked to fix: one balanced, consistent gap between every
+    section instead. Both opt-in mechanisms (their window.* arrays here,
+    the classList-adding code in main.js's renderGrid(), and the
+    ".archive-grid--gap-large"/".archive-grid--gap-xl" rules in
+    style.css) were removed rather than left dormant, and every group
+    boundary on this page — including the group-1→group-2 and
+    group-5→group-1 boundaries that used to be special-cased — now gets
+    the exact same single gap, set once via style.css's
+    "--archive-section-gap" custom property (currently 160px) and
+    applied by ".archive-grid + .archive-grid". See that rule in
+    style.css for the full current explanation; nothing group-specific
+    remains to describe here.
 
     Section 6 onward, and any further reordering, are left for a
     future update — nothing about this structure needs to change to
     append another group or move an existing one again (see the
     `group` field description above).
-
-    LARGE GAP after group 1 (the three-sculpture removal): when
-    archive-69/70/71 were removed just above, the artist specifically
-    asked that the vertical space they used to occupy NOT collapse —
-    it should stay as a large intentional blank gap separating group 1
-    from group 2, distinctly bigger than the normal inter-group gap.
-    window.ARCHIVE_LARGE_GAP_AFTER (declared right before
-    ARCHIVE_WORKS below) lists '<category>:<group>' keys that get this
-    treatment; main.js's renderGrid() adds an
-    "archive-grid--gap-large" modifier class to a matching group's
-    rendered <div class="archive-grid">, and style.css gives
-    ".archive-grid--gap-large + .archive-grid" (right after the normal
-    ".archive-grid + .archive-grid" rule, so it wins) a noticeably
-    taller margin-top — sized, at common desktop widths, to roughly
-    the height that row of three sculpture photos actually occupied
-    before removal (measured directly against the live page rather
-    than guessed). This is a general mechanism, not a one-off hack: a
-    future group could opt into the same large gap by adding its
-    '<category>:<group>' key to that array, or this one could be
-    un-flagged later by removing '2022-2026:1' from it, without
-    touching main.js or style.css again. It's a plain empty spacer —
-    no box, border, caption, or clickable element, purely CSS margin.
 
     before-2022 (archive-41 through archive-54, 14 works) is NOT part
     of this reset and is completely unchanged — added as the third of
@@ -497,21 +479,14 @@
     medium/dimensions rather than guessed ones. This append order is
     still temporary, same as it was before this reset.
   */
-  // See the "LARGE GAP after group 1" note above: '<category>:<group>'
-  // keys listed here get an oversized gap after that group's grid
-  // instead of the normal one (renderGrid() / .archive-grid--gap-large
-  // in style.css). Empty array = no category currently needs this.
-  window.ARCHIVE_LARGE_GAP_AFTER = ['2022-2026:1'];
-  // See the "Section 1 / Section 2 gap" note above: a second, smaller
-  // opt-in gap tier, independent of ARCHIVE_LARGE_GAP_AFTER (that one's
-  // clamp() is tuned for a much taller ~650px case and isn't reused
-  // here) — '<category>:<group>' keys listed here get a ~300-350px
-  // desktop gap after that group's grid (renderGrid() /
-  // .archive-grid--gap-xl in style.css). Group 5 is now the first
-  // group rendered in "2022-2026" (see the "SECTION REORDER" note
-  // above), so this is what separates it from the group that now
-  // follows it.
-  window.ARCHIVE_XL_GAP_AFTER = ['2022-2026:5'];
+  // See the "GAP UNIFICATION (history)" note above: this page used to
+  // carry two per-group "bigger gap" opt-in arrays here
+  // (ARCHIVE_LARGE_GAP_AFTER, ARCHIVE_XL_GAP_AFTER). Both were removed
+  // — every section now gets the same single gap, set once in
+  // style.css (--archive-section-gap on .archive-groups, consumed by
+  // ".archive-grid + .archive-grid"). Don't re-add a per-group gap
+  // array for a future one-off request; see the removal note in
+  // main.js's renderGrid() for why.
   // '<category>:<group>' -> a style.css layout-modifier suffix (see the
   // "SECTION 4" note above and .archive-grid--cols-2 in style.css).
   // Today only group 4 opts into the compact two-column variant; every

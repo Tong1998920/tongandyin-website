@@ -1405,6 +1405,12 @@ body.work-detail-page .primary-nav .submenu a {
    the old always-one-grid behavior, not a different system. */
 .archive-groups {
   display: block;
+  /* The single, consistent section-to-section gap value — see the
+     longer explanation further down, right above where it's consumed
+     by ".archive-grid + .archive-grid". Declared here (inherited down
+     to every .archive-grid child) so there is exactly one place to
+     change it. */
+  --archive-section-gap: 10rem;
 }
 
 /* Three columns on desktop, sitting inside the same capped .wrap
@@ -1458,52 +1464,40 @@ body.work-detail-page .primary-nav .submenu a {
 }
 
 /* The ONLY thing that visually separates one group from the next —
-   deliberately larger than the normal row-gap above, but still a
-   plain whitespace break: no heading, label, line, or border. The
-   sibling combinator means this never applies before the first group
-   (nothing to separate it from), so a category with only one group —
-   every category except "2022-2026" today — renders with no extra gap
-   at all, identical to before groups existed. Reuses the site's
-   existing --space-8 token (the same large structural gap used
-   elsewhere, e.g. above the footer) rather than a one-off value. */
+   still a plain whitespace break: no heading, label, line, or border.
+   The sibling combinator means this never applies before the first
+   group (nothing to separate it from), so a category with only one
+   group — every category except "2022-2026" today — renders with no
+   extra gap at all, identical to before groups existed.
+
+   A SINGLE, CONSISTENT value on purpose: earlier this had two extra
+   opt-in "bigger gap" tiers (an ".archive-grid--gap-large" modifier at
+   ~650px, added when group 1 lost three works and needed to keep their
+   footprint as blank space; and an ".archive-grid--gap-xl" modifier at
+   ~300-350px, added when group 5 became the first-rendered group) —
+   the artist found the resulting page visually inconsistent (some gaps
+   tiny, one enormous) and asked for one uniform gap between every
+   section instead. Both modifiers, their CSS rules, the JS that added
+   them (main.js's LARGE_GAP_AFTER/XL_GAP_AFTER), and the
+   window.ARCHIVE_LARGE_GAP_AFTER/ARCHIVE_XL_GAP_AFTER declarations that
+   drove them (works/archive/index.html) were removed rather than left
+   in place unused — dead opt-in machinery nobody was meant to opt
+   back into is exactly the kind of thing that causes an accidental
+   reintroduction of this same inconsistency later. --archive-section-gap
+   is a fixed 10rem (160px), not viewport-scaled — the artist asked for
+   "approximately 140-180px on desktop" as ONE value, not a range that
+   moves with viewport width, so a flat value is the more literal,
+   simpler match (compare column-gap/row-gap above, which genuinely do
+   need to scale with the grid's own width). It's declared as a custom
+   property, rather than inlined directly into the margin-top below, so
+   a future request for a different single value only means changing
+   it in this one place. This is unrelated to and independent of
+   ".archive-grid--cols-2" above (group 4's compact-width layout) — a
+   group can still use that column-layout variant while getting the
+   exact same section gap as everyone else, since the two rules target
+   different properties. */
 .archive-grid + .archive-grid {
-  margin-top: var(--space-8);
-}
-
-/* Opt-in oversized version of the rule above, applied only when a group
-   is listed in window.ARCHIVE_LARGE_GAP_AFTER (see the "LARGE GAP after
-   group 1" comment in works/archive/index.html). Used here to preserve
-   the approximate vertical footprint of three sculpture works removed
-   from group 1, as intentional blank gallery space before group 2 —
-   still nothing but whitespace: no heading, label, line, or border.
-   Must come after the ".archive-grid + .archive-grid" rule above since
-   both selectors are equally specific (two class-selector combinators)
-   and rely on source order to win. Sized from the actual pixel height
-   the three removed works occupied on the live page before deletion
-   (~650px at 1440px-wide desktop, ~467px at 1024px), which scales at
-   roughly 45% of viewport width across that range. */
-.archive-grid--gap-large + .archive-grid {
-  margin-top: clamp(18rem, 45vw, 42rem);
-}
-
-/* A second, smaller opt-in gap tier — separate from --gap-large above,
-   which is already tuned for a specific, much taller ~650px case and
-   isn't reused here. Applied when a group is listed in window.
-   ARCHIVE_XL_GAP_AFTER (see the "Section 1 / Section 2 gap" note in
-   works/archive/index.html): today, the group that renders first on
-   the page, so the two "first-look" groups of works read as clearly
-   separate bodies of work right from the top of the page. Targets
-   ~300-350px on a common desktop width and scales down proportionally
-   on narrower screens, the same vw-scaling approach as --gap-large,
-   just with its own smaller min/preferred/max — 22.5vw lands at 324px
-   at 1440px wide (inside the requested range), the 22rem (352px) cap
-   keeps very wide screens close to that same range instead of growing
-   unbounded, and the 8rem (128px) floor keeps it visibly bigger than
-   the plain inter-group gap above even on small screens. Must come
-   after ".archive-grid + .archive-grid" for the same source-order
-   reason --gap-large does. */
-.archive-grid--gap-xl + .archive-grid {
-  margin-top: clamp(8rem, 22.5vw, 22rem);
+  margin-top: var(--archive-section-gap);
 }
 
 .archive-figure { margin: 0; }
