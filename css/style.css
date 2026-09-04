@@ -1,0 +1,1851 @@
+/* ==========================================================================
+   Tong Yin — shared stylesheet
+   One file, used by every page. Organized top to bottom:
+   1. Fonts + variables (the whole visual system lives in the variables)
+   2. Reset
+   3. Type
+   4. Layout helpers
+   5. Site header / navigation
+   6. Footer
+   7. Homepage
+   8. Works (overview + project pages)
+   9. Exhibitions
+   10. News
+   11. About
+   12. Contact
+   13. Responsive
+
+   Visual language: artwork first, space second, typography third. One
+   unified sans-serif system, a real self-hosted webfont (no CDN, no
+   system-font substitution): TeX Gyre Heros — a cold, precise, thin
+   neo-grotesk — for everything on the site, structural and
+   informational alike (wordmark, nav, Selected Works, artwork
+   navigation, prev/next, artwork title/medium/dimensions/year/credit,
+   captions, exhibition metadata, body prose). See --font-sans below
+   and the @font-face block that backs it. There is no separate serif
+   voice; --font-serif is kept only as an alias of --font-sans so older
+   rules that still reference it keep working without a second family
+   being reintroduced. Hierarchy comes from size, weight, spacing and
+   line-height, not from a change of typeface, and weights stay light
+   (400, occasionally 500) — no unnecessary bold. No hairline dividers
+   — sections are separated by space alone. Motion is kept to
+   near-nothing: no hover-zoom, no slides, no dramatic fades. A capped
+   content column (--content-max) keeps the page from simply
+   stretching to fill wide viewports — extra width becomes outer empty
+   space instead, the way it does on the site's reference.
+   ========================================================================== */
+
+/* ---- webfont: self-hosted, real font files (assets/fonts/) ----
+   TeX Gyre Heros (GUST e-foundry, GUST Font License — an open,
+   metrically-Helvetica sans): the site's one and only typeface. Four
+   weights/styles are loaded: Regular, Italic, Bold, Bold Italic — no
+   synthesized/faux weights anywhere on the site. font-display: swap
+   avoids an invisible-text flash while these load. (A second family,
+   Source Serif 4, previously supplied a separate informational voice;
+   its font files and @font-face rules have been removed now that the
+   whole site reads in one sans-serif system.) */
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TeX Gyre Heros';
+  src: url('../fonts/TeXGyreHeros-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* ---- palette: neutral off-white ground, soft gray ink throughout ---- */
+  --color-bg: #f7f7f6;
+  --color-ink: #57554f;      /* nav, body copy, headings — same ink everywhere */
+  --color-ink-soft: #83807a; /* secondary/meta text, and the wordmark */
+  --color-ink-strong: #3c3a35; /* reserved for rare emphasis only */
+  --color-line: #e2e0da;
+  --color-active: #007AAA;   /* active/current navigation state only — not decorative elsewhere */
+
+  /* ---- type: one real webfont (@font-face above), not a system
+     substitute, used everywhere on the site — wordmark, navigation,
+     Selected Works, artwork-navigation lists, prev/next, artwork
+     title/medium/dimensions/year/credit, captions, exhibition
+     metadata, body prose, Archive. --font-serif is kept as an alias
+     of --font-sans (not a second family) purely so any rule still
+     written as font-family: var(--font-serif) keeps resolving to the
+     same one typeface. The fallback stack ends in the generic
+     `sans-serif` keyword, which is also what lets Chinese text
+     (中文) render in the browser's own sans-serif system font, since
+     TeX Gyre Heros/Arial don't carry CJK glyphs. ---- */
+  --font-sans: 'TeX Gyre Heros', Arial, sans-serif;
+  --font-serif: var(--font-sans);
+
+  /* ---- wordmark: structural, not decorative — same family as the
+     nav (--font-sans). Kept as its own variable (rather than every
+     rule referencing --font-sans directly) so the wordmark and the
+     work-detail template's structural column can still be retuned
+     independently if needed later. ---- */
+  --font-wordmark: var(--font-sans);
+
+  /* ---- spacing scale: tighter, print-like rhythm ---- */
+  --space-1: 0.3rem;
+  --space-2: 0.6rem;
+  --space-3: 0.9rem;
+  --space-4: 1.4rem;
+  --space-5: 2.2rem;
+  --space-6: 3.4rem;
+  --space-7: 5rem;
+  --space-8: 6.8rem;
+
+  /* ---- page margin, fluid — generous, close to a printed page's outer margin ---- */
+  --page-margin: clamp(20px, 9vw, 150px);
+
+  /* ---- header margin: deliberately smaller than --page-margin. The
+     header spans close to the full viewport width; the content column
+     below it (including the homepage image) is its own, narrower,
+     independently-centered block. Do not reuse --page-margin here. ---- */
+  --header-margin: clamp(20px, 4vw, 56px);
+
+  /* ---- carousel prev/next inset: tighter than --header-margin on
+     purpose — these sit right at the true viewport edge, not aligned
+     to the header's own margin. ---- */
+  --carousel-edge: clamp(8px, 1.8vw, 22px);
+
+  /* ---- carousel artwork viewing box: a FIXED height (not a fixed
+     aspect-ratio) so every slide occupies exactly the same vertical
+     space regardless of its own image's proportions — object-fit:
+     contain then does the work of keeping each image uncropped and
+     undistorted inside it. Deliberately tall enough that, combined
+     with the header and the carousel's own top padding, the caption
+     that follows the image lands just past the bottom of a typical
+     desktop viewport (the "below the fold" requirement) — tuned
+     against real viewport heights, not guessed. Also the box
+     .carousel-arrow centers itself against (see below), so arrows
+     track the artwork specifically, not the caption underneath it.
+     Overridden smaller for mobile, where the fold requirement doesn't
+     apply. ---- */
+  --carousel-figure-h: 94vh;
+
+  /* ---- nav: sized and spaced independently of body copy — see
+     .primary-nav a. Kept as its own variables so tightening body text
+     elsewhere never accidentally tightens the nav again. Fluid
+     (clamp) rather than fixed, per this round's typography brief —
+     compact and controlled at every width, never jumping at a
+     breakpoint. ---- */
+  --nav-font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  --nav-item-gap: 0.7rem;
+  --submenu-font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
+
+  /* ---- content column: the page stops growing past this width, so on
+     wide monitors the extra space becomes margin, not more image ---- */
+  --content-max: 1180px;
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-reveal: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ---- Chinese (中文) type fallback ----
+   Overrides --font-sans/--font-serif (and, through them, every rule
+   that references either — nothing else changes) only when the page
+   is in Chinese, via TY_I18N in main.js setting <html lang="zh">. All
+   the same size/weight/spacing rules as the English type continue to
+   apply unchanged — only the family swaps to a clean system CJK
+   stack; no new webfont, and every other :root value above (colors,
+   spacing, layout) is untouched here. */
+html[lang="zh"] {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-serif: var(--font-sans);
+}
+
+/* Smooth, subtle same-origin page transitions where supported.
+   Pure progressive enhancement — does nothing in browsers that
+   don't understand it, no JS required. */
+@view-transition {
+  navigation: auto;
+}
+
+/* ---------------------------------------------------------------- reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, h4, p { margin: 0; }
+button { font-family: inherit; background: none; border: none; cursor: pointer; color: inherit; }
+
+/* ---------------------------------------------------------------- type */
+body {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* Section label — structural, not content, so it stays in the sans
+   family: "Works", "Exhibitions", "News", "Contact", a year eyebrow
+   above a project title. */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+  color: var(--color-ink-soft);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Page heading = the artwork's (or exhibition's) own name — a compact,
+   controlled size, never an oversized editorial headline. font-weight
+   500 (resolving to the Regular file, since the site's one typeface
+   only ships Regular/Bold — no synthesized in-between weight) gives
+   it just enough presence to read as a title without shouting; the
+   distinction from body text is carried by size, not by real bold. */
+.page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.3vw, 1.1875rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.25;
+  color: var(--color-ink);
+}
+
+.body-text {
+  max-width: 38em;
+  font-family: var(--font-serif);
+  font-size: clamp(0.875rem, 0.95vw, 0.9688rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-ink);
+}
+
+.body-text p + p { margin-top: 1.3em; }
+
+/* Shared small-text scale — used in two different roles depending on
+   context, so this base rule covers the more common structural/
+   interface use (contact links, the About page's "full archive"
+   link); .exhibition-venue and .carousel-caption (below) override it
+   back to the informational voice where the text is describing
+   a specific exhibition or artwork rather than acting as a control. */
+.meta-text {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+/* Always paired with .plate-caption (installation/artwork captions) —
+   informational text. */
+.caption {
+  font-family: var(--font-serif);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+/* --------------------------------------------------------- layout base */
+.wrap {
+  max-width: calc(var(--content-max) + 2 * var(--page-margin));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+}
+
+main { display: block; }
+
+.section {
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-7);
+}
+
+.section--tight { padding-top: var(--space-5); padding-bottom: var(--space-5); }
+
+.hairline {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--color-bg);
+  padding: var(--space-2);
+  z-index: 100;
+}
+.skip-link:focus { left: var(--page-margin); }
+
+/* --------------------------------------------------------- site header */
+/* Deliberately NOT capped to --content-max / --page-margin like .wrap:
+   the header spans close to the full viewport width, with its own
+   smaller --header-margin, independent of how wide the content column
+   (and the homepage image) below it is.
+
+   Always transparent — no background fill, even when sticky and even
+   once content has scrolled underneath it. Whatever's on the page
+   (the homepage image included) continues visually behind the header,
+   the way it does on the reference site. This is a deliberate choice,
+   not an oversight: don't "fix" it by adding a background on scroll. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: transparent;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.9rem var(--header-margin) 0.65rem;
+  gap: var(--space-3);
+}
+
+/* The artist's name — set as typography, not a logo: same structural
+   sans as the nav, sized only a little larger so it reads as the
+   page's one point of identity without competing for attention. No
+   tracking, no bold, no box or background — its color is actually
+   softer than the nav's, so size alone gives it presence. */
+.wordmark {
+  position: relative;
+  z-index: 61;
+  font-family: var(--font-wordmark);
+  font-size: clamp(1.125rem, 1.25vw, 1.25rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+/* Groups the nav and the language toggle together on the right side of
+   the header, as one unit, so .site-header's space-between still only
+   has two things to place: the wordmark, and this. */
+.header-right {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.primary-nav {
+  display: flex;
+}
+
+.primary-nav > ul {
+  display: flex;
+  align-items: baseline;
+  gap: var(--nav-item-gap);
+  flex-wrap: wrap;
+}
+
+/* Compact and decisive, not light or airy — regular weight (never
+   300), a tight gap between items, and slightly negative tracking so
+   the whole group reads as one small, precise cluster rather than
+   spreading across the header. */
+.primary-nav a {
+  font-family: var(--font-sans);
+  font-size: var(--nav-font-size);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  padding: 0.3rem 0;
+  transition: color 0.2s var(--ease);
+}
+
+.primary-nav a:hover,
+.primary-nav a:focus-visible,
+.primary-nav a[aria-current="page"] {
+  color: var(--color-active);
+}
+
+/* ---- Works submenu ----
+   A natural vertical continuation of "Works" — not a conventional
+   dropdown card. No fixed width or height: the background plane is
+   sized by its own content plus a little breathing room (padding
+   only), so it never reads as a large empty white rectangle. Still no
+   border, shadow, or rounded corners — just the page's own flat
+   background color, floating a layer above the page (position:
+   absolute, so it never pushes content down), flush to the left edge,
+   directly under "Works". */
+.primary-nav li.has-submenu {
+  position: relative;
+}
+
+.primary-nav .submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: max-content;
+  margin: 0;
+  padding: 0.75rem 0.1rem 0.85rem;
+  background: var(--color-bg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-2px);
+  transition: opacity 250ms ease-in-out, transform 250ms ease-in-out, visibility 250ms ease-in-out;
+  z-index: 5;
+}
+
+.primary-nav li.has-submenu:hover > .submenu,
+.primary-nav li.has-submenu:focus-within > .submenu,
+.primary-nav li.has-submenu.is-open > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.primary-nav .submenu li + li {
+  margin-top: 0.55rem;
+}
+
+/* Same small scale as the top-level nav — compact, not a separate
+   larger type style. The surrounding white plane (above) is what
+   creates the sense of space, not the text itself. */
+.primary-nav .submenu a {
+  display: block;
+  white-space: nowrap;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--submenu-font-size);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+}
+
+.primary-nav .submenu a:hover,
+.primary-nav .submenu a:focus-visible {
+  color: var(--color-active);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-nav .submenu { transition: none; }
+}
+
+/* ---- language toggle ----
+   Plain text, not a control: no box, border, or background. The
+   active language is simply darker than the inactive one — driven by
+   aria-pressed, which TY_I18N in main.js keeps in sync with the
+   actual page language. */
+.lang-toggle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+}
+
+.lang-option {
+  font-family: var(--font-sans);
+  font-size: inherit;
+  color: var(--color-ink-soft);
+  padding: 0.3rem 0;
+}
+
+.lang-option[aria-pressed="true"] {
+  color: var(--color-ink);
+}
+
+.lang-option:hover,
+.lang-option:focus-visible {
+  color: var(--color-active);
+}
+
+.lang-sep {
+  color: var(--color-line);
+  font-size: inherit;
+}
+
+.nav-toggle {
+  position: relative;
+  z-index: 61;
+  display: none;
+  font-size: var(--nav-font-size);
+}
+
+/* --------------------------------------------------------------- footer */
+.site-footer {
+  padding: var(--space-5) var(--page-margin) var(--space-6);
+  margin-top: var(--space-8);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.site-footer .footer-links {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+  letter-spacing: 0;
+  transition: color 0.2s var(--ease);
+}
+.site-footer a:hover, .site-footer a:focus-visible { color: var(--color-ink); }
+
+.site-footer .copyright {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------- homepage */
+/* Homepage artwork carousel — an exhibition-viewing interface, not a
+   commercial slider. Full-bleed (independent of --content-max, like
+   the header) so the prev/next controls can sit near the true
+   viewport edges; the artwork itself is centered in its own capped
+   viewing area. One slide is shown at a time (plain display block/
+   none), so there is nothing here for a no-JS visitor to trip on —
+   the first slide is simply the page's static content. */
+.carousel {
+  width: 100%;
+  /* Kept deliberately small: the artwork should sit close under the
+     header, not centered in a tall gap beneath it. The box itself
+     (--carousel-figure-h) stays at its full size — only this padding
+     was reduced, so the artwork reads higher on the page without
+     reading any smaller. */
+  padding: clamp(4px, 1.2vh, 20px) 0 var(--space-6);
+}
+
+.carousel-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Same content column the rest of the site uses (compare .wrap /
+   the old .hero-wrap) — this is what gives the artwork its previous
+   large scale back, instead of shrinking into a small centered
+   viewer box. */
+.carousel-viewport {
+  width: 100%;
+  max-width: calc(var(--content-max) + 2 * var(--page-margin));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+}
+
+.carousel-track {
+  position: relative;
+}
+
+.carousel-slide {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: 0;
+}
+
+.carousel-slide.is-active {
+  display: flex;
+}
+
+.carousel-slide.is-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .carousel-slide.is-active {
+    transition: opacity 200ms linear;
+  }
+}
+
+/* The shared "artwork viewing box": a fixed height (--carousel-figure-h,
+   defined above) rather than a fixed aspect-ratio, so switching between
+   a landscape and a portrait work never changes the box's height and
+   never jumps the page — only the rendered image's width changes,
+   via object-fit: contain, which also keeps every image uncropped and
+   undistorted at its own natural proportions. A landscape work reads
+   wide within the box; a portrait work reads narrower, both using the
+   same full height rather than being shrunk to share a width. */
+.carousel-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--carousel-figure-h);
+  margin: 0;
+}
+
+.carousel-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: opacity 250ms var(--ease);
+}
+
+/* Each homepage artwork is now a plain link through to its Selected
+   Works page (.carousel-figure is an <a> — see index.html), but must
+   look pixel-identical before and during hover/focus: these are
+   deliberately light, high-key works, so any opacity/brightness/
+   filter/scale hover effect would make them harder to see. cursor:
+   pointer is the ONLY affordance; nothing here touches the image's
+   own appearance, and no rule anywhere else in this file targets
+   .carousel-figure-link on :hover/:focus, on purpose. */
+.carousel-figure-link {
+  cursor: pointer;
+}
+
+/* One-off: "The Stranger" is a physically small artwork, so it's
+   deliberately NOT scaled up to fill the shared viewing box the way
+   every other slide is. The box itself (.carousel-figure, above)
+   stays exactly the same fixed size as all the others — arrows and
+   fold position are unaffected — only this image is capped well
+   below the box's full size and centered within it (via the flex
+   rule above), reading as quietly smaller with generous space around
+   it. Applied only via the carousel-figure--small modifier class on
+   that one slide in index.html; no other slide should carry it. */
+.carousel-figure--small img {
+  width: auto;
+  height: auto;
+  max-width: 42%;
+  max-height: 42%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-figure img { transition: none; }
+}
+
+/* Prev/next controls: thin, quiet strokes near the true viewport
+   edges — not boxes, not circles, not sitting beside the artwork.
+   top is pinned to half of --carousel-figure-h (the artwork box
+   itself, which sits flush with the top of .carousel-stage) rather
+   than 50% of the stage — the stage also contains the caption below
+   the image, and centering on the whole stage would pull the arrows
+   down off the artwork's own midpoint. The button's own hit area
+   (width/height) is kept larger than the chevron glyph inside it, so
+   there's a generous click target without the arrow reading as a
+   button — no circle, box, background, or border. */
+.carousel-arrow {
+  position: absolute;
+  top: calc(var(--carousel-figure-h) / 2);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.8rem;
+  height: 3.8rem;
+  padding: 0;
+  color: var(--color-ink-soft);
+  transition: color 0.2s var(--ease);
+}
+.carousel-arrow svg {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+}
+.carousel-arrow:hover,
+.carousel-arrow:focus-visible {
+  color: var(--color-active);
+}
+.carousel-arrow--prev { left: var(--carousel-edge); }
+.carousel-arrow--next { right: var(--carousel-edge); }
+
+/* No-JS fallback (see the <noscript> rule in index.html): without
+   main.js the arrows can't do anything, so they're hidden rather than
+   left as dead controls. The first slide (marked is-active/is-visible
+   in the HTML) is still fully visible and its image is still a plain,
+   working link. */
+
+.index-list {
+  display: block;
+}
+
+.index-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  transition: opacity 0.2s var(--ease);
+}
+
+.index-list a.index-row:hover .index-row-title,
+.index-list a.index-row:focus-visible .index-row-title {
+  opacity: 0.6;
+}
+
+/* Works-overview index list — a navigational list of works, so it
+   stays in the structural sans family (parallel to the Selected Works
+   list on the single-work template), not the informational one. */
+.index-row-title {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  transition: opacity 0.2s var(--ease);
+}
+
+.index-row-meta {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+/* ------------------------------------------------------- works overview */
+/*
+   The works index is a calm, centered sequence, not a grid and not a
+   visible left/right/center pattern. Every entry is centered by default
+   (work-item--lead / --standard / --intimate simply differ in max-width,
+   i.e. in how large that one work reads); only one or two entries in the
+   whole sequence carry a --standard-left / --standard-right nudge, and
+   that nudge is small (about 40px) — enough to keep the page from
+   feeling perfectly mechanical, not enough to register as a rule. Most
+   of the page's rhythm should come from each work's own aspect ratio
+   and from the vertical space between entries, not from side-to-side
+   placement.
+*/
+.works-sequence {
+  display: flex;
+  flex-direction: column;
+}
+
+.work-item + .work-item {
+  margin-top: var(--space-8);
+}
+
+.work-item-link {
+  display: block;
+}
+
+.work-item-figure {
+  margin: 0;
+}
+
+.work-item-figure img {
+  width: 100%;
+}
+
+.work-item-caption {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+
+/* width + alignment — centered by default; two quiet, small nudges only */
+.work-item--lead          { max-width: 1080px; margin-left: auto; margin-right: auto; }
+.work-item--standard      { max-width: 620px;  margin-left: auto; margin-right: auto; }
+.work-item--standard-left { max-width: 600px;  margin-left: calc(50% - 340px); margin-right: auto; }
+.work-item--standard-right{ max-width: 600px;  margin-left: auto; margin-right: calc(50% - 340px); }
+.work-item--intimate       { max-width: 480px;  margin-left: auto; margin-right: auto; }
+
+/* ---------------------------------------------------------- project page */
+.project-header {
+  max-width: 42em;
+}
+
+/* Project pages use the shared .page-title (compact) as-is —
+   the artwork's own name, sized to read as an identifying title, not
+   an editorial headline. */
+.project-header .page-title {
+  margin-top: var(--space-2);
+}
+
+.project-text {
+  margin-top: var(--space-3);
+}
+
+/*
+   Image plates are a simple vertical flow, not a grid — each plate is a
+   full-width block whose max-width and alignment vary, so the page
+   reads as a deliberate editorial sequence (left / right / centered,
+   wide / narrow) rather than a rigid grid or an e-commerce tile wall.
+   This also means plates can never collide or misplace regardless of
+   how tall any single image is.
+*/
+.project-images {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.plate {
+  margin: 0;
+  width: 100%;
+}
+
+.plate img {
+  width: 100%;
+}
+
+/* image rhythm: varied width + alignment so the page never reads as a uniform grid */
+.plate--full   { max-width: none; }
+.plate--wide   { max-width: 920px; margin-left: auto; margin-right: auto; }
+.plate--center { max-width: 640px; margin-left: auto; margin-right: auto; }
+.plate--left   { max-width: 680px; margin-left: 0; margin-right: auto; }
+.plate--right  { max-width: 680px; margin-left: auto; margin-right: 0; }
+.plate--left-narrow  { max-width: 480px; margin-left: 0; margin-right: auto; }
+.plate--right-narrow { max-width: 480px; margin-left: auto; margin-right: 0; }
+
+.plate-caption {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.plate-caption .work-title { font-family: var(--font-serif); font-style: italic; color: var(--color-ink); }
+
+.installation-heading {
+  padding-top: var(--space-2);
+}
+
+.project-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.project-nav a {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  line-height: 1.3;
+}
+.project-nav a:hover, .project-nav a:focus-visible { color: var(--color-ink); }
+
+/* ---------------------------------------------------- single-work detail
+   A second, more spacious template for one individual artwork page: a
+   left column (the Selected Works list, then this work's info)
+   anchored near the true page margin, beside a large single-image
+   carousel reaching toward the right edge. Scoped entirely to
+   body.work-detail-page, so it only touches pages that opt into it by
+   carrying that class on <body> — currently only Calling A Deer A
+   Horse — every other project page keeps the plain vertical
+   .project-images sequence above, untouched.
+
+   Typography here uses the site's one typeface throughout: the left
+   column's structural elements (nav, Selected Works heading and list)
+   are set in --font-wordmark/--font-sans (TeX Gyre Heros), and the
+   artwork's own information block (title, medium, dimensions, year,
+   credit) uses the same family via --font-serif (an alias of
+   --font-sans, kept only so this markup didn't need rewriting) — see
+   .work-detail-info below; the two are told apart by size and weight,
+   not by a different face. The header/nav markup itself is unchanged
+   (same file everywhere); these rules simply override its size only
+   when body.work-detail-page is present, so no other page is
+   affected. */
+body.work-detail-page .primary-nav a {
+  font-family: var(--font-wordmark);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+body.work-detail-page .primary-nav .submenu a {
+  font-family: var(--font-wordmark);
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
+  letter-spacing: -0.01em;
+}
+
+/* Outer shell for the work-detail section only: unlike the rest of the
+   site's body copy (.wrap), this is NOT capped to --content-max and
+   re-centered — that centering is what was pushing the left column
+   toward the middle of wide viewports. Instead it spans full width with
+   its own left/right padding, so the left column anchors at the same
+   tight --header-margin inset the "Tong Yin" wordmark itself uses
+   (not the larger --page-margin every other page's body copy starts
+   at, which reads as too far toward center for this column), while
+   the right side is free to run out toward the true viewport edge
+   using that same --header-margin inset. */
+.work-detail-shell {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-left: var(--header-margin);
+  padding-right: var(--header-margin);
+}
+
+/* Shared figure height for the artwork stage — also used by the left
+   column's min-height so its info block naturally settles low, with a
+   large vertical gap under the Selected Works list, echoing the right
+   column's own height, rather than the two columns being independently
+   top-aligned and uneven. */
+.work-detail {
+  --work-detail-figure-h: 82vh;
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  column-gap: clamp(3.5rem, 7vw, 7.5rem);
+  row-gap: 0;
+  align-items: start;
+}
+
+.work-detail-side {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: var(--work-detail-figure-h);
+}
+
+.work-detail-stage { grid-column: 2; grid-row: 1; }
+
+.selected-works-heading {
+  font-family: var(--font-wordmark);
+  font-size: clamp(0.875rem, 1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin: 0 0 var(--space-4);
+}
+
+.selected-works-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+}
+.selected-works-list a {
+  font-family: var(--font-wordmark);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+.selected-works-list a:hover,
+.selected-works-list a:focus-visible,
+.selected-works-list a[aria-current="page"] {
+  color: var(--color-active);
+}
+
+/* Larger intentional gap between the "Selected Works" heading and the
+   artwork list beneath it — desktop only, matching the side-by-side
+   layout the reference screenshot was taken from. Added as margin-top
+   on the list itself (on top of the heading's own unchanged
+   margin-bottom above) rather than by enlarging that heading's
+   margin, so "Selected Works" itself never moves. Because
+   .work-detail-side lays its two children out with justify-content:
+   space-between, this extra height at the top of the column is
+   absorbed entirely by the gap above .work-detail-info below — the
+   artwork metadata block's own position is unaffected. Below 701px
+   the column stacks (see the max-width: 700px block further down,
+   .work-detail-info's own margin-top there) and is deliberately left
+   at its existing, tighter rhythm.
+
+   142px, not 120px: the heading's own 22.4px margin-bottom
+   (--space-4) and this margin-top collapse together per normal CSS
+   margin-collapsing rules (both are plain block-level siblings), so
+   the rendered gap is whichever value is larger, not their sum. 142px
+   here is what actually renders as a ~120px increase over the
+   original ~22px gap. */
+@media (min-width: 701px) {
+  .selected-works-list {
+    margin-top: 142px;
+  }
+}
+
+/* Artwork info + prev/next sit together at the foot of the left column
+   (flex + justify-content: space-between on .work-detail-side puts
+   this block near the bottom, not immediately under the list). Same
+   one typeface as the structural column above it — the artwork's own
+   facts (title, medium, dimensions, year, credit) are set apart from
+   interface chrome by size and weight, not by a different family. */
+.work-detail-info .work-detail-title {
+  font-family: var(--font-serif);
+  font-size: clamp(0.875rem, 1vw, 0.9375rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.3;
+  color: var(--color-ink);
+  margin: 0;
+}
+.work-detail-info .work-detail-meta {
+  font-family: var(--font-serif);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--color-ink-soft);
+  margin: 0.35em 0 0;
+}
+.work-detail-info .work-detail-credit {
+  font-family: var(--font-serif);
+  font-size: clamp(0.75rem, 0.85vw, 0.8438rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-ink-soft);
+  margin: var(--space-3) 0 0;
+}
+
+/* Right column: the artwork stage. A fixed box (width AND height, not
+   just an aspect-ratio) so the display area never changes size between
+   the three images regardless of each one's own proportions — the page
+   never jumps or reflows on switch. Sized large and dominant — close to
+   REF-02's scale — while still leaving intentional white space around
+   it; aligned to the end (right) of its grid column so it reads as
+   reaching toward the true right edge rather than floating centered in
+   whatever space happens to be left. Not every future work-detail page
+   need use these exact numbers: a portrait work should be constrained
+   primarily by --work-detail-figure-h (viewport height) rather than
+   this width, and a physically small work (as with the homepage's
+   earlier "Stranger" treatment) may intentionally render smaller. */
+.work-detail-stage {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.work-carousel-track { position: relative; }
+
+.work-carousel-slide {
+  display: none;
+  opacity: 0;
+  width: min(58vw, 920px);
+  height: var(--work-detail-figure-h);
+}
+.work-carousel-slide.is-active { display: flex; align-items: center; justify-content: center; }
+.work-carousel-slide.is-visible { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .work-carousel-slide.is-active { transition: opacity 200ms linear; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-carousel-slide img { transition: none; }
+}
+
+.work-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* ------------------------------------------------- Stranger preview stage */
+/* Stranger 01–04 use a dedicated, deliberately minimal template — one
+   large image, nothing else in the right column — instead of the
+   metadata-carrying .work-detail-info / boxed .work-carousel every
+   other work-detail page uses. It still shares .work-detail's grid
+   and .work-detail-side's Selected Works styling (same left column,
+   same rhythm as the rest of the site), but the right column has no
+   fixed box: the image is centered in the available space and scales
+   by its own natural proportions up to --work-detail-figure-h, so a
+   landscape, portrait, square or irregular-silk work all read at a
+   generous, coherent size without being forced into one shape.
+   Switching between the four works has no visible prev/next control —
+   see main.js, [data-stranger-preview]: clicking the image's own
+   left/right half (with a quiet arrow-cursor hint, same convention as
+   .work-carousel above) or the Left/Right arrow keys moves to the
+   previous/next work. A visually-hidden real link for each direction
+   (omitted at either end of the series) keeps the series navigable
+   without JavaScript and for keyboard/screen-reader users. */
+.stranger-preview-stage {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--work-detail-figure-h);
+}
+
+.stranger-preview-image {
+  display: block;
+  max-width: 100%;
+  max-height: var(--work-detail-figure-h);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Stranger 01 only: that one artwork has more than one image (see
+   main.js, [data-stranger-preview] and the doc comment in
+   works/the-stranger/stranger-01/index.html), so its stage holds
+   several .stranger-preview-slide wrappers instead of a single bare
+   .stranger-preview-image. Same is-active/is-visible cross-fade
+   convention as .work-carousel-slide above — one slide shown at a
+   time, calm opacity fade, never a slide/zoom/bounce — with the inner
+   image keeping the exact same natural-size/no-crop/no-stretch
+   .stranger-preview-image rules as every other Stranger page. Stranger
+   02–04 have no .stranger-preview-slide element at all and are
+   completely unaffected by this block. */
+.stranger-preview-slide {
+  display: none;
+  opacity: 0;
+  align-items: center;
+  justify-content: center;
+}
+.stranger-preview-slide.is-active {
+  display: flex;
+}
+.stranger-preview-slide.is-visible {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stranger-preview-slide.is-active {
+    transition: opacity 200ms linear;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stranger-preview-slide img { transition: none; }
+}
+
+/* ------------------------------------------------------- Ignore overview */
+/* The Ignore work-detail page shows two clickable artwork groups
+   instead of a single-image carousel, and no metadata at all — so it
+   reuses .work-detail / .work-detail-side (heading + Selected Works
+   list only, no .work-detail-info block) but swaps .work-detail-stage
+   for this stacked, centered layout via the .ignore-overview-stage
+   modifier. Each image keeps its own natural aspect ratio (width:100%,
+   height:auto, no object-fit) so neither is cropped or stretched. */
+.ignore-overview-stage {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(4rem, 9vw, 8rem);
+  width: 100%;
+}
+
+.ignore-overview-figure {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.ignore-overview-figure a {
+  display: block;
+}
+
+.ignore-overview-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.2s var(--ease);
+}
+
+/* Quiet hover affordance, matching .carousel-figure-link elsewhere on
+   the site — opacity only, no scale, no border, no background. */
+.ignore-overview-figure a:hover img,
+.ignore-overview-figure a:focus-visible img {
+  opacity: 0.88;
+}
+
+.ignore-overview-top { max-width: min(48%, 420px); }
+.ignore-overview-bottom { max-width: min(58vw, 920px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ignore-overview-figure img { transition: none; }
+}
+
+/* ----------------------------------------------------- Boundary overview */
+/* The Boundary work-detail page shows three clickable artworks read as
+   one continuous top-to-bottom exhibition sequence, not a grid — same
+   no-metadata pattern as the Ignore overview (.work-detail-side keeps
+   only the heading + list, no .work-detail-info block). The stage is a
+   single centered column: Boundary 02 and 03 (the two physically
+   smaller works) first, side by side near the top; Boundary 01 (by far
+   the largest) well below that, at the same displayed scale it has
+   always had. The large gap between the two groups (not a fixed
+   viewport height, not absolute positioning) is what keeps the large
+   work out of the first viewport and requires a scroll to reach it.
+   Sizing (not just each image's own aspect ratio) is what signals the
+   real difference in physical scale between the works, so — unlike
+   every other image on the site — these three intentionally do NOT all
+   render at the same width; .boundary-overview-large is deliberately
+   larger than .boundary-overview-small. Every image still keeps its
+   own natural aspect ratio (width:100%, height:auto, no object-fit),
+   so none of the three is ever cropped or stretched. */
+.boundary-overview-stage {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(5rem, 13vw, 11rem);
+  width: 100%;
+}
+
+.boundary-overview-figure {
+  margin: 0;
+  display: block;
+  min-width: 0;
+}
+
+.boundary-overview-figure a {
+  display: block;
+}
+
+.boundary-overview-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.2s var(--ease);
+}
+
+.boundary-overview-figure a:hover img,
+.boundary-overview-figure a:focus-visible img {
+  opacity: 0.88;
+}
+
+/* Percentages of the stage's own width (not the viewport), matching
+   the displayed scale the row layout used to produce: the large work
+   at 55%, the small pair together at 42%. */
+.boundary-overview-large {
+  width: 55%;
+  min-width: 0;
+  /* Spacing above this figure comes from .boundary-overview-stage's own
+     `gap` only (see above) — this used to also carry its own
+     `margin-top: max(4rem, 62vh)` "extra push", which stacked on top of
+     that gap and pushed Boundary 01 nearly a full viewport-height
+     further down than intended, leaving a huge blank gap between the
+     small pair and the large work. Removed; the stage gap alone
+     already keeps Boundary 01 below the small pair without an
+     oversized empty span, and physical scale is still communicated by
+     width (55% vs. .boundary-overview-small-group's 42%), not by
+     spacing. */
+}
+
+.boundary-overview-small-group {
+  width: 42%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+.boundary-overview-small { flex: 1 1 0; min-width: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .boundary-overview-figure img { transition: none; }
+}
+
+/* ----------------------------------------------------- Stranger overview */
+/* The Stranger work-detail page shows four clickable artworks — same
+   no-metadata pattern as Ignore/Boundary above (.work-detail-side
+   keeps only the heading + list). Unlike Boundary's two-group row,
+   Stranger reads as a three-tier vertical sequence, in fixed series
+   order: Stranger 01 alone near the top, smaller; Stranger 04 and
+   Stranger 02 paired side by side below that, medium-large and
+   visually balanced; Stranger 03 alone lower still, the largest of
+   the four. All three tiers are centered in a single column
+   (.stranger-overview-stage) with generous gaps between them —
+   natural document flow, not fixed-viewport or absolute positioning
+   — so the page scrolls to move through the sequence rather than
+   showing all four works on one screen. Every image keeps its own
+   natural aspect ratio (width:100%, height:auto, no object-fit), so
+   none of the four is ever cropped or stretched, and no image uses a
+   one-off per-artwork width — each tier's sizing is a shared rule. */
+.stranger-overview-stage {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(4rem, 11vw, 9rem);
+  width: 100%;
+}
+
+.stranger-overview-figure {
+  margin: 0;
+  display: block;
+  min-width: 0;
+}
+
+.stranger-overview-figure a {
+  display: block;
+}
+
+.stranger-overview-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.2s var(--ease);
+}
+
+.stranger-overview-figure a:hover img,
+.stranger-overview-figure a:focus-visible img {
+  opacity: 0.88;
+}
+
+/* Tier 1 — Stranger 01 alone, smaller, near the top. */
+.stranger-overview-01 { width: 30%; }
+
+/* Tier 2 — Stranger 04 and Stranger 02 paired, medium-large and
+   balanced; the pair container is wider than a single tier-1 or
+   tier-3 figure, and its two children split it evenly. */
+.stranger-overview-pair {
+  width: 82%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.stranger-overview-pair .stranger-overview-figure { flex: 1 1 0; min-width: 0; }
+
+/* Tier 3 — Stranger 03 alone, the largest, lower on the page. */
+.stranger-overview-03 {
+  width: 60%;
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stranger-overview-figure img { transition: none; }
+}
+
+/* ------------------------------------------------------------- archive */
+/* The Archive is a separate browsing system from Selected Works: a
+   flat, data-driven thumbnail grid (works/archive/, rendered by
+   main.js's [data-archive] block from the ARCHIVE_WORKS array
+   declared inline in that page) with two plain-text category
+   filters, opening into a full-screen lightbox rather than a
+   dedicated project page per artwork. Nothing here is positioned by
+   hand — the grid is CSS Grid in natural document flow, and adding a
+   work later means adding one entry to that array (image, thumbnail,
+   title, year, medium, dimensions, category), never new CSS or
+   coordinates. Typography throughout uses the site's one shared
+   family; hierarchy is by size/weight only, same as every other
+   page. */
+.archive-categories {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+/* Plain text, not a control — same convention as .lang-toggle above:
+   no box, border, or background; the active category is simply
+   darker than the inactive one. */
+.archive-category-btn {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  padding: 0.2rem 0;
+}
+.archive-category-btn.is-active { color: var(--color-ink); }
+.archive-category-btn:hover,
+.archive-category-btn:focus-visible { color: var(--color-active); }
+
+/* Three columns on desktop, sitting inside the same capped .wrap
+   content column as the rest of the site (so the grid never stretches
+   edge to edge) with generous, controlled gaps rather than a tight
+   commercial card grid. Each image keeps width:100%/height:auto — its
+   own aspect ratio, never cropped or forced to a uniform box — so
+   .archive-figure/.archive-thumb carry no fixed height anywhere. */
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(2.5rem, 5vw, 4.5rem);
+  row-gap: clamp(3rem, 6vw, 5rem);
+  align-items: end;
+}
+
+.archive-figure { margin: 0; }
+
+.archive-thumb { display: block; width: 100%; }
+
+.archive-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.2s var(--ease);
+}
+
+.archive-thumb:hover img,
+.archive-thumb:focus-visible img { opacity: 0.88; }
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-thumb img { transition: none; }
+}
+
+/* ---- Archive lightbox ----
+   A full-screen overlay, one artwork centered with generous margins —
+   deliberately not the site's usual left-column/right-stage grid,
+   since an Archive work has no Selected Works sidebar or project
+   identity of its own. Navigation reuses the exact convention already
+   established by .work-carousel / .stranger-preview-stage elsewhere
+   on the site: click the image's own left/right half (quiet
+   arrow-cursor hint, set via JS) or use the Left/Right arrow keys.
+   Escape, or a click on the surrounding background (not the image or
+   caption), closes it. The small text "Close" control in the corner
+   is only a visible affordance for anyone who doesn't know about
+   Escape/background-click — never a large modal-style button. */
+.archive-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(40px, 8vh, 80px) clamp(24px, 8vw, 80px);
+}
+.archive-lightbox[hidden] { display: none; }
+
+body.archive-lightbox-open { overflow: hidden; }
+
+.archive-lightbox-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.archive-lightbox-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 160px);
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+}
+
+.archive-lightbox-meta {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.85vw, 0.8125rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-ink-soft);
+  text-align: center;
+  max-width: 46em;
+}
+
+/* A couple of works carry one or two quiet "Video →" links below their
+   caption (see the `videos` field on those ARCHIVE_WORKS entries, and
+   main.js's showWork()) — same size/weight/color as the caption itself,
+   only distinguished by the same hover convention already used for the
+   category tabs and the Close control above, never a button/border/icon. */
+.archive-lightbox-videos {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.85vw, 0.8125rem);
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  text-align: center;
+}
+.archive-lightbox-videos[hidden] { display: none; }
+.archive-lightbox-videos a:hover,
+.archive-lightbox-videos a:focus-visible { color: var(--color-active); }
+
+.archive-lightbox-close {
+  position: absolute;
+  top: clamp(20px, 4vh, 40px);
+  right: var(--header-margin);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--color-ink-soft);
+}
+.archive-lightbox-close:hover,
+.archive-lightbox-close:focus-visible { color: var(--color-active); }
+
+@media (max-width: 900px) {
+  .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    row-gap: var(--space-6);
+  }
+  .archive-lightbox { padding: 24px 20px; }
+  .archive-lightbox-image { max-width: calc(100vw - 48px); max-height: calc(100vh - 140px); }
+  .archive-lightbox-close { top: 16px; right: var(--header-margin); }
+}
+
+/* ------------------------------------------------------------ exhibitions */
+/* The exhibitions index (year / title / venue) is a navigable list,
+   like the works overview — structural, not the informational
+   information voice reserved for a single exhibition's own detail
+   (see .exhibition-page-header .exhibition-venue below). */
+/* Solo/Group section labels above each .exhibition-list — same plain,
+   understated register as .selected-works-heading (no box, no rule,
+   no oversized type), just enough weight to read as a grouping label
+   rather than another exhibition row. */
+.exhibition-group-heading {
+  font-family: var(--font-sans);
+  font-size: clamp(0.875rem, 1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin: var(--space-7) 0 var(--space-3);
+}
+.exhibition-group-heading:first-of-type { margin-top: 0; }
+
+.exhibition-list { width: 100%; }
+
+.exhibition-row {
+  display: grid;
+  grid-template-columns: 4.5em 1fr;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+.exhibition-year {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+}
+
+.exhibition-main .exhibition-title {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.exhibition-main a.exhibition-title:hover,
+.exhibition-main a.exhibition-title:focus-visible { opacity: 0.6; }
+
+.exhibition-main .exhibition-venue {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  margin-top: 0.2em;
+  line-height: 1.3;
+}
+
+.exhibition-page-header { max-width: 42em; }
+/* A single exhibition's own venue/dates read as information about
+   that show, so — unlike the index list above — this takes the informational
+   voice, overriding the .meta-text class it's paired with in the
+   markup (see .carousel-caption for the same pattern). */
+.exhibition-page-header .exhibition-venue {
+  font-family: var(--font-serif);
+  font-size: clamp(0.8125rem, 0.9vw, 0.875rem);
+  line-height: 1.4;
+  margin-top: var(--space-1);
+}
+
+.exhibition-images {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-top: var(--space-5);
+}
+.exhibition-images .plate img { width: 100%; }
+
+/* ------------------------------------------------------------------ news */
+.news-list { display: flex; flex-direction: column; }
+
+.news-entry {
+  display: grid;
+  grid-template-columns: 4.5em 1fr;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+/* News is a dated index (like Works/Exhibitions), so date + headline
+   stay structural sans; each entry's own announcement text is
+   .body-text, already using the site's one typeface by default. */
+.news-date {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  line-height: 1.3;
+}
+.news-entry .news-title {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8125rem, 0.9vw, 0.9375rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.news-entry .body-text { margin-top: var(--space-2); }
+
+/* ----------------------------------------------------------------- about */
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+
+.about-portrait img { width: 100%; }
+
+.about-block + .about-block {
+  margin-top: var(--space-5);
+}
+
+/* Section labels + the CV list are structural/index in character
+   (like Exhibitions' own list), so sans; the bio paragraphs beside
+   them are .body-text, already using the site's one typeface by default. */
+.about-block h2 {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-2);
+}
+
+.cv-list { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.cv-row {
+  display: grid;
+  grid-template-columns: 4.5em 1fr;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 0.8vw, 0.8125rem);
+  letter-spacing: -0.01em;
+}
+.cv-row .cv-year { color: var(--color-ink-soft); }
+
+.cv-subgroup + .cv-subgroup { margin-top: var(--space-3); }
+.cv-subgroup-label {
+  font-family: var(--font-sans);
+  font-size: clamp(0.7188rem, 0.75vw, 0.75rem);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-1);
+}
+
+/* --------------------------------------------------------------- contact */
+/* Portrait (left) + biography (right), vertically centered as one
+   compact editorial block — a contained artist-bio photo, never a
+   hero image. Quiet and spacious, no card/border/shadow. The
+   portrait's width is fixed by a clamp() on the <img> itself (not
+   just a grid track), so its size can't balloon regardless of what's
+   beside it — the figure/flex item is width: 0 0 auto and just wraps
+   whatever size the image resolves to. Height is intentionally left
+   to resolve from that width via the image's own intrinsic ratio
+   (width + height:auto, NOTHING else constraining height — no
+   max-height) so the portrait can never be stretched/distorted; do
+   not reintroduce a max-height here without also handling the
+   width/height coupling, or the image will squash again. Email and
+   Instagram live inside .contact-bio, directly under the biography
+   paragraph (.contact-details) — NOT in the page footer; the
+   page's .site-footer (see contact/index.html) now carries only the
+   copyright. */
+.contact-intro {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(1.6rem, 3vw, 2.8rem);
+  max-width: 1080px;
+  margin-top: var(--space-5);
+}
+
+.contact-portrait { flex: 0 0 auto; margin: 0; }
+
+.contact-portrait img {
+  display: block;
+  width: clamp(380px, 31vw, 500px);
+  max-width: 100%;
+  height: auto;
+}
+
+/* Photo credit — directly under the portrait, left-aligned with it;
+   same small/understated register as .caption elsewhere on the site. */
+.contact-credit {
+  margin-top: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--color-ink-soft);
+  letter-spacing: 0;
+}
+
+.contact-bio { flex: 1 1 260px; max-width: 30em; }
+
+/* Email / Instagram, directly under the biography paragraph — plain
+   text-column flow (no position:fixed/absolute), left-aligned with
+   the biography, same quiet .meta-text register used for other
+   "contact link" style text on the site. */
+.contact-details {
+  margin-top: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.contact-details a { transition: color 0.2s var(--ease); }
+.contact-details a:hover, .contact-details a:focus-visible { color: var(--color-ink); }
+
+/* --------------------------------------------------------------- callout */
+.placeholder-note {
+  background: transparent;
+  border: 1px dashed var(--color-line);
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.78rem;
+  color: var(--color-ink-soft);
+  max-width: 46em;
+  margin-bottom: var(--space-5);
+}
+
+/* ---------------------------------------------------------------- utility */
+.mt-0 { margin-top: 0 !important; }
+
+/* ============================================================ responsive */
+@media (max-width: 900px) {
+  .about-layout { grid-template-columns: 1fr; gap: var(--space-5); }
+  .about-portrait { max-width: 320px; }
+  .contact-intro { flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+  .contact-portrait img { width: min(320px, 100%); }
+
+  .plate--left, .plate--right, .plate--right-narrow, .plate--left-narrow, .plate--center {
+    grid-column: 1 / -1;
+    max-width: 640px;
+  }
+
+  .work-item--lead, .work-item--standard, .work-item--standard-left,
+  .work-item--standard-right, .work-item--intimate {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  :root { --space-7: 3.4rem; --space-8: 4.6rem; }
+
+  .site-header {
+    flex-wrap: wrap;
+    padding: 1.5rem var(--header-margin) 0.65rem;
+  }
+
+  /* Language toggle stays put in the header bar; only the nav itself
+     becomes the fullscreen overlay below. Order it before the Menu
+     button so the bar reads wordmark / EN·中文 / Menu. */
+  .header-right { order: 1; }
+  .nav-toggle { order: 2; display: inline-block; }
+
+  .primary-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--color-bg);
+    padding: var(--space-7) var(--page-margin);
+    z-index: 50;
+    overflow-y: auto;
+  }
+  .primary-nav.is-open { display: block; }
+  .primary-nav > ul { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .primary-nav a { font-size: 1.15rem; }
+
+  /* On touch/mobile the Works submenu is not hidden behind hover at
+     all — it reads as a permanently-open, de-emphasized continuation
+     of the "Works" line, so it's reachable with a simple tap-through. */
+  .primary-nav li.has-submenu { position: static; }
+  .primary-nav .submenu {
+    position: static;
+    width: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+    margin-top: 0.6rem;
+    padding: 0;
+  }
+  .primary-nav .submenu a { font-size: 1rem; padding: 0.35rem 0; }
+
+  .exhibition-row, .news-entry { grid-template-columns: 3.6em 1fr; }
+
+  /* Carousel: the artwork still uses the same full content column as
+     desktop (--page-margin already narrows itself on small screens),
+     just with less vertical padding around it. Arrows stay large
+     enough to see and read, anchored at the true screen edge. */
+  .carousel { --carousel-figure-h: 62vh; padding: var(--space-5) 0 var(--space-4); }
+  .carousel-arrow { width: 2.3rem; height: 2.3rem; }
+  .carousel-arrow svg { width: 1.15rem; height: 1.15rem; }
+
+  /* Single-work detail template: stack instead of a fixed side column,
+     so the list/info aren't squeezed into a ~200px sliver on a phone
+     screen. Desktop composition (the point of this round's brief) is
+     otherwise untouched. */
+  .work-detail { grid-template-columns: 1fr; column-gap: 0; row-gap: var(--space-6); }
+  .work-detail-side { grid-column: 1; grid-row: 1; min-height: 0; }
+  .work-detail-info { margin-top: var(--space-5); }
+  .work-detail-stage { grid-column: 1; grid-row: 2; }
+  .work-carousel-slide { width: 100%; height: 50vh; }
+
+  /* Stranger preview: same single-column stack, image below Selected
+     Works, natural aspect ratio preserved (no fixed height). */
+  .stranger-preview-stage { grid-column: 1; grid-row: 2; min-height: 0; }
+  .stranger-preview-image { max-height: 70vh; }
+
+  /* Boundary / Stranger overview: the desktop proportions (percentages
+     of a wide content column) read as too narrow on a phone screen, so
+     widen every tier to use most of the available width while keeping
+     the same top-to-bottom sequence and gaps. */
+  .boundary-overview-stage,
+  .stranger-overview-stage {
+    gap: clamp(3.5rem, 22vw, 6rem);
+  }
+  .boundary-overview-large { width: 92%; margin-top: 0; }
+  .boundary-overview-small-group { width: 100%; gap: 1rem; }
+  .stranger-overview-01 { width: 60%; }
+  .stranger-overview-pair { width: 100%; gap: 1rem; }
+  .stranger-overview-03 { width: 88%; margin-top: 0; }
+}
+
+@media (max-width: 520px) {
+  .index-row { flex-direction: column; align-items: flex-start; gap: 0.25em; }
+}
+
+/* --------------------------------------------------- reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
