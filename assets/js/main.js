@@ -675,7 +675,8 @@ var TY_I18N = (function () {
     'Home': '家',
     'Press Release': '新闻稿',
     'Untitled 16': '未命名作品16',
-    'Escape Room': '逃离房间'
+    'Escape Room': '逃离房间',
+    'How can you do this to me': '你怎么可以这样对我'
   };
   var ARCHIVE_MEDIUM_EXTRA = [
     ['Acrylic on acrylic board, Chinese silk', '亚克力板上丙烯、中国绢'],
@@ -730,6 +731,16 @@ var TY_I18N = (function () {
   // where this array is declared (window.ARCHIVE_LARGE_GAP_AFTER).
   var LARGE_GAP_AFTER = Array.isArray(window.ARCHIVE_LARGE_GAP_AFTER) ? window.ARCHIVE_LARGE_GAP_AFTER : [];
 
+  // '<category>:<group>' -> a style.css modifier suffix, applied as
+  // "archive-grid--<suffix>" on that group's grid element — e.g.
+  // 'cols-2' for the compact two-column variant (see the "SECTION 4"
+  // note in works/archive/index.html and .archive-grid--cols-2 in
+  // style.css). Separate from LARGE_GAP_AFTER because a group can want
+  // a layout change, a bigger gap, both, or neither.
+  var GROUP_LAYOUT = (window.ARCHIVE_GROUP_LAYOUT && typeof window.ARCHIVE_GROUP_LAYOUT === 'object')
+    ? window.ARCHIVE_GROUP_LAYOUT
+    : {};
+
   // `grid` (the [data-archive-grid] element) is a plain wrapper, not a
   // grid itself — see the HTML comment above it. Works in the active
   // category are split into ordered groups by their optional `group`
@@ -741,8 +752,10 @@ var TY_I18N = (function () {
   // groups, never before the first one — no JS-computed spacing, no
   // visible label, just plain whitespace from that CSS rule. A group
   // whose '<category>:<group>' combo is listed in LARGE_GAP_AFTER
-  // additionally gets an "archive-grid--gap-large" class, which
-  // style.css uses to make that particular gap bigger than usual.
+  // additionally gets an "archive-grid--gap-large" class, and one
+  // listed in GROUP_LAYOUT gets an "archive-grid--<suffix>" class —
+  // both are just extra classes on the same element, style.css does
+  // the rest.
   function renderGrid() {
     visible = works.filter(function (w) { return w.category === activeCategory; });
     grid.innerHTML = '';
@@ -759,8 +772,14 @@ var TY_I18N = (function () {
     groupOrder.forEach(function (key) {
       var gridEl = document.createElement('div');
       gridEl.className = 'archive-grid';
-      if (key && LARGE_GAP_AFTER.indexOf(activeCategory + ':' + key) !== -1) {
-        gridEl.classList.add('archive-grid--gap-large');
+      if (key) {
+        var layoutKey = activeCategory + ':' + key;
+        if (LARGE_GAP_AFTER.indexOf(layoutKey) !== -1) {
+          gridEl.classList.add('archive-grid--gap-large');
+        }
+        if (GROUP_LAYOUT[layoutKey]) {
+          gridEl.classList.add('archive-grid--' + GROUP_LAYOUT[layoutKey]);
+        }
       }
       groupWorks[key].forEach(function (w) {
         gridEl.appendChild(buildFigure(w));

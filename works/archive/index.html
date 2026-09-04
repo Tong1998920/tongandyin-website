@@ -150,7 +150,7 @@
                     image on the site)
         group:      optional number — works sharing the same `group`
                     (within the same category) are laid out together
-                    as one 3-column grid, with a visibly larger gap
+                    as one grid (3 columns by default), with a gap
                     before the next group's grid (see style.css,
                     ".archive-grid + .archive-grid") — no heading or
                     label is ever rendered for a group, purely a
@@ -161,7 +161,14 @@
                     `group` entirely for a category that isn't
                     (or isn't yet) organized into groups — see
                     "before-2022" below, which has none and renders as
-                    one plain grid, exactly as it always has.
+                    one plain grid, exactly as it always has. A given
+                    group's gap and column layout can each be
+                    individually overridden — see
+                    window.ARCHIVE_LARGE_GAP_AFTER (an oversized gap
+                    after a specific group) and window.
+                    ARCHIVE_GROUP_LAYOUT (a different column layout for
+                    a specific group, e.g. group 4's compact 2-column
+                    block) just above ARCHIVE_WORKS below.
       }
 
     "2022-2026" RESET: this category previously held four batches
@@ -283,7 +290,52 @@
     oversized gap described below (that gap is specific to the group-1
     sculpture removal, not a general "between every section" rule).
 
-    Section 4 onward, and any reordering of sections 1-3, are left for
+    "2022-2026" REBUILD, group 4 (archive-90 through archive-93, 4
+    works): a small, deliberately compact 2x2 block — Tears above Love,
+    Persona above "How can you do this to me" — rather than the page's
+    usual 3-column flow. Sourced from one uploaded ZIP (4 files, one
+    work each, matched to the artist's reference screenshot by
+    filename and confirmed by opening and visually comparing each one
+    against that screenshot before adding it, same practice as every
+    other identify-by-filename batch here). Resized the same way as
+    every other jpg/png batch on this page — long edge capped at
+    2200px for `image`, 900px for `thumbnail`, aspect ratio untouched,
+    re-encoded as JPEG (all three PNG sources were fully opaque, so
+    flattening to JPEG changes nothing visible) — never cropped,
+    stretched, or upscaled. "Persona"'s medium is given here as
+    "Digital Art"; its source filename actually spells it "Digtal Art"
+    (a typo), corrected on the assumption it means "Digital", worth the
+    artist double-checking. "Love" and "How can you do this to me" had
+    no dimensions in their filenames, so that field is left out rather
+    than guessed, same rule used throughout this file. "How can you do
+    this to me" is this batch's own English rendering of a filename
+    that led with the Chinese title 你怎么可以这样对我 immediately
+    followed by that same English phrase with no separator — the
+    English is used as the work's `title` (consistent with every other
+    Archive entry using an English title) and the Chinese is preserved
+    for the 中文 toggle via a new ARCHIVE_TITLES entry in main.js,
+    exactly the same "genuinely Chinese-titled work" handling already
+    used there for "Home"/家, "Press Release"/新闻稿, etc.
+
+    Group 4's compact 2x2 layout, instead of the page's normal 3-column
+    grid, is a new, general per-group mechanism: window.
+    ARCHIVE_GROUP_LAYOUT (declared right before ARCHIVE_WORKS below,
+    alongside ARCHIVE_LARGE_GAP_AFTER) maps a '<category>:<group>' key
+    to a style.css modifier suffix; main.js's renderGrid() adds an
+    "archive-grid--<suffix>" class to that group's rendered
+    <div class="archive-grid">, alongside the existing gap-large
+    mechanism (a group can use either, both, or neither — they're
+    independent). Group 4 maps to 'cols-2' — see
+    ".archive-grid--cols-2" in style.css: exactly two columns, width
+    capped to what two of the normal three columns would measure, so
+    Tears/Persona/Love/"How can you do this to me" render at the same
+    size as every other Archive thumbnail, just arranged as a small
+    self-contained block instead of spanning the full row. Group 4
+    itself is not listed in ARCHIVE_LARGE_GAP_AFTER, so the gap before
+    it is the normal inter-group one, the same spacing used between
+    every other section on this page.
+
+    Section 5 onward, and any reordering of sections 1-4, are left for
     a future update — nothing about this structure needs to change to
     append another group later (see the `group` field description
     above).
@@ -335,6 +387,11 @@
   // instead of the normal one (renderGrid() / .archive-grid--gap-large
   // in style.css). Empty array = no category currently needs this.
   window.ARCHIVE_LARGE_GAP_AFTER = ['2022-2026:1'];
+  // '<category>:<group>' -> a style.css layout-modifier suffix (see the
+  // "SECTION 4" note above and .archive-grid--cols-2 in style.css).
+  // Today only group 4 opts into the compact two-column variant; every
+  // other group is absent from this object and renders the normal way.
+  window.ARCHIVE_GROUP_LAYOUT = { '2022-2026:4': 'cols-2' };
   window.ARCHIVE_WORKS = [
     {
       id: 'archive-41',
@@ -805,6 +862,56 @@
       group: 3,
       width: 2200,
       height: 1636
+    },
+    {
+      id: 'archive-90',
+      image: '../../assets/images/archive/archive-90-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-90-thumb.jpg',
+      title: 'Tears',
+      year: '2021',
+      medium: 'Stickers',
+      dimensions: '30 × 21 cm',
+      category: '2022-2026',
+      group: 4,
+      width: 2200,
+      height: 964
+    },
+    {
+      id: 'archive-91',
+      image: '../../assets/images/archive/archive-91-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-91-thumb.jpg',
+      title: 'Persona',
+      year: '2022',
+      medium: 'Digital Art',
+      dimensions: '30 × 30 cm',
+      category: '2022-2026',
+      group: 4,
+      width: 2200,
+      height: 1278
+    },
+    {
+      id: 'archive-92',
+      image: '../../assets/images/archive/archive-92-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-92-thumb.jpg',
+      title: 'Love',
+      year: '2022',
+      medium: 'Print',
+      category: '2022-2026',
+      group: 4,
+      width: 1714,
+      height: 1372
+    },
+    {
+      id: 'archive-93',
+      image: '../../assets/images/archive/archive-93-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-93-thumb.jpg',
+      title: 'How can you do this to me',
+      year: '2022',
+      medium: 'Print, Pencil',
+      category: '2022-2026',
+      group: 4,
+      width: 2200,
+      height: 1649
     },
   ];
 </script>

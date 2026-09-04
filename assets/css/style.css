@@ -1421,13 +1421,40 @@ body.work-detail-page .primary-nav .submenu a {
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: clamp(2.5rem, 5vw, 4.5rem);
+  --archive-gap: clamp(2.5rem, 5vw, 4.5rem);
+  column-gap: var(--archive-gap);
   row-gap: clamp(3rem, 6vw, 5rem);
   align-items: end;
 }
 
 @media (max-width: 900px) {
   .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Opt-in 2-column "compact" variant for a group that should read as a
+   small, self-contained block instead of the site's normal 3-column
+   flow (e.g. a deliberate 2x2 pairing where the artist wants specific
+   works kept directly above/below each other) — flagged per-group via
+   window.ARCHIVE_GROUP_LAYOUT (see the ARCHIVE_WORKS comment in
+   works/archive/index.html); main.js adds this class alongside the
+   base .archive-grid class on that group's own grid element. Two
+   columns, but capped to the width two of the normal three columns
+   would occupy (2 column-tracks + 1 gap) via the shared --archive-gap
+   custom property set above, on the same element — so this group's
+   thumbnails stay exactly the same size as every other group's, and
+   it reads as a compact block sitting at the left edge, not a
+   stretched two-up layout filling the full row. */
+.archive-grid--cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: calc((100% - 2 * var(--archive-gap)) / 3 * 2 + var(--archive-gap));
+}
+
+@media (max-width: 900px) {
+  /* At this width the base .archive-grid is already 2 columns full
+     width, so the 2-of-3 compact-width math above no longer applies —
+     let a --cols-2 group match every other group's width here rather
+     than shrinking further. */
+  .archive-grid--cols-2 { max-width: none; }
 }
 
 /* The ONLY thing that visually separates one group from the next —
