@@ -54,13 +54,18 @@
 
       The carousel images are real photographs of this one work — a
       full frontal view, then a left-hand/open-hand detail, then a
-      right-arm/bent-arm detail, in that fixed order (an installation
-      view, showing the work mounted on its freestanding wall in the
-      exhibition space, is intended as a fourth slide after this one
-      — add it as data-index="3" the same way the others are added
-      below once that photograph is supplied). All slides load
-      eagerly and share one fixed-size stage (style.css), so
-      switching between them never changes the page's layout.
+      right-arm/bent-arm detail, then an installation view showing the
+      work mounted on its freestanding wall in the exhibition space
+      (data-index="3", added once that photograph was supplied — same
+      slide markup as the first three, just its own width/height since
+      this photo's framing is naturally wider than the others' shared
+      2200x1757). All slides load eagerly and share one fixed-size
+      stage (style.css's .work-carousel-slide, width/height fixed,
+      each slide's img sized via object-fit: contain) so every slide
+      letterboxes to fit that same box regardless of its own aspect
+      ratio, and switching between them never changes the page's
+      layout — this is exactly why the installation photo didn't need
+      cropping or resizing to match the other three's proportions.
 
       Navigating between these three images is the image itself: the
       old permanent prev/next buttons were removed in favor of a
@@ -110,6 +115,9 @@
             </li>
             <li class="work-carousel-slide" data-index="2">
               <img src="../../assets/images/works/calling-a-deer-a-horse-detail-right.jpg" alt="Calling A Deer A Horse, Tong Yin — detail, right arm and hand" width="2200" height="1757">
+            </li>
+            <li class="work-carousel-slide" data-index="3">
+              <img src="../../assets/images/works/calling-a-deer-a-horse-installation.jpg" alt="Calling A Deer A Horse, Tong Yin — installation view" width="2000" height="1375">
             </li>
           </ul>
         </div>
