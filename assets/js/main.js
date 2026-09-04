@@ -724,6 +724,12 @@ var TY_I18N = (function () {
     return figure;
   }
 
+  // '<category>:<group>' keys that get an oversized gap after that
+  // group instead of the normal inter-group one — see the "LARGE GAP
+  // after group 1" comment in works/archive/index.html, right above
+  // where this array is declared (window.ARCHIVE_LARGE_GAP_AFTER).
+  var LARGE_GAP_AFTER = Array.isArray(window.ARCHIVE_LARGE_GAP_AFTER) ? window.ARCHIVE_LARGE_GAP_AFTER : [];
+
   // `grid` (the [data-archive-grid] element) is a plain wrapper, not a
   // grid itself — see the HTML comment above it. Works in the active
   // category are split into ordered groups by their optional `group`
@@ -733,7 +739,10 @@ var TY_I18N = (function () {
   // own .archive-grid child in DOM order, so CSS's sibling-only
   // ".archive-grid + .archive-grid" gap only ever appears BETWEEN
   // groups, never before the first one — no JS-computed spacing, no
-  // visible label, just plain whitespace from that CSS rule.
+  // visible label, just plain whitespace from that CSS rule. A group
+  // whose '<category>:<group>' combo is listed in LARGE_GAP_AFTER
+  // additionally gets an "archive-grid--gap-large" class, which
+  // style.css uses to make that particular gap bigger than usual.
   function renderGrid() {
     visible = works.filter(function (w) { return w.category === activeCategory; });
     grid.innerHTML = '';
@@ -750,6 +759,9 @@ var TY_I18N = (function () {
     groupOrder.forEach(function (key) {
       var gridEl = document.createElement('div');
       gridEl.className = 'archive-grid';
+      if (key && LARGE_GAP_AFTER.indexOf(activeCategory + ':' + key) !== -1) {
+        gridEl.classList.add('archive-grid--gap-large');
+      }
       groupWorks[key].forEach(function (w) {
         gridEl.appendChild(buildFigure(w));
       });

@@ -188,12 +188,20 @@
     described above this comment block — new objects appended to this
     array — nothing here or in style.css needs to change for that.
 
-    "2022-2026" REBUILD, group 1 (archive-61 through archive-71, 11
-    works) and group 2 (archive-72 through archive-79, 8 works): the
-    first two groups of the new, from-scratch "2022-2026" collection,
-    each in the exact order the artist specified (by numbered
-    filename, 1 through 11 and 1 through 8 — NOT alphabetical, date,
-    dimension, or composition order). Sourced from two freshly
+    "2022-2026" REBUILD, group 1 (archive-61 through archive-68, 8
+    works — originally 11, archive-61 through archive-71; archive-69
+    "Baby girl", archive-70 "Dream" and archive-71 "Spider-Maid's
+    private time", the three sculpture-photo works that had closed out
+    the group, were removed shortly after at the artist's request —
+    see the large-gap note further below) and group 2 (archive-72
+    through archive-79, 8 works): the first two groups of the new,
+    from-scratch "2022-2026" collection, each in the exact order the
+    artist specified (by numbered filename, 1 through 11 and 1 through
+    8 — NOT alphabetical, date, dimension, or composition order).
+    archive-69/70/71's image files were left in assets/images/archive/
+    (archive-69-full.jpg, archive-69-thumb.jpg, and the same pair for
+    70/71) rather than deleted, same as every other removal on this
+    page — simply unreferenced now. Sourced from two freshly
     uploaded ZIPs, not from any pre-reset archive-01..40/55..60 file
     above, per instruction — new image files, new ids, even where a
     work's title/medium/dimensions happens to match one from before
@@ -224,20 +232,43 @@
     pre-reset GIF batch used ("Please Step on My Face", "Go to
     Heaven") — left exactly as this batch's filenames give them,
     same don't-alter-given-titles rule as everywhere else in this
-    file. archive-64 ("Relayed Flame") and archive-69 ("Baby girl")
-    repeat a title used by an earlier, different work in this same
-    file (the pre-reset "Relayed Flame 10"/"Relayed Flame 70", and
-    "Baby Girl" at archive-61 right above it) with different
-    dimensions/medium — kept as distinct works, per the same
-    repeated-title handling used throughout this file. archive-64's
-    dimensions ("45-70 × 120 cm") and archive-69's filename (the only
-    one in group 1 with no leading number — its position as #9 comes
-    from the artist's reference screenshot, not the filename) are
-    both worth the artist double-checking against their own records.
+    file. archive-64 ("Relayed Flame") repeats a title used by an
+    earlier, different work in this same file (the pre-reset "Relayed
+    Flame 10"/"Relayed Flame 70") with different dimensions/medium —
+    kept as a distinct work, per the same repeated-title handling used
+    throughout this file. archive-64's dimensions ("45-70 × 120 cm")
+    are worth the artist double-checking against their own records.
+    (The former archive-69 "Baby girl" repeated the archive-61 "Baby
+    Girl" title the same way, and was the one group-1 filename with no
+    leading number, positioned as #9 per the artist's reference
+    screenshot rather than its filename — both now moot, since
+    archive-69 was removed; see the large-gap note below.)
     Sections 3 onward, and any reordering of sections 1-2, are left
     for a future update — nothing about this structure needs to change
     to append a group 3 later (see the `group` field description
     above).
+
+    LARGE GAP after group 1 (the three-sculpture removal): when
+    archive-69/70/71 were removed just above, the artist specifically
+    asked that the vertical space they used to occupy NOT collapse —
+    it should stay as a large intentional blank gap separating group 1
+    from group 2, distinctly bigger than the normal inter-group gap.
+    window.ARCHIVE_LARGE_GAP_AFTER (declared right before
+    ARCHIVE_WORKS below) lists '<category>:<group>' keys that get this
+    treatment; main.js's renderGrid() adds an
+    "archive-grid--gap-large" modifier class to a matching group's
+    rendered <div class="archive-grid">, and style.css gives
+    ".archive-grid--gap-large + .archive-grid" (right after the normal
+    ".archive-grid + .archive-grid" rule, so it wins) a noticeably
+    taller margin-top — sized, at common desktop widths, to roughly
+    the height that row of three sculpture photos actually occupied
+    before removal (measured directly against the live page rather
+    than guessed). This is a general mechanism, not a one-off hack: a
+    future group could opt into the same large gap by adding its
+    '<category>:<group>' key to that array, or this one could be
+    un-flagged later by removing '2022-2026:1' from it, without
+    touching main.js or style.css again. It's a plain empty spacer —
+    no box, border, caption, or clickable element, purely CSS margin.
 
     before-2022 (archive-41 through archive-54, 14 works) is NOT part
     of this reset and is completely unchanged — added as the third of
@@ -259,6 +290,11 @@
     medium/dimensions rather than guessed ones. This append order is
     still temporary, same as it was before this reset.
   */
+  // See the "LARGE GAP after group 1" note above: '<category>:<group>'
+  // keys listed here get an oversized gap after that group's grid
+  // instead of the normal one (renderGrid() / .archive-grid--gap-large
+  // in style.css). Empty array = no category currently needs this.
+  window.ARCHIVE_LARGE_GAP_AFTER = ['2022-2026:1'];
   window.ARCHIVE_WORKS = [
     {
       id: 'archive-41',
@@ -517,45 +553,6 @@
       group: 1,
       width: 1660,
       height: 1244
-    },
-    {
-      id: 'archive-69',
-      image: '../../assets/images/archive/archive-69-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-69-thumb.jpg',
-      title: 'Baby girl',
-      year: '2022',
-      medium: 'Polymer and spray paint',
-      dimensions: '153 × 96 cm',
-      category: '2022-2026',
-      group: 1,
-      width: 2160,
-      height: 1148
-    },
-    {
-      id: 'archive-70',
-      image: '../../assets/images/archive/archive-70-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-70-thumb.jpg',
-      title: 'Dream',
-      year: '2022',
-      medium: 'Polymer and spray paint',
-      dimensions: '52 × 110 cm',
-      category: '2022-2026',
-      group: 1,
-      width: 2156,
-      height: 1144
-    },
-    {
-      id: 'archive-71',
-      image: '../../assets/images/archive/archive-71-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-71-thumb.jpg',
-      title: "Spider-Maid's private time",
-      year: '2022',
-      medium: 'Polymer and spray paint',
-      dimensions: '145 × 135 cm',
-      category: '2022-2026',
-      group: 1,
-      width: 1244,
-      height: 1394
     },
     {
       id: 'archive-72',

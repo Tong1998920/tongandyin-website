@@ -1443,6 +1443,22 @@ body.work-detail-page .primary-nav .submenu a {
   margin-top: var(--space-8);
 }
 
+/* Opt-in oversized version of the rule above, applied only when a group
+   is listed in window.ARCHIVE_LARGE_GAP_AFTER (see the "LARGE GAP after
+   group 1" comment in works/archive/index.html). Used here to preserve
+   the approximate vertical footprint of three sculpture works removed
+   from group 1, as intentional blank gallery space before group 2 —
+   still nothing but whitespace: no heading, label, line, or border.
+   Must come after the ".archive-grid + .archive-grid" rule above since
+   both selectors are equally specific (two class-selector combinators)
+   and rely on source order to win. Sized from the actual pixel height
+   the three removed works occupied on the live page before deletion
+   (~650px at 1440px-wide desktop, ~467px at 1024px), which scales at
+   roughly 45% of viewport width across that range. */
+.archive-grid--gap-large + .archive-grid {
+  margin-top: clamp(18rem, 45vw, 42rem);
+}
+
 .archive-figure { margin: 0; }
 
 .archive-thumb { display: block; width: 100%; }
