@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tong Yin</title>
-<meta name="description" content="Tong Yin — artist website. Works, exhibitions, news, and contact.">
-<link rel="stylesheet" href="assets/css/style.css">
+<title>Contact — Tong Yin</title>
+<meta name="description" content="Contact — Tong Yin.">
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header">
-  <a class="wordmark" href="/" aria-current="page">Tong Yin</a>
+  <a class="wordmark" href="../">Tong Yin</a>
   <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
   <div class="header-right">
   <nav class="primary-nav" id="primary-nav" aria-label="Primary">
     <ul>
       <li class="has-submenu">
-        <a href="works/calling-a-deer-a-horse/" aria-haspopup="true">Works</a>
+        <a href="../works/calling-a-deer-a-horse/" aria-haspopup="true">Works</a>
         <ul class="submenu">
-        <li><a href="works/calling-a-deer-a-horse/">Selected Works</a></li>
-        <li><a href="works/archive/">Archive</a></li>
+        <li><a href="../works/calling-a-deer-a-horse/">Selected Works</a></li>
+        <li><a href="../works/archive/">Archive</a></li>
         </ul>
       </li>
-      <li><a href="exhibitions/">Exhibitions</a></li>
-      <li><a href="contact/">Contact</a></li>
+      <li><a href="../exhibitions/">Exhibitions</a></li>
+      <li><a href="../contact/" aria-current="page">Contact</a></li>
     </ul>
   </nav>
   <div class="lang-toggle" aria-label="Language">
@@ -35,125 +35,54 @@
 </header>
 
 <main id="main">
+  <section class="section wrap">
+    <h1 class="eyebrow" style="margin-bottom: var(--space-4);">Contact</h1>
 
-  <!--
-    HOMEPAGE CAROUSEL
-    ---------------------------------------------------------------
-    8 slides, numeric position is the sole ordering authority (image
-    files/order/sizing are unchanged from the previous round — see
-    assets/images/home/). Each slide's artwork image is now a plain
-    link through to that exact artwork's Selected Works page (added
-    per the homepage-linking brief, confirmed against reference
-    screenshots) — but still carries no caption/text underneath, and
-    the link is deliberately styled to look IDENTICAL on hover/focus
-    (see .carousel-figure-link in style.css: cursor: pointer only,
-    no opacity/filter/scale change) since these are light, high-key
-    works where a hover effect would make them harder to see. The
-    mapping below is fixed by the artist's reference screenshots, not
-    by file order alone — 06/07/08 intentionally all point to the
-    same Ignore 02 page:
-      data-index 0 (home-01) -> works/calling-a-deer-a-horse/
-      data-index 1 (home-02) -> works/the-stranger/stranger-01/
-      data-index 2 (home-03) -> works/ignore/ignore-01/
-      data-index 3 (home-04) -> works/the-boundary/boundary-02/
-      data-index 4 (home-05) -> works/the-boundary/boundary-03/
-      data-index 5 (home-06) -> works/ignore/ignore-02/
-      data-index 6 (home-07) -> works/ignore/ignore-02/
-      data-index 7 (home-08) -> works/ignore/ignore-02/
-    Each of those destination pages already opens on the exact
-    sub-work state shown in the reference TARGET screenshots by
-    default, so a plain link to the page is the correct, minimal
-    mechanism here — no query/hash deep-link routing was needed.
-
-    Each image keeps its own original aspect ratio inside a shared
-    viewing box (object-fit: contain in style.css) — never cropped,
-    never stretched, never forced to a common width. All eight load
-    eagerly (no loading="lazy") even though only the first is visible
-    at first — with the carousel image-heavy but not enormous, that
-    small extra weight up front is what keeps prev/next feeling
-    instant instead of pausing to fetch each image the first time
-    it's shown. Only the first slide additionally gets
-    fetchpriority="high", since it's the one visible before any
-    script runs.
-
-    The <noscript> rule hides the prev/next arrows when JS can't run
-    (they'd otherwise be dead buttons) — the first slide is still
-    fully visible and still a working link without any script.
-  -->
-  <noscript><style>.carousel-arrow{display:none;}</style></noscript>
-
-  <div class="carousel" data-carousel>
-    <div class="carousel-stage">
-      <button type="button" class="carousel-arrow carousel-arrow--prev" data-carousel-prev aria-label="Previous artwork">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"></polyline></svg>
-      </button>
-
-      <div class="carousel-viewport">
-        <ul class="carousel-track">
-
-          <li class="carousel-slide is-active is-visible" data-index="0">
-            <a class="carousel-figure carousel-figure-link" href="works/calling-a-deer-a-horse/" aria-label="Calling A Deer A Horse">
-              <img src="assets/images/home/home-01-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917" fetchpriority="high">
-            </a>
-          </li>
-
-          <li class="carousel-slide" data-index="1">
-            <a class="carousel-figure carousel-figure-link" href="works/the-stranger/stranger-01/" aria-label="The Stranger">
-              <img src="assets/images/home/home-02-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </a>
-          </li>
-
-          <li class="carousel-slide" data-index="2">
-            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-01/" aria-label="Ignore">
-              <img src="assets/images/home/home-03-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </a>
-          </li>
-
-          <li class="carousel-slide" data-index="3">
-            <a class="carousel-figure carousel-figure-link" href="works/the-boundary/boundary-02/" aria-label="The Boundary">
-              <img src="assets/images/home/home-04-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </a>
-          </li>
-
-          <li class="carousel-slide" data-index="4">
-            <a class="carousel-figure carousel-figure-link" href="works/the-boundary/boundary-03/" aria-label="The Boundary">
-              <img src="assets/images/home/home-05-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </a>
-          </li>
-
-          <li class="carousel-slide" data-index="5">
-            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
-              <img src="assets/images/home/home-06-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </a>
-          </li>
-
-          <li class="carousel-slide" data-index="6">
-            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
-              <img src="assets/images/home/home-07-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </a>
-          </li>
-
-          <li class="carousel-slide" data-index="7">
-            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
-              <img src="assets/images/home/home-08-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </a>
-          </li>
-
-        </ul>
+    <!--
+      CONTACT
+      ---------------------------------------------------------------
+      Portrait + a short biography, vertically centered side by side
+      (.contact-intro, style.css's "contact" section) — a contained,
+      editorial-scale portrait (clamp(380px,31vw,500px), never a hero
+      image), not a card/border/shadow around either. The <img> is
+      sized by width + height:auto ONLY (no max-height) so it always
+      keeps its own intrinsic aspect ratio and can never be stretched.
+      No photo credit is shown under the portrait (removed at the
+      artist's request — the .contact-credit rule in style.css is left
+      in place, unused, in case a future portrait needs one again; see
+      the markup below for where a <figcaption class="contact-credit">
+      would go). Email and Instagram sit directly under the biography
+      paragraph, inside .contact-bio (.contact-details) — plain
+      left-aligned text, not the page footer; this page's own
+      <footer class="site-footer"> below now carries just the
+      copyright. To update later: swap
+      assets/images/contact/portrait.jpg (keep its own aspect ratio —
+      just update the <img> width/height attributes to match), edit
+      the credit line, edit the biography paragraph, or edit the two
+      contact-details links' text/href below.
+    -->
+    <div class="contact-intro">
+      <figure class="contact-portrait">
+        <img src="../assets/images/contact/portrait.jpg" alt="Tong Yin" width="1500" height="2000" loading="lazy">
+      </figure>
+      <div class="contact-bio">
+        <div class="body-text">
+          <p data-i18n-en="Tong Yin (b. 1998, Anhui, China) received her BFA in Oil Painting from the Central Academy of Fine Arts in 2020. She is currently studying at the Berlin University of the Arts and lives and works between Berlin and China." data-i18n-zh="殷童，1998年生于中国安徽。2020年毕业于中央美术学院油画系，获学士学位。现就读于柏林艺术大学，生活和工作于德国柏林与中国。">Tong Yin (b. 1998, Anhui, China) received her BFA in Oil Painting from the Central Academy of Fine Arts in 2020. She is currently studying at the Berlin University of the Arts and lives and works between Berlin and China.</p>
+        </div>
+        <div class="contact-details meta-text">
+          <p><a href="mailto:y630239920@gmail.com">Email: y630239920@gmail.com</a></p>
+          <p><a href="https://www.instagram.com/tong_yin_/" target="_blank" rel="noopener noreferrer">Instagram: tong_yin_</a></p>
+        </div>
       </div>
-
-      <button type="button" class="carousel-arrow carousel-arrow--next" data-carousel-next aria-label="Next artwork">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
-      </button>
     </div>
-  </div>
 
+  </section>
 </main>
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
 </footer>
 
-<script src="assets/js/main.js"></script>
+<script src="../assets/js/main.js"></script>
 </body>
 </html>
