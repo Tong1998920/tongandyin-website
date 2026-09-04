@@ -42,14 +42,19 @@
       CONTACT
       ---------------------------------------------------------------
       Portrait + a short biography, vertically centered side by side
-      (.contact-intro, style.css's "contact" section) — a contained,
-      editorial-scale portrait (clamp(380px,31vw,500px), never a hero
-      image), not a card/border/shadow around either. The <img> is
+      (.contact-intro, style.css's "contact" section) — a quiet,
+      secondary-scale portrait (clamp(260px,20vw,300px) on desktop,
+      deliberately reduced from an earlier, larger clamp(380px,31vw,
+      500px) at the artist's request so it no longer dominates the
+      page — see that rule's own comment in style.css for the full
+      reasoning), not a card/border/shadow around either. The <img> is
       sized by width + height:auto ONLY (no max-height) so it always
       keeps its own intrinsic aspect ratio and can never be stretched.
-      The photo credit sits directly under the portrait, left-aligned
-      with it (.contact-credit) — it is the ONLY photo credit on this
-      page. Email and Instagram sit directly under the biography
+      No photo credit is shown under the portrait (removed at the
+      artist's request — the .contact-credit rule in style.css is left
+      in place, unused, in case a future portrait needs one again; see
+      the markup below for where a <figcaption class="contact-credit">
+      would go). Email and Instagram sit directly under the biography
       paragraph, inside .contact-bio (.contact-details) — plain
       left-aligned text, not the page footer; this page's own
       <footer class="site-footer"> below now carries just the
@@ -61,8 +66,7 @@
     -->
     <div class="contact-intro">
       <figure class="contact-portrait">
-        <img src="../assets/images/contact/portrait.jpg" alt="Tong Yin" width="1500" height="2000" loading="lazy">
-        <figcaption class="contact-credit">Photography by Bonsai Peng</figcaption>
+        <img src="../assets/images/contact/portrait.jpg" alt="Tong Yin" width="2200" height="1467" loading="lazy">
       </figure>
       <div class="contact-bio">
         <div class="body-text">

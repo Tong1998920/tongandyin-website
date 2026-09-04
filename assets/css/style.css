@@ -1817,9 +1817,19 @@ body.archive-lightbox-open { overflow: hidden; }
 
 .contact-portrait { flex: 0 0 auto; margin: 0; }
 
+/* Reduced from an earlier clamp(380px, 31vw, 500px) at the artist's
+   request — the portrait was reading as too dominant next to the
+   biography; this quieter size still scales a little with viewport
+   width (so it isn't a single frozen number) but settles around
+   270-300px on most desktop widths, roughly resolving to the low-to-
+   mid 300s of the vw range in between. max-width:100%/height:auto is
+   unchanged from before, so the image still can never be
+   stretched/distorted or overflow a narrow viewport — see the comment
+   above .contact-intro for why height is deliberately left to resolve
+   from width alone. */
 .contact-portrait img {
   display: block;
-  width: clamp(380px, 31vw, 500px);
+  width: clamp(260px, 20vw, 300px);
   max-width: 100%;
   height: auto;
 }
@@ -1869,7 +1879,13 @@ body.archive-lightbox-open { overflow: hidden; }
   .about-layout { grid-template-columns: 1fr; gap: var(--space-5); }
   .about-portrait { max-width: 320px; }
   .contact-intro { flex-direction: column; align-items: flex-start; gap: var(--space-5); }
-  .contact-portrait img { width: min(320px, 100%); }
+  /* Scaled down in step with the desktop reduction above (this used to
+     be min(320px, 100%), sized off the old, larger desktop clamp) —
+     kept proportionally smaller here too rather than left at its old
+     absolute value, so the portrait doesn't end up reading larger on
+     mobile than it now does on desktop. Still responsive (the 100%
+     term) so it never overflows a narrower phone. */
+  .contact-portrait img { width: min(220px, 100%); }
 
   .plate--left, .plate--right, .plate--right-narrow, .plate--left-narrow, .plate--center {
     grid-column: 1 / -1;
@@ -1946,6 +1962,64 @@ body.archive-lightbox-open { overflow: hidden; }
   .work-detail-info { margin-top: var(--space-5); }
   .work-detail-stage { grid-column: 1; grid-row: 2; }
   .work-carousel-slide { width: 100%; height: 50vh; }
+
+  /* MOBILE TYPOGRAPHY REFINEMENT — Selected Works detail pages only
+     (Calling A Deer A Horse, Ignore, The Boundary, The Stranger — the
+     four pages that carry body.work-detail-page; see the template
+     comment near .work-detail-shell above), inside this same
+     breakpoint rather than a new one, since it only makes sense once
+     the layout above has already stacked into one column. Every
+     selector below is prefixed with body.work-detail-page specifically
+     so nothing here touches the header, Selected Works styling, or
+     any other page (Archive, Home, Exhibitions, Contact, News, About)
+     — those don't carry that body class, so they're structurally
+     unreachable by these rules regardless of viewport width.
+
+     Sizes are pinned to plain px (not clamp()) so they're exact and
+     predictable on a phone, rather than left to a vw-based formula
+     whose floor happens to land nearby. text-size-adjust: 100% turns
+     off WebKit/iOS Safari's own automatic font-boosting heuristic
+     (it silently enlarges text in narrow single-column blocks like
+     this one) — without it, a phone can render noticeably larger than
+     any of the pixel values actually written here, which is the most
+     likely real explanation for "everything looks oversized" despite
+     the underlying CSS already being fairly restrained. */
+  body.work-detail-page {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body.work-detail-page .wordmark { font-size: 18px; }
+  body.work-detail-page .lang-toggle { font-size: 14px; }
+  body.work-detail-page .nav-toggle { font-size: 14px; }
+
+  /* Weight stays the inherited 400 + hairline text-stroke from the
+     base rule above (see its comment: this typeface has no true
+     medium/500 face, so that stroke is what "medium weight" already
+     means here) — only size and line-height change on mobile. */
+  body.work-detail-page .selected-works-heading { font-size: 15px; line-height: 1.4; }
+  body.work-detail-page .selected-works-list a { font-size: 14px; line-height: 1.4; }
+
+  body.work-detail-page .work-detail-info .work-detail-title { font-size: 14px; line-height: 1.4; }
+  body.work-detail-page .work-detail-info .work-detail-meta { font-size: 13px; line-height: 1.45; }
+  body.work-detail-page .work-detail-info .work-detail-credit { font-size: 13px; line-height: 1.45; }
+
+  /* SPACING: shortens, but does not remove, the two gaps between
+     "Selected Works" list → metadata → first artwork image (the
+     desktop-only .selected-works-list margin-top a bit above already
+     doesn't apply below 701px, so that particular gap was untouched
+     already — these two are the ones actually inflating the distance
+     to the image on mobile). Both were living off the same shared
+     --space-5 / --space-6 tokens desktop uses for much roomier
+     purposes; giving mobile its own smaller, explicit values here
+     keeps a deliberate, visible gap at each step (never 0, never
+     compressed together) while bringing the image up noticeably
+     sooner on the scroll. Pages with no .work-detail-info block
+     (Ignore, The Boundary, The Stranger) only ever have the second
+     gap (.work-detail's row-gap) to begin with, so they benefit from
+     that one alone. */
+  body.work-detail-page .work-detail-info { margin-top: 1.25rem; }
+  body.work-detail-page .work-detail { row-gap: 1.75rem; }
 
   /* Stranger preview: same single-column stack, image below Selected
      Works, natural aspect ratio preserved (no fixed height). */
