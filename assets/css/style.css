@@ -1396,24 +1396,29 @@ body.work-detail-page .primary-nav .submenu a {
 .archive-category-btn:hover,
 .archive-category-btn:focus-visible { color: var(--color-active); }
 
-/* Two columns on desktop (was three), sitting inside the same capped
-   .wrap content column as the rest of the site (so the grid never
-   stretches edge to edge) with generous, controlled gaps rather than
-   a tight commercial card grid. Each image keeps width:100%/
-   height:auto — its own aspect ratio, never cropped or forced to a
-   uniform box — so .archive-figure/.archive-thumb carry no fixed
-   height anywhere. The old 900px "tablet" breakpoint below this used
-   to step 3 columns down to 2 for narrower screens; now that 2 is
-   already the default, that breakpoint would just repeat the same
-   rule, so it's removed rather than kept as a no-op — the 520px
-   "phone" breakpoint further down (1 column) is unaffected and still
-   applies at the same width it always did. */
+/* Three columns on desktop (back from a brief two-column change),
+   sitting inside the same capped .wrap content column as the rest of
+   the site (so the grid never stretches edge to edge) with generous,
+   controlled gaps rather than a tight commercial card grid. Each
+   image keeps width:100%/height:auto — its own aspect ratio, never
+   cropped or forced to a uniform box — so .archive-figure/
+   .archive-thumb carry no fixed height anywhere. This is prepared for
+   a currently-empty "2022-2026" category (see the ARCHIVE_WORKS
+   comment in works/archive/index.html) — the grid itself doesn't care
+   how many works are in it, so whatever's added there next lays out
+   as 3-per-row on desktop with no further CSS changes needed. The
+   900px "tablet" breakpoint just below steps this down to 2 columns;
+   the 520px "phone" breakpoint further down (1 column) is unchanged. */
 .archive-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: clamp(2.5rem, 5vw, 4.5rem);
   row-gap: clamp(3rem, 6vw, 5rem);
   align-items: end;
+}
+
+@media (max-width: 900px) {
+  .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .archive-figure { margin: 0; }
