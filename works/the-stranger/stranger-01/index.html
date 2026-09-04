@@ -42,24 +42,42 @@
       ---------------------------------------------------------------
       Dedicated "image only" viewing stage for the Stranger series
       (see style.css, .stranger-preview-stage) — the right/main column
-      is a single large image, not the boxed .work-carousel Calling A
-      Deer A Horse/Ignore/The Boundary use. The left column, though,
-      keeps the same .work-detail-info block those pages use: title,
-      medium, dimensions, year and (Stranger 01 only) photography
-      credit, in the lower-left area under Selected Works — same
-      markup and CSS as everywhere else on the site, understated,
-      no card or border. justify-content:space-between on
-      .work-detail-side (unchanged) is what settles this info near the
-      foot of the column beneath the Selected Works list.
+      is image(s) only, not the boxed .work-carousel Calling A Deer A
+      Horse/Ignore/The Boundary use. The left column, though, keeps the
+      same .work-detail-info block those pages use: title, medium,
+      dimensions, year and photography credit, in the lower-left area
+      under Selected Works — same markup and CSS as everywhere else on
+      the site, understated, no card or border. This ONE metadata
+      block covers all images below — they are four views of the same
+      single artwork, not four separate works, so there is deliberately
+      only one title/medium/dimensions/year/credit set here.
+      justify-content:space-between on .work-detail-side (unchanged) is
+      what settles this info near the foot of the column beneath the
+      Selected Works list.
 
-      Switching between Stranger 01–04 has no visible prev/next
-      control: clicking the image's own left/right half (quiet
-      arrow-cursor hint, same convention as .work-carousel elsewhere
-      on the site) or the Left/Right arrow keys moves between works —
-      see main.js, [data-stranger-preview]. The visually-hidden link
-      below keeps the series reachable without JavaScript and for
-      keyboard/screen-reader users. First artwork in the series: no
-      "previous" target.
+      Stranger 01 is the only work in this series with more than one
+      image: the original full view, plus three additional views
+      (front/full re-shoot, side/angled, and a close-up detail) added
+      later. These four share ONE stage and cross-fade between each
+      other exactly like [data-work-carousel] elsewhere on the site
+      (.stranger-preview-slide, same is-active/is-visible convention).
+      Stranger 02–04 are unchanged: still a single plain
+      .stranger-preview-image with no slide wrapper, and main.js's
+      [data-stranger-preview] logic treats that shape exactly as
+      before — nothing about this addition alters those three pages.
+
+      Navigating still has no visible prev/next control: clicking the
+      image's own left/right half (quiet arrow-cursor hint, same
+      convention as .work-carousel elsewhere on the site) or the
+      Left/Right arrow keys moves through THIS artwork's own images
+      first, and only continues on to the next/previous ARTWORK once
+      already at the last/first image here — see main.js,
+      [data-stranger-preview]. The visually-hidden link below keeps
+      the series reachable without JavaScript and for keyboard/
+      screen-reader users (it always points at Stranger 02, the actual
+      next artwork — JS is what makes the in-between images reachable
+      first for everyone else). First artwork in the series: no
+      "previous" target, on any of the four images.
     -->
     <div class="work-detail">
       <aside class="work-detail-side">
@@ -84,7 +102,18 @@
       <div class="stranger-preview-stage"
            data-stranger-preview
            data-next-href="../stranger-02/">
-        <img class="stranger-preview-image" src="../../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01" width="2400" height="1917">
+        <div class="stranger-preview-slide is-active is-visible" data-index="0">
+          <img class="stranger-preview-image" src="../../../assets/images/works/stranger-01-full.jpg" alt="The Stranger, Tong Yin — Stranger 01" width="2400" height="1917">
+        </div>
+        <div class="stranger-preview-slide" data-index="1">
+          <img class="stranger-preview-image" src="../../../assets/images/works/stranger-01-front.jpg" alt="The Stranger, Tong Yin — Stranger 01, front view" width="2400" height="1917">
+        </div>
+        <div class="stranger-preview-slide" data-index="2">
+          <img class="stranger-preview-image" src="../../../assets/images/works/stranger-01-side.jpg" alt="The Stranger, Tong Yin — Stranger 01, side view" width="2400" height="1917">
+        </div>
+        <div class="stranger-preview-slide" data-index="3">
+          <img class="stranger-preview-image" src="../../../assets/images/works/stranger-01-detail.jpg" alt="The Stranger, Tong Yin — Stranger 01, detail" width="2400" height="1800">
+        </div>
         <a class="visually-hidden" href="../stranger-02/">Next: Stranger 02</a>
       </div>
     </div>

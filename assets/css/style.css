@@ -1082,6 +1082,38 @@ body.work-detail-page .primary-nav .submenu a {
   object-fit: contain;
 }
 
+/* Stranger 01 only: that one artwork has more than one image (see
+   main.js, [data-stranger-preview] and the doc comment in
+   works/the-stranger/stranger-01/index.html), so its stage holds
+   several .stranger-preview-slide wrappers instead of a single bare
+   .stranger-preview-image. Same is-active/is-visible cross-fade
+   convention as .work-carousel-slide above — one slide shown at a
+   time, calm opacity fade, never a slide/zoom/bounce — with the inner
+   image keeping the exact same natural-size/no-crop/no-stretch
+   .stranger-preview-image rules as every other Stranger page. Stranger
+   02–04 have no .stranger-preview-slide element at all and are
+   completely unaffected by this block. */
+.stranger-preview-slide {
+  display: none;
+  opacity: 0;
+  align-items: center;
+  justify-content: center;
+}
+.stranger-preview-slide.is-active {
+  display: flex;
+}
+.stranger-preview-slide.is-visible {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stranger-preview-slide.is-active {
+    transition: opacity 200ms linear;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stranger-preview-slide img { transition: none; }
+}
+
 /* ------------------------------------------------------- Ignore overview */
 /* The Ignore work-detail page shows two clickable artwork groups
    instead of a single-image carousel, and no metadata at all — so it

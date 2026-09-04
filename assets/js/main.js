@@ -207,11 +207,11 @@
 (function () {
   // Stranger series preview pages (works/the-stranger/stranger-01..04)
   // — a dedicated "image only" template with no visible prev/next
-  // link. Switching between the four works happens by clicking the
+  // link. Switching between the four WORKS happens by clicking the
   // image's own left/right half — same quiet arrow-cursor convention
-  // as the [data-work-carousel] block above, but this one is a real
-  // page navigation (a different artwork, not another slide of the
-  // same one), so it sets location.href rather than swapping a slide.
+  // as the [data-work-carousel] block above, but that's a real page
+  // navigation (a different artwork, not another slide of the same
+  // one), so it sets location.href rather than swapping a slide.
   // A work at either end of the series (Stranger 01 has no previous,
   // Stranger 04 has no next) simply has no href on that side, via a
   // missing data-prev-href/data-next-href attribute — that half of
@@ -219,11 +219,76 @@
   // around and never linking to itself. The real, visually-hidden
   // <a> in each page's markup is what makes the series navigable
   // without JavaScript; this block is purely an enhancement on top.
+  //
+  // Stranger 01 additionally has more than one IMAGE of that same
+  // work (.stranger-preview-slide children — see its index.html and
+  // style.css); Stranger 02–04 still each have a single bare
+  // .stranger-preview-image with no slide wrapper. Both shapes are
+  // handled by the same code below: when a stage has slides, left/
+  // right first cross-fades between this artwork's own images (same
+  // is-active/is-visible convention as [data-work-carousel]), and
+  // only falls through to the previous/next ARTWORK once already on
+  // the first/last image; when a stage has no slides (the plain,
+  // single-image shape), that "already at the edge" condition is
+  // simply always true, so behavior there is untouched.
   var stage = document.querySelector('[data-stranger-preview]');
   if (!stage) return;
 
   var prevHref = stage.dataset.prevHref || null;
   var nextHref = stage.dataset.nextHref || null;
+
+  var slides = Array.prototype.slice.call(stage.querySelectorAll('.stranger-preview-slide'));
+  var current = 0;
+  var animating = false;
+  var FADE_MS = 200;
+  if (slides.length) {
+    current = slides.findIndex(function (s) { return s.classList.contains('is-active'); });
+    if (current < 0) current = 0;
+  }
+
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function goToSlide(index) {
+    if (index === current || animating) return;
+    var from = slides[current];
+    var to = slides[index];
+
+    if (prefersReducedMotion()) {
+      from.classList.remove('is-active', 'is-visible');
+      to.classList.add('is-active', 'is-visible');
+      current = index;
+      return;
+    }
+
+    animating = true;
+    from.classList.remove('is-visible');
+    window.setTimeout(function () {
+      from.classList.remove('is-active');
+      to.classList.add('is-active');
+      void to.offsetWidth;
+      to.classList.add('is-visible');
+      current = index;
+      animating = false;
+    }, FADE_MS);
+  }
+
+  // Whether stepping "prev"/"next" from here stays within this
+  // artwork's own images (true) or should fall through to the
+  // previous/next artwork's href (false). A single-image stage (no
+  // slides) is always at both edges at once.
+  function hasPrevSlide() { return slides.length > 1 && current > 0; }
+  function hasNextSlide() { return slides.length > 1 && current < slides.length - 1; }
+
+  function prev() {
+    if (hasPrevSlide()) { goToSlide(current - 1); return; }
+    if (prevHref) window.location.href = prevHref;
+  }
+  function next() {
+    if (hasNextSlide()) { goToSlide(current + 1); return; }
+    if (nextHref) window.location.href = nextHref;
+  }
 
   var LEFT_CURSOR = 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2357554f%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2215%206%209%2012%2015%2018%22%2F%3E%3C%2Fsvg%3E") 12 12, w-resize';
   var RIGHT_CURSOR = 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2357554f%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%229%206%2015%2012%209%2018%22%2F%3E%3C%2Fsvg%3E") 12 12, e-resize';
@@ -234,30 +299,25 @@
     return (e.clientX - r.left) < r.width / 2 ? 'prev' : 'next';
   }
 
-  function hrefFor(zone) {
-    if (zone === 'prev') return prevHref;
-    if (zone === 'next') return nextHref;
-    return null;
-  }
-
   stage.addEventListener('mousemove', function (e) {
     var zone = zoneFor(e);
-    var href = hrefFor(zone);
-    stage.style.cursor = !href ? '' : zone === 'prev' ? LEFT_CURSOR : RIGHT_CURSOR;
+    var active = zone === 'prev' ? (hasPrevSlide() || prevHref) : zone === 'next' ? (hasNextSlide() || nextHref) : null;
+    stage.style.cursor = !active ? '' : zone === 'prev' ? LEFT_CURSOR : RIGHT_CURSOR;
   });
   stage.addEventListener('mouseleave', function () {
     stage.style.cursor = '';
   });
   stage.addEventListener('click', function (e) {
-    var href = hrefFor(zoneFor(e));
-    if (href) window.location.href = href;
+    var zone = zoneFor(e);
+    if (zone === 'prev') prev();
+    else if (zone === 'next') next();
   });
 
   document.addEventListener('keydown', function (e) {
     var tag = document.activeElement && document.activeElement.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-    if (e.key === 'ArrowLeft' && prevHref) window.location.href = prevHref;
-    else if (e.key === 'ArrowRight' && nextHref) window.location.href = nextHref;
+    if (e.key === 'ArrowLeft') prev();
+    else if (e.key === 'ArrowRight') next();
   });
 })();
 
