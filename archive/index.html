@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archive — Tong Yin</title>
+<meta name="description" content="Archive — earlier works by Tong Yin.">
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <a class="wordmark" href="../../">Tong Yin</a>
+  <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+  <div class="header-right">
+  <nav class="primary-nav" id="primary-nav" aria-label="Primary">
+    <ul>
+      <li class="has-submenu">
+        <a href="../../works/calling-a-deer-a-horse/" aria-haspopup="true">Works</a>
+        <ul class="submenu">
+        <li><a href="../../works/calling-a-deer-a-horse/">Selected Works</a></li>
+        <li><a href="../../works/archive/" aria-current="page">Archive</a></li>
+        </ul>
+      </li>
+      <li><a href="../../exhibitions/">Exhibitions</a></li>
+      <li><a href="../../contact/">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="lang-toggle" aria-label="Language">
+    <button type="button" class="lang-option" data-lang="en" aria-pressed="true">EN</button><span class="lang-sep">/</span><button type="button" class="lang-option" data-lang="zh" aria-pressed="false">中文</button>
+  </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section wrap" data-archive>
+
+    <!--
+      ARCHIVE
+      ---------------------------------------------------------------
+      A second, separate browsing system from Works/Selected Works —
+      earlier works, shown as a flat thumbnail grid under two plain
+      text category tabs (2022-2026 / before-2022) rather than each
+      getting its own project page. Clicking a thumbnail opens a
+      full-screen lightbox (markup below, right after </main>) instead
+      of navigating anywhere; previous/next inside the lightbox moves
+      between works in the currently active category. All of this —
+      the grid, the tabs, the lightbox — is rendered by
+      assets/js/main.js's [data-archive] block, entirely from the
+      ARCHIVE_WORKS array declared in the <script> further down this
+      file. See style.css's "archive" section for the layout rules.
+
+      TO ADD A WORK LATER: add one object to the ARCHIVE_WORKS array
+      below (image, thumbnail, title, year, medium, dimensions,
+      category, and optionally width/height) — nothing on this page
+      or in style.css needs to change. "2022-2026" was intentionally
+      emptied back to zero works (see the long comment further down,
+      right above ARCHIVE_WORKS, for why) and is due a full new set
+      from the artist; until then its tab falls back to the same
+      placeholder note "before-2022" used to show when it had nothing
+      either. Still true either way: do not add placeholder or stock
+      images to fill a category with none.
+    -->
+    <h1 class="eyebrow" style="margin-bottom: var(--space-3);">Archive</h1>
+
+    <nav class="archive-categories" aria-label="Archive categories">
+      <button type="button" class="archive-category-btn is-active" data-archive-category="2022-2026" aria-pressed="true">2022–2026</button>
+      <button type="button" class="archive-category-btn" data-archive-category="before-2022" aria-pressed="false">Before 2022</button>
+    </nav>
+
+    <!-- data-archive-grid is now a wrapper, not the grid itself: JS
+         (renderGrid() in main.js) fills it with one or more child
+         .archive-grid elements, one per `group` present in the active
+         category's works (see the ARCHIVE_WORKS comment below for
+         what `group` means and how to add more). A category with no
+         `group` field on its works (e.g. "before-2022" today) still
+         renders as a single .archive-grid child, identical to before
+         this existed. No visible heading/label is ever added for a
+         group — the only thing that marks a group boundary is the
+         larger gap in style.css's ".archive-grid + .archive-grid"
+         rule, which only applies between two sibling grids, so a
+         single-group category gets no extra gap at all. -->
+    <div class="archive-groups" data-archive-grid></div>
+
+    <p class="placeholder-note" data-archive-empty>Archive works have not been added yet.</p>
+
+  </section>
+</main>
+
+<!-- Archive lightbox: one overlay, shared by every work in the grid
+     above (see main.js, [data-archive-lightbox]). Starts hidden; JS
+     shows it and fills in the image/caption when a thumbnail (or a
+     #work-<id> deep link) opens it. -->
+<div class="archive-lightbox" data-archive-lightbox hidden>
+  <button type="button" class="archive-lightbox-close" data-archive-lightbox-close>Close</button>
+  <figure class="archive-lightbox-figure">
+    <img class="archive-lightbox-image" data-archive-lightbox-image alt="">
+    <!-- No src attribute here on purpose: an empty src="" resolves to
+         the current page URL and the browser will actually request it,
+         which briefly registers as a "broken image" on every page
+         load. JS sets a real src the first time a work is shown. -->
+    <figcaption class="archive-lightbox-meta" data-archive-lightbox-meta></figcaption>
+    <!-- Optional quiet "Video →" links for works that have one (see
+         the `videos` field on a few ARCHIVE_WORKS entries below, e.g.
+         "Don't bother me" / "Fire") — populated by JS alongside the
+         caption above; empty and not rendered for every other work. -->
+    <p class="archive-lightbox-videos" data-archive-lightbox-videos hidden></p>
+  </figure>
+</div>
+
+<footer class="site-footer">
+  <p class="copyright">© Tong Yin</p>
+  <div class="footer-links">
+    <a href="../../contact/">Email</a>
+    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</footer>
+
+<script>
+  /*
+    ARCHIVE DATA
+    ---------------------------------------------------------------
+    The only place Archive content lives. Each entry:
+
+      {
+        id:         unique string — becomes the shareable lightbox URL
+                    ("#work-<id>"), so keep it stable once published
+        image:      full-size artwork image, shown in the lightbox
+        thumbnail:  grid thumbnail (can be the same file as `image`,
+                    or a lighter version of it — never a cropped one)
+        title:      artwork title
+        year:       artwork year
+        medium:     medium description
+        dimensions: display dimensions
+        category:   '2022-2026' or 'before-2022' — which Archive tab
+                    the work appears under
+        videos:     optional array of { label, url } — renders as quiet
+                    "Video →" links under the caption (see main.js
+                    showWork() and .archive-lightbox-videos in
+                    style.css); the two entries that used to have this
+                    ("Don't bother me", "Fire") were removed in the
+                    2022-2026 reset below, so no current entry uses it,
+                    but the mechanism is unchanged and still there for
+                    whatever's added next
+        width,
+        height:     optional, the image's intrinsic pixel size (avoids
+                    layout shift while it loads, same as every other
+                    image on the site)
+        group:      optional number — works sharing the same `group`
+                    (within the same category) are laid out together
+                    as one grid (3 columns by default), with a gap
+                    before the next group's grid (see style.css,
+                    ".archive-grid + .archive-grid") — no heading or
+                    label is ever rendered for a group, purely a
+                    whitespace break. Groups render in the order their
+                    first work appears in this array; works within a
+                    group render in their own order in this array — so
+                    a group's works should stay contiguous here. Omit
+                    `group` entirely for a category that isn't
+                    (or isn't yet) organized into groups — see
+                    "before-2022" below, which has none and renders as
+                    one plain grid, exactly as it always has. A given
+                    group's gap and column layout can each be
+                    individually overridden — see
+                    window.ARCHIVE_LARGE_GAP_AFTER (an oversized gap
+                    after a specific group) and window.
+                    ARCHIVE_GROUP_LAYOUT (a different column layout for
+                    a specific group, e.g. group 4's compact 2-column
+                    block) just above ARCHIVE_WORKS below.
+      }
+
+    "2022-2026" RESET: this category previously held four batches
+    (43 works: archive-01 through archive-40, plus three surviving
+    GIFs from a fourth batch, archive-56/58/60 — two more from that
+    same fourth batch, archive-55 and archive-59, had already been
+    removed the same way in an earlier edit). All of it — every
+    2022-2026 entry — was deliberately removed from this array at the
+    artist's explicit request, as a full reset before they supply a
+    new collection and its exact order from scratch. This was a data-
+    only change: nothing was added, reordered, or guessed to fill the
+    gap, and no physical image file was deleted — every archive-01
+    through archive-40 .jpg/.jpg-thumb pair and every archive-55
+    through archive-60 .gif still sits in assets/images/archive/
+    exactly as before, simply unreferenced by any entry now (several
+    of the .jpg thumbnails were also candidates for reuse, but per
+    instruction none were reused or re-added on a guess). The category
+    tab itself, its "2022–2026" label, and the empty-state placeholder
+    note ("Archive works have not been added yet.") are unchanged and
+    untouched — with zero entries in this category, that placeholder
+    now simply shows here the same way it already did for "before-2022"
+    before that category had any works of its own (see below). Adding
+    the new collection later is exactly the "TO ADD A WORK LATER" case
+    described above this comment block — new objects appended to this
+    array — nothing here or in style.css needs to change for that.
+
+    "2022-2026" REBUILD, group 1 (archive-61 through archive-68, 8
+    works — originally 11, archive-61 through archive-71; archive-69
+    "Baby girl", archive-70 "Dream" and archive-71 "Spider-Maid's
+    private time", the three sculpture-photo works that had closed out
+    the group, were removed shortly after at the artist's request —
+    see the large-gap note further below) and group 2 (archive-72
+    through archive-79, 8 works): the first two groups of the new,
+    from-scratch "2022-2026" collection, each in the exact order the
+    artist specified (by numbered filename, 1 through 11 and 1 through
+    8 — NOT alphabetical, date, dimension, or composition order).
+    archive-69/70/71's image files were left in assets/images/archive/
+    (archive-69-full.jpg, archive-69-thumb.jpg, and the same pair for
+    70/71) rather than deleted, same as every other removal on this
+    page — simply unreferenced now. Sourced from two freshly
+    uploaded ZIPs, not from any pre-reset archive-01..40/55..60 file
+    above, per instruction — new image files, new ids, even where a
+    work's title/medium/dimensions happens to match one from before
+    the reset (several clearly do; that's the same real artwork being
+    reintroduced deliberately, not a coincidence, but it's still a new
+    entry with its own fresh asset files rather than a pointer back to
+    the old ones). group 1's images (jpg/png) were resized the same
+    way as every prior batch on this page — long edge capped at 2200px
+    for the lightbox `image`, 900px for the grid `thumbnail`, aspect
+    ratio untouched, re-encoded as JPEG (the two PNG source files were
+    fully opaque, so flattening to JPEG changes nothing visible) —
+    never cropped or stretched. group 2's six .gif files are copied
+    through unchanged (same convention as the pre-reset GIF batch:
+    `image` and `thumbnail` point at the identical original .gif, no
+    resize, no first-frame extraction, no separate thumbnail file) —
+    two of these six are actually byte-identical to the removed
+    archive-55/57/59/56/58/60 files from before the reset (same
+    animations, re-supplied fresh per instruction rather than re-
+    linked to the old paths); its remaining two works are static jpg
+    photos, resized the same way as group 1.
+
+    Titles/medium here are taken verbatim from THIS batch's own
+    filenames, not copied from the pre-reset entries even when the
+    same work was documented differently there — e.g. this batch
+    spells the group-2 GIF titles "Please step on my face" and "Go to
+    heaven" (sentence case) and "Don't Bother Me" (title case),
+    inconsistent with each other and with the title-case versions the
+    pre-reset GIF batch used ("Please Step on My Face", "Go to
+    Heaven") — left exactly as this batch's filenames give them,
+    same don't-alter-given-titles rule as everywhere else in this
+    file. archive-64 ("Relayed Flame") repeats a title used by an
+    earlier, different work in this same file (the pre-reset "Relayed
+    Flame 10"/"Relayed Flame 70") with different dimensions/medium —
+    kept as a distinct work, per the same repeated-title handling used
+    throughout this file. archive-64's dimensions ("45-70 × 120 cm")
+    are worth the artist double-checking against their own records.
+    (The former archive-69 "Baby girl" repeated the archive-61 "Baby
+    Girl" title the same way, and was the one group-1 filename with no
+    leading number, positioned as #9 per the artist's reference
+    screenshot rather than its filename — both now moot, since
+    archive-69 was removed; see the large-gap note below.)
+    "2022-2026" REBUILD, group 3 (archive-80 through archive-89, 10
+    works): the third group of the collection, laid out as a 4-row,
+    3-column block per the artist's reference screenshot (10 works in
+    a 3-column grid naturally leaves the last row with a single item
+    in the left column and nothing else — no special-case CSS needed,
+    that's just how CSS Grid auto-placement fills a 3-column track).
+    Sourced from three freshly uploaded ZIPs (10 files total, one work
+    each — matched to the artist's numbered reference screenshot by
+    filename, and each one visually opened and compared against the
+    screenshot's thumbnail before being added, the same verification
+    practice used for every prior identify-by-filename batch on this
+    page); array order here is the row-by-row, left-to-right reading
+    order from that screenshot (80/81/82 = row 1, 83/84/85 = row 2,
+    86/87/88 = row 3, 89 = row 4 alone), which is also exactly the DOM
+    order the 3-column grid needs to reproduce that layout. Resized the
+    same way as every prior jpg/png batch on this page — long edge
+    capped at 2200px for `image`, 900px for `thumbnail`, aspect ratio
+    untouched, re-encoded as JPEG (the three PNG sources were fully
+    opaque, so flattening to JPEG changes nothing visible) — never
+    cropped, stretched, or upscaled (archive-81, whose source was
+    already under the 2200px cap, was left at its original size rather
+    than enlarged). Several works in this group carry incomplete
+    metadata and were left that way rather than guessed, same rule as
+    archive-41/42 above: archive-84 ("3. Plastic Apple") has a title
+    but no year/medium/dimensions in its filename, unlike its two
+    same-titled siblings archive-83/85 which do; archive-86, -87, -88
+    and -89 are auto-named camera/phone files (IMG_####, a bare "18",
+    a 照片_YYYY-MM-DD_###### timestamp) with no artwork title, year,
+    medium, or dimensions embedded at all, so none of those fields are
+    guessed from the file's date-like numbers. archive-81 and -82 share
+    the title "The entitlement to become a person" for two visually
+    distinct photographs — same repeated-title handling used throughout
+    this file (see archive-64/68's note above); archive-83/84/85 share
+    "Plastic Apple" the same way. Section 3 sits below group 2 with the
+    normal inter-group gap (".archive-grid + .archive-grid" in
+    style.css, the same spacing used between sections 1 and 2) — it is
+    not listed in ARCHIVE_LARGE_GAP_AFTER, so it does not get the
+    oversized gap described below (that gap is specific to the group-1
+    sculpture removal, not a general "between every section" rule).
+
+    "2022-2026" REBUILD, group 4 (archive-90 through archive-93, 4
+    works): a small, deliberately compact 2x2 block — Tears above Love,
+    Persona above "How can you do this to me" — rather than the page's
+    usual 3-column flow. Sourced from one uploaded ZIP (4 files, one
+    work each, matched to the artist's reference screenshot by
+    filename and confirmed by opening and visually comparing each one
+    against that screenshot before adding it, same practice as every
+    other identify-by-filename batch here). Resized the same way as
+    every other jpg/png batch on this page — long edge capped at
+    2200px for `image`, 900px for `thumbnail`, aspect ratio untouched,
+    re-encoded as JPEG (all three PNG sources were fully opaque, so
+    flattening to JPEG changes nothing visible) — never cropped,
+    stretched, or upscaled. "Persona"'s medium is given here as
+    "Digital Art"; its source filename actually spells it "Digtal Art"
+    (a typo), corrected on the assumption it means "Digital", worth the
+    artist double-checking. "Love" and "How can you do this to me" had
+    no dimensions in their filenames, so that field is left out rather
+    than guessed, same rule used throughout this file. "How can you do
+    this to me" is this batch's own English rendering of a filename
+    that led with the Chinese title 你怎么可以这样对我 immediately
+    followed by that same English phrase with no separator — the
+    English is used as the work's `title` (consistent with every other
+    Archive entry using an English title) and the Chinese is preserved
+    for the 中文 toggle via a new ARCHIVE_TITLES entry in main.js,
+    exactly the same "genuinely Chinese-titled work" handling already
+    used there for "Home"/家, "Press Release"/新闻稿, etc.
+
+    Group 4's compact 2x2 layout, instead of the page's normal 3-column
+    grid, is a new, general per-group mechanism: window.
+    ARCHIVE_GROUP_LAYOUT (declared right before ARCHIVE_WORKS below,
+    alongside ARCHIVE_LARGE_GAP_AFTER) maps a '<category>:<group>' key
+    to a style.css modifier suffix; main.js's renderGrid() adds an
+    "archive-grid--<suffix>" class to that group's rendered
+    <div class="archive-grid">, alongside the existing gap-large
+    mechanism (a group can use either, both, or neither — they're
+    independent). Group 4 maps to 'cols-2' — see
+    ".archive-grid--cols-2" in style.css: exactly two columns, width
+    capped to what two of the normal three columns would measure, so
+    Tears/Persona/Love/"How can you do this to me" render at the same
+    size as every other Archive thumbnail, just arranged as a small
+    self-contained block instead of spanning the full row. Group 4
+    itself is not listed in ARCHIVE_LARGE_GAP_AFTER, so the gap before
+    it is the normal inter-group one, the same spacing used between
+    every other section on this page.
+
+    "2022-2026" REBUILD, group 5 (archive-94 through archive-102, 9
+    works): back to the page's normal 3-column layout (no LARGE_GAP_AFTER
+    or ARCHIVE_GROUP_LAYOUT entry, so it gets the plain inter-group gap,
+    same spacing used between every other section) — a straightforward
+    3x3 block, laid out in the artist's exact reference-screenshot
+    reading order (row by row, left to right), which is also the DOM
+    order the grid needs. Sourced from two uploaded ZIPs (9 files, one
+    work each, each opened and visually compared against the reference
+    screenshot before being placed — same verification practice as
+    every prior identify-by-filename batch here). Resized the same way
+    as every other jpg/png batch on this page — long edge capped at
+    2200px for `image`, 900px for `thumbnail`, aspect ratio untouched,
+    re-encoded as JPEG, never cropped, stretched, or upscaled.
+
+    Every titled work in this group is, by title and medium, the exact
+    same real artwork as an entry already in the pre-reset "2022-2026"
+    collection this file's comments describe further up (archive-64
+    "Relayed Flame" being the first instance of this pattern): "Red for
+    Family, Green for Ancestral Mountain", "The Stranger" (×2, distinct
+    works, same title — same repeated-title handling used throughout
+    this file), "Drift", "Dirty Knight" (×2), "Relayed Flame 10" and
+    "Relayed Flame 70" all match titles already sitting in main.js's
+    ARCHIVE_TITLES dictionary from before this page's 2022-2026 reset —
+    that dictionary was never touched by the reset (it lives in
+    main.js, the reset only ever removed entries from the ARCHIVE_WORKS
+    array in this file), so every one of those titles already had a
+    correct Chinese pairing waiting for it; only "The Stranger" needed
+    a new ARCHIVE_TITLES entry added (it was already in the site-wide,
+    Selected-Works-facing TITLES dictionary, but that one isn't
+    consulted by the Archive page's zhTitle(), so it had to be added to
+    ARCHIVE_TITLES separately). Every work's medium here — "亚克力板上
+    丙烯、中国绢" — matches the ARCHIVE_MEDIUM_EXTRA translation pair
+    already in main.js too, so it's rendered as "Acrylic on acrylic
+    board, Chinese silk" with no new translation work needed. None of
+    this group's filenames include a year, so `year` is left out of
+    every entry here rather than guessed. archive-98 ("场景 2.JPG",
+    "Scene 2") is a documentation/installation photo, not an
+    individually titled artwork — its filename carries no title,
+    medium, or dimensions, so (like archive-41/42, -86 through -89
+    above) none of those fields are guessed for it; its visible content
+    (two other archive works under gallery lighting) is exactly what
+    its position in the reference screenshot's row 2 shows.
+
+    SECTION REORDER: group 5 (the 3x3 block described just above) was
+    moved from the last section on the page to the first, at the
+    artist's request — the page now reads group 5, then groups 1-4 in
+    their original relative order (previously it was groups 1-4, then
+    5). This was done by physically moving group 5's nine object
+    literals earlier in this array, to right after the last
+    "before-2022" entry and right before group 1's first entry —
+    nothing else changed: same nine works, same internal 3x3 order,
+    same `group: 5` number on each (deliberately left as "5" rather
+    than renumbered to "0" or "1", since renderGrid() orders groups by
+    where each one's first work appears in this array, not by the
+    numeric value of `group` — that number is only ever used as an
+    opaque lookup key for ARCHIVE_LARGE_GAP_AFTER/ARCHIVE_GROUP_LAYOUT,
+    so leaving it as 5 costs nothing and avoids touching five other
+    groups' worth of entries and every reference to "group 1"/"group 4"
+    elsewhere in these comments and in main.js). Because
+    ARCHIVE_LARGE_GAP_AFTER (['2022-2026:1']) and ARCHIVE_GROUP_LAYOUT
+    ({'2022-2026:4': 'cols-2'}) key off that same group number rather
+    than position, moving group 5 didn't require touching either of
+    them: the large gap still lands between group 1 and group 2
+    wherever they render (they're still adjacent to each other in the
+    array), and group 4 still renders as the compact 2-column block —
+    both completely unaffected by group 5 now sitting in front of them.
+    Group 5 itself is still absent from both of those, so it renders
+    with the plain inter-group gap on both sides — no gap before it
+    (nothing precedes the first group in a category, per the sibling-
+    selector gap rule described above) and the normal gap after it,
+    now between it and group 1 instead of between group 4 and it.
+    Group 4 (the compact 2x2 block) is now the last section on the
+    page, so there is no leftover gap at group 5's old location — the
+    page simply ends after group 4, same as it would have regardless
+    of which group happened to render last.
+
+    Section 6 onward, and any further reordering, are left for a
+    future update — nothing about this structure needs to change to
+    append another group or move an existing one again (see the
+    `group` field description above).
+
+    LARGE GAP after group 1 (the three-sculpture removal): when
+    archive-69/70/71 were removed just above, the artist specifically
+    asked that the vertical space they used to occupy NOT collapse —
+    it should stay as a large intentional blank gap separating group 1
+    from group 2, distinctly bigger than the normal inter-group gap.
+    window.ARCHIVE_LARGE_GAP_AFTER (declared right before
+    ARCHIVE_WORKS below) lists '<category>:<group>' keys that get this
+    treatment; main.js's renderGrid() adds an
+    "archive-grid--gap-large" modifier class to a matching group's
+    rendered <div class="archive-grid">, and style.css gives
+    ".archive-grid--gap-large + .archive-grid" (right after the normal
+    ".archive-grid + .archive-grid" rule, so it wins) a noticeably
+    taller margin-top — sized, at common desktop widths, to roughly
+    the height that row of three sculpture photos actually occupied
+    before removal (measured directly against the live page rather
+    than guessed). This is a general mechanism, not a one-off hack: a
+    future group could opt into the same large gap by adding its
+    '<category>:<group>' key to that array, or this one could be
+    un-flagged later by removing '2022-2026:1' from it, without
+    touching main.js or style.css again. It's a plain empty spacer —
+    no box, border, caption, or clickable element, purely CSS margin.
+
+    before-2022 (archive-41 through archive-54, 14 works) is NOT part
+    of this reset and is completely unchanged — added as the third of
+    the four batches mentioned above, from two uploaded ZIPs, mixing
+    English-titled filenames used verbatim ("On The Street" ×2 with
+    different media — Ink pen/paper vs. pencil — kept as two distinct
+    works, not a duplicate; "Persona", "Rocket Man", "Toy" — a second,
+    distinct "Toy" from a same-titled 2022-2026 work this reset has
+    since removed; "Bum!", "Dance", "Princess") with four Chinese
+    filenames whose titles are best-effort English translations
+    flagged for the artist's confirmation: 家 → "Home", 新闻稿 → "Press
+    Release", 未命名作品16 → "Untitled 16", 逃离房间 → "Escape Room"; 印刷
+    后铅笔、纸 → "Pencil on print, paper", 印刷、水彩、纸 → "Print,
+    watercolor, paper", 数字艺术 → "Digital art", 综合材料 → "Mixed
+    media", 游戏 → "Game". archive-51's dimensions field preserves the
+    filename's own "A4 size" rather than converting it to a guessed cm
+    figure. archive-41/42 (IMG_6246.JPG, IMG_6254.JPG) carried no
+    embedded metadata at all, so they're kept with no title/year/
+    medium/dimensions rather than guessed ones. This append order is
+    still temporary, same as it was before this reset.
+  */
+  // See the "LARGE GAP after group 1" note above: '<category>:<group>'
+  // keys listed here get an oversized gap after that group's grid
+  // instead of the normal one (renderGrid() / .archive-grid--gap-large
+  // in style.css). Empty array = no category currently needs this.
+  window.ARCHIVE_LARGE_GAP_AFTER = ['2022-2026:1'];
+  // '<category>:<group>' -> a style.css layout-modifier suffix (see the
+  // "SECTION 4" note above and .archive-grid--cols-2 in style.css).
+  // Today only group 4 opts into the compact two-column variant; every
+  // other group is absent from this object and renders the normal way.
+  window.ARCHIVE_GROUP_LAYOUT = { '2022-2026:4': 'cols-2' };
+  window.ARCHIVE_WORKS = [
+    {
+      id: 'archive-41',
+      image: '../../assets/images/archive/archive-41-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-41-thumb.jpg',
+      category: 'before-2022',
+      width: 2101,
+      height: 2200
+    },
+    {
+      id: 'archive-42',
+      image: '../../assets/images/archive/archive-42-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-42-thumb.jpg',
+      category: 'before-2022',
+      width: 1730,
+      height: 1223
+    },
+    {
+      id: 'archive-43',
+      image: '../../assets/images/archive/archive-43-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-43-thumb.jpg',
+      title: 'On The Street',
+      year: '2020',
+      medium: 'Ink pen, paper',
+      dimensions: '25 × 18 cm',
+      category: 'before-2022',
+      width: 1474,
+      height: 2200
+    },
+    {
+      id: 'archive-44',
+      image: '../../assets/images/archive/archive-44-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-44-thumb.jpg',
+      title: 'On The Street',
+      year: '2020',
+      medium: 'Pencil',
+      dimensions: '25 × 18 cm',
+      category: 'before-2022',
+      width: 1032,
+      height: 1422
+    },
+    {
+      id: 'archive-45',
+      image: '../../assets/images/archive/archive-45-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-45-thumb.jpg',
+      title: 'Persona',
+      year: '2020',
+      medium: 'Pencil',
+      dimensions: '25 × 18 cm',
+      category: 'before-2022',
+      width: 1086,
+      height: 1402
+    },
+    {
+      id: 'archive-46',
+      image: '../../assets/images/archive/archive-46-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-46-thumb.jpg',
+      title: 'Rocket Man',
+      year: '2020',
+      medium: 'Ink pen, paper',
+      dimensions: '30 × 42 cm',
+      category: 'before-2022',
+      width: 1038,
+      height: 1376
+    },
+    {
+      id: 'archive-47',
+      image: '../../assets/images/archive/archive-47-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-47-thumb.jpg',
+      title: 'Toy',
+      year: '2020',
+      medium: 'Mixed media',
+      dimensions: '92 × 66 cm',
+      category: 'before-2022',
+      width: 2200,
+      height: 1570
+    },
+    {
+      id: 'archive-48',
+      image: '../../assets/images/archive/archive-48-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-48-thumb.jpg',
+      title: 'Bum!',
+      year: '2019',
+      medium: 'Ink pen on paper',
+      dimensions: '21 × 29.7 cm',
+      category: 'before-2022',
+      width: 2116,
+      height: 1288
+    },
+    {
+      id: 'archive-49',
+      image: '../../assets/images/archive/archive-49-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-49-thumb.jpg',
+      title: 'Dance',
+      year: '2020',
+      medium: 'Mixed media',
+      dimensions: '92 × 73 cm',
+      category: 'before-2022',
+      width: 2200,
+      height: 1805
+    },
+    {
+      id: 'archive-50',
+      image: '../../assets/images/archive/archive-50-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-50-thumb.jpg',
+      title: 'Princess',
+      year: '2020',
+      medium: 'Pencil on print, paper',
+      dimensions: '32 × 15 cm',
+      category: 'before-2022',
+      width: 2200,
+      height: 1235
+    },
+    {
+      id: 'archive-51',
+      image: '../../assets/images/archive/archive-51-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-51-thumb.jpg',
+      title: 'Home',
+      year: '2020',
+      medium: 'Print, watercolor, paper',
+      dimensions: 'A4 size',
+      category: 'before-2022',
+      width: 2200,
+      height: 1461
+    },
+    {
+      id: 'archive-52',
+      image: '../../assets/images/archive/archive-52-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-52-thumb.jpg',
+      title: 'Press Release',
+      year: '2020',
+      medium: 'Digital art',
+      category: 'before-2022',
+      width: 2200,
+      height: 1815
+    },
+    {
+      id: 'archive-53',
+      image: '../../assets/images/archive/archive-53-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-53-thumb.jpg',
+      title: 'Untitled 16',
+      category: 'before-2022',
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-54',
+      image: '../../assets/images/archive/archive-54-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-54-thumb.jpg',
+      title: 'Escape Room',
+      year: '2020',
+      medium: 'Game',
+      category: 'before-2022',
+      width: 2116,
+      height: 1279
+    },
+    {
+      id: 'archive-94',
+      image: '../../assets/images/archive/archive-94-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-94-thumb.jpg',
+      title: 'Red for Family, Green for Ancestral Mountain',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '30 × 40 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-95',
+      image: '../../assets/images/archive/archive-95-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-95-thumb.jpg',
+      title: 'The Stranger',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '28.9 × 30 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1669
+    },
+    {
+      id: 'archive-96',
+      image: '../../assets/images/archive/archive-96-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-96-thumb.jpg',
+      title: 'Drift',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '31 × 37 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-97',
+      image: '../../assets/images/archive/archive-97-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-97-thumb.jpg',
+      title: 'Dirty Knight',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '27.5 × 38.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-98',
+      image: '../../assets/images/archive/archive-98-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-98-thumb.jpg',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-99',
+      image: '../../assets/images/archive/archive-99-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-99-thumb.jpg',
+      title: 'The Stranger',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '23.8 × 25 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-100',
+      image: '../../assets/images/archive/archive-100-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-100-thumb.jpg',
+      title: 'Relayed Flame 10',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '23 × 39.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-101',
+      image: '../../assets/images/archive/archive-101-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-101-thumb.jpg',
+      title: 'Relayed Flame 70',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '59 × 62.7 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-102',
+      image: '../../assets/images/archive/archive-102-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-102-thumb.jpg',
+      title: 'Dirty Knight',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '26.2 × 31.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-61',
+      image: '../../assets/images/archive/archive-61-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-61-thumb.jpg',
+      title: 'Baby Girl',
+      year: '2022',
+      medium: 'Acrylic on paper',
+      dimensions: '92 × 66 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 2200,
+      height: 1589
+    },
+    {
+      id: 'archive-62',
+      image: '../../assets/images/archive/archive-62-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-62-thumb.jpg',
+      title: 'Driver',
+      year: '2022',
+      medium: 'Acrylic on paper',
+      dimensions: '68 × 88 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1554,
+      height: 1266
+    },
+    {
+      id: 'archive-63',
+      image: '../../assets/images/archive/archive-63-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-63-thumb.jpg',
+      title: 'Love and tears',
+      year: '2022',
+      medium: 'Inkjet print and acrylic',
+      dimensions: '65 × 155 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1736,
+      height: 1052
+    },
+    {
+      id: 'archive-64',
+      image: '../../assets/images/archive/archive-64-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-64-thumb.jpg',
+      title: 'Relayed Flame',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '45-70 × 120 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-65',
+      image: '../../assets/images/archive/archive-65-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-65-thumb.jpg',
+      title: 'Bunny Girl',
+      year: '2022',
+      medium: 'Liquid acrylic and ink pen',
+      dimensions: '100 × 51 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 842,
+      height: 1386
+    },
+    {
+      id: 'archive-66',
+      image: '../../assets/images/archive/archive-66-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-66-thumb.jpg',
+      title: 'Birthday',
+      year: '2022',
+      medium: 'Inkjet print and acrylic',
+      dimensions: '85 × 75 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-67',
+      image: '../../assets/images/archive/archive-67-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-67-thumb.jpg',
+      title: 'Angry apple',
+      year: '2022',
+      medium: 'Liquid acrylic and charcoal',
+      dimensions: '90 × 88 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1304,
+      height: 1378
+    },
+    {
+      id: 'archive-68',
+      image: '../../assets/images/archive/archive-68-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-68-thumb.jpg',
+      title: 'The god of panties',
+      year: '2022',
+      medium: 'Liquid acrylic and ink pen',
+      dimensions: '70 × 55 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1660,
+      height: 1244
+    },
+    {
+      id: 'archive-72',
+      image: '../../assets/images/archive/archive-72-full.gif',
+      thumbnail: '../../assets/images/archive/archive-72-full.gif',
+      title: 'Please step on my face',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1200,
+      height: 900
+    },
+    {
+      id: 'archive-73',
+      image: '../../assets/images/archive/archive-73-full.gif',
+      thumbnail: '../../assets/images/archive/archive-73-full.gif',
+      title: 'Fire',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1440,
+      height: 990
+    },
+    {
+      id: 'archive-74',
+      image: '../../assets/images/archive/archive-74-full.gif',
+      thumbnail: '../../assets/images/archive/archive-74-full.gif',
+      title: "Don't Bother Me",
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 2400,
+      height: 1800
+    },
+    {
+      id: 'archive-75',
+      image: '../../assets/images/archive/archive-75-full.gif',
+      thumbnail: '../../assets/images/archive/archive-75-full.gif',
+      title: 'Love',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1600,
+      height: 1200
+    },
+    {
+      id: 'archive-76',
+      image: '../../assets/images/archive/archive-76-full.gif',
+      thumbnail: '../../assets/images/archive/archive-76-full.gif',
+      title: 'Go to heaven',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1200,
+      height: 900
+    },
+    {
+      id: 'archive-77',
+      image: '../../assets/images/archive/archive-77-full.gif',
+      thumbnail: '../../assets/images/archive/archive-77-full.gif',
+      title: 'Boy',
+      year: '2022',
+      medium: 'Pen, Acrylic Sheet, Animation Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 2400,
+      height: 1800
+    },
+    {
+      id: 'archive-78',
+      image: '../../assets/images/archive/archive-78-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-78-thumb.jpg',
+      title: 'Go to heaven',
+      year: '2022',
+      medium: 'Video installation',
+      dimensions: '30 × 23 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-79',
+      image: '../../assets/images/archive/archive-79-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-79-thumb.jpg',
+      title: 'Fire',
+      year: '2022',
+      medium: 'Installation',
+      dimensions: '28.5 × 15 cm',
+      category: '2022-2026',
+      group: 2,
+      width: 1463,
+      height: 2200
+    },
+    {
+      id: 'archive-80',
+      image: '../../assets/images/archive/archive-80-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-80-thumb.jpg',
+      title: 'Dream of Success',
+      year: '2023',
+      medium: 'Indoor installation',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-81',
+      image: '../../assets/images/archive/archive-81-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-81-thumb.jpg',
+      title: 'The entitlement to become a person',
+      year: '2023',
+      medium: 'Photography',
+      category: '2022-2026',
+      group: 3,
+      width: 1198,
+      height: 1602
+    },
+    {
+      id: 'archive-82',
+      image: '../../assets/images/archive/archive-82-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-82-thumb.jpg',
+      title: 'The entitlement to become a person',
+      year: '2023',
+      medium: 'Photography',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-83',
+      image: '../../assets/images/archive/archive-83-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-83-thumb.jpg',
+      title: 'Plastic Apple',
+      year: '2024',
+      medium: 'Mural',
+      dimensions: '300 × 200 cm',
+      category: '2022-2026',
+      group: 3,
+      width: 1730,
+      height: 1148
+    },
+    {
+      id: 'archive-84',
+      image: '../../assets/images/archive/archive-84-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-84-thumb.jpg',
+      title: 'Plastic Apple',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-85',
+      image: '../../assets/images/archive/archive-85-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-85-thumb.jpg',
+      title: 'Plastic Apple',
+      year: '2024',
+      medium: 'Mural',
+      dimensions: '300 × 200 cm',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1319
+    },
+    {
+      id: 'archive-86',
+      image: '../../assets/images/archive/archive-86-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-86-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 1842,
+      height: 1279
+    },
+    {
+      id: 'archive-87',
+      image: '../../assets/images/archive/archive-87-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-87-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 2004,
+      height: 1600
+    },
+    {
+      id: 'archive-88',
+      image: '../../assets/images/archive/archive-88-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-88-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1608
+    },
+    {
+      id: 'archive-89',
+      image: '../../assets/images/archive/archive-89-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-89-thumb.jpg',
+      category: '2022-2026',
+      group: 3,
+      width: 2200,
+      height: 1636
+    },
+    {
+      id: 'archive-90',
+      image: '../../assets/images/archive/archive-90-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-90-thumb.jpg',
+      title: 'Tears',
+      year: '2021',
+      medium: 'Stickers',
+      dimensions: '30 × 21 cm',
+      category: '2022-2026',
+      group: 4,
+      width: 2200,
+      height: 964
+    },
+    {
+      id: 'archive-91',
+      image: '../../assets/images/archive/archive-91-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-91-thumb.jpg',
+      title: 'Persona',
+      year: '2022',
+      medium: 'Digital Art',
+      dimensions: '30 × 30 cm',
+      category: '2022-2026',
+      group: 4,
+      width: 2200,
+      height: 1278
+    },
+    {
+      id: 'archive-92',
+      image: '../../assets/images/archive/archive-92-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-92-thumb.jpg',
+      title: 'Love',
+      year: '2022',
+      medium: 'Print',
+      category: '2022-2026',
+      group: 4,
+      width: 1714,
+      height: 1372
+    },
+    {
+      id: 'archive-93',
+      image: '../../assets/images/archive/archive-93-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-93-thumb.jpg',
+      title: 'How can you do this to me',
+      year: '2022',
+      medium: 'Print, Pencil',
+      category: '2022-2026',
+      group: 4,
+      width: 2200,
+      height: 1649
+    },
+  ];
+</script>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>
