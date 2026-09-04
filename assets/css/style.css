@@ -620,6 +620,18 @@ main { display: block; }
   transition: opacity 250ms var(--ease);
 }
 
+/* Each homepage artwork is now a plain link through to its Selected
+   Works page (.carousel-figure is an <a> — see index.html), but must
+   look pixel-identical before and during hover/focus: these are
+   deliberately light, high-key works, so any opacity/brightness/
+   filter/scale hover effect would make them harder to see. cursor:
+   pointer is the ONLY affordance; nothing here touches the image's
+   own appearance, and no rule anywhere else in this file targets
+   .carousel-figure-link on :hover/:focus, on purpose. */
+.carousel-figure-link {
+  cursor: pointer;
+}
+
 /* One-off: "The Stranger" is a physically small artwork, so it's
    deliberately NOT scaled up to fill the shared viewing box the way
    every other slide is. The box itself (.carousel-figure, above)

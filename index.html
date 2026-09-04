@@ -39,15 +39,31 @@
   <!--
     HOMEPAGE CAROUSEL
     ---------------------------------------------------------------
-    Rebuilt from the 8 newly supplied, explicitly numbered images
-    (01-home through 08-home in the brief) — the numeric position is
-    the sole ordering authority, so these 8 slides simply run 1-8 in
-    upload order. All 8 are photographs of the same body of work,
-    "Ignore, 2026" (matching that series' established documentation
-    at works/ignore/), but per the brief these slides are deliberately
-    NOT links and carry no caption — the homepage carousel is images
-    only, with no click-through to any artwork detail page and no
-    text under the images.
+    8 slides, numeric position is the sole ordering authority (image
+    files/order/sizing are unchanged from the previous round — see
+    assets/images/home/). Each slide's artwork image is now a plain
+    link through to that exact artwork's Selected Works page (added
+    per the homepage-linking brief, confirmed against reference
+    screenshots) — but still carries no caption/text underneath, and
+    the link is deliberately styled to look IDENTICAL on hover/focus
+    (see .carousel-figure-link in style.css: cursor: pointer only,
+    no opacity/filter/scale change) since these are light, high-key
+    works where a hover effect would make them harder to see. The
+    mapping below is fixed by the artist's reference screenshots, not
+    by file order alone — 06/07/08 intentionally all point to the
+    same Ignore 02 page:
+      data-index 0 (home-01) -> works/calling-a-deer-a-horse/
+      data-index 1 (home-02) -> works/the-stranger/stranger-01/
+      data-index 2 (home-03) -> works/ignore/ignore-01/
+      data-index 3 (home-04) -> works/the-boundary/boundary-02/
+      data-index 4 (home-05) -> works/the-boundary/boundary-03/
+      data-index 5 (home-06) -> works/ignore/ignore-02/
+      data-index 6 (home-07) -> works/ignore/ignore-02/
+      data-index 7 (home-08) -> works/ignore/ignore-02/
+    Each of those destination pages already opens on the exact
+    sub-work state shown in the reference TARGET screenshots by
+    default, so a plain link to the page is the correct, minimal
+    mechanism here — no query/hash deep-link routing was needed.
 
     Each image keeps its own original aspect ratio inside a shared
     viewing box (object-fit: contain in style.css) — never cropped,
@@ -76,51 +92,51 @@
         <ul class="carousel-track">
 
           <li class="carousel-slide is-active is-visible" data-index="0">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/calling-a-deer-a-horse/" aria-label="Calling A Deer A Horse">
               <img src="assets/images/home/home-01-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917" fetchpriority="high">
-            </span>
+            </a>
           </li>
 
           <li class="carousel-slide" data-index="1">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/the-stranger/stranger-01/" aria-label="The Stranger">
               <img src="assets/images/home/home-02-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </span>
+            </a>
           </li>
 
           <li class="carousel-slide" data-index="2">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-01/" aria-label="Ignore">
               <img src="assets/images/home/home-03-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </span>
+            </a>
           </li>
 
           <li class="carousel-slide" data-index="3">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/the-boundary/boundary-02/" aria-label="The Boundary">
               <img src="assets/images/home/home-04-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </span>
+            </a>
           </li>
 
           <li class="carousel-slide" data-index="4">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/the-boundary/boundary-03/" aria-label="The Boundary">
               <img src="assets/images/home/home-05-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </span>
+            </a>
           </li>
 
           <li class="carousel-slide" data-index="5">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
               <img src="assets/images/home/home-06-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </span>
+            </a>
           </li>
 
           <li class="carousel-slide" data-index="6">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
               <img src="assets/images/home/home-07-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </span>
+            </a>
           </li>
 
           <li class="carousel-slide" data-index="7">
-            <span class="carousel-figure">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
               <img src="assets/images/home/home-08-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
-            </span>
+            </a>
           </li>
 
         </ul>
