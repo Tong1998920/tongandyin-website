@@ -1396,18 +1396,128 @@ body.work-detail-page .primary-nav .submenu a {
 .archive-category-btn:hover,
 .archive-category-btn:focus-visible { color: var(--color-active); }
 
+/* [data-archive-grid] (".archive-groups" in the HTML) is a plain
+   wrapper — main.js's renderGrid() fills it with one or more child
+   .archive-section elements, one per group of works (see the `group`
+   field described in the ARCHIVE_WORKS comment in
+   works/archive/index.html), each containing exactly one .archive-grid.
+   A category with no groups still gets exactly one .archive-section /
+   .archive-grid pair, so this is a strict superset of the old
+   always-one-grid behavior, not a different system. */
+.archive-groups {
+  display: block;
+  /* The single, consistent section-to-section gap value — see the
+     longer explanation further down, right above where it's consumed
+     by ".archive-section + .archive-section". Declared here (inherited
+     down to every .archive-section child) so there is exactly one
+     place to change it. */
+  --archive-section-gap: 10rem;
+}
+
+/* Each .archive-section is a plain block wrapper around one group's
+   .archive-grid — an explicit per-group container in the DOM (see
+   renderGrid() in main.js), not just an inferred boundary between two
+   bare .archive-grid siblings. Carries no visual styling of its own;
+   the gap between sections below is the only thing it's for. */
+.archive-section {
+  display: block;
+}
+
 /* Three columns on desktop, sitting inside the same capped .wrap
    content column as the rest of the site (so the grid never stretches
    edge to edge) with generous, controlled gaps rather than a tight
    commercial card grid. Each image keeps width:100%/height:auto — its
    own aspect ratio, never cropped or forced to a uniform box — so
-   .archive-figure/.archive-thumb carry no fixed height anywhere. */
+   .archive-figure/.archive-thumb carry no fixed height anywhere. A
+   group with a count not divisible by 3 (e.g. 11 or 8 works) simply
+   ends its last row short — CSS grid doesn't add filler cells, so no
+   empty placeholder appears. The 900px "tablet" breakpoint just below
+   steps this down to 2 columns; the 520px "phone" breakpoint further
+   down (1 column) is unchanged. */
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: clamp(2.5rem, 5vw, 4.5rem);
+  --archive-gap: clamp(2.5rem, 5vw, 4.5rem);
+  column-gap: var(--archive-gap);
   row-gap: clamp(3rem, 6vw, 5rem);
   align-items: end;
+}
+
+@media (max-width: 900px) {
+  .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Opt-in 2-column "compact" variant for a group that should read as a
+   small, self-contained block instead of the site's normal 3-column
+   flow (e.g. a deliberate 2x2 pairing where the artist wants specific
+   works kept directly above/below each other) — flagged per-group via
+   window.ARCHIVE_GROUP_LAYOUT (see the ARCHIVE_WORKS comment in
+   works/archive/index.html); main.js adds this class alongside the
+   base .archive-grid class on that group's own grid element. Two
+   columns, but capped to the width two of the normal three columns
+   would occupy (2 column-tracks + 1 gap) via the shared --archive-gap
+   custom property set above, on the same element — so this group's
+   thumbnails stay exactly the same size as every other group's, and
+   it reads as a compact block sitting at the left edge, not a
+   stretched two-up layout filling the full row. */
+.archive-grid--cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: calc((100% - 2 * var(--archive-gap)) / 3 * 2 + var(--archive-gap));
+}
+
+@media (max-width: 900px) {
+  /* At this width the base .archive-grid is already 2 columns full
+     width, so the 2-of-3 compact-width math above no longer applies —
+     let a --cols-2 group match every other group's width here rather
+     than shrinking further. */
+  .archive-grid--cols-2 { max-width: none; }
+}
+
+/* The ONLY thing that visually separates one group from the next —
+   still a plain whitespace break: no heading, label, line, or border.
+   The sibling combinator means this never applies before the first
+   section (nothing to separate it from), so a category with only one
+   group — every category except "2022-2026" today — renders with no
+   extra gap at all, identical to before groups existed.
+
+   Targets ".archive-section", the explicit per-group wrapper (see the
+   comment above .archive-groups), rather than ".archive-grid" directly
+   — each .archive-grid now sits alone inside its own .archive-section,
+   so it no longer has a same-level .archive-grid sibling to match
+   against. This selector is what actually creates the section gap;
+   moving it to the wrapper level, instead of leaving it on the inner
+   .archive-grid elements, means a group's boundary is never dependent
+   on exactly which element happens to be adjacent to which — the
+   wrapper structure itself is the section boundary.
+
+   A SINGLE, CONSISTENT value on purpose: earlier this had two extra
+   opt-in "bigger gap" tiers (an ".archive-grid--gap-large" modifier at
+   ~650px, added when group 1 lost three works and needed to keep their
+   footprint as blank space; and an ".archive-grid--gap-xl" modifier at
+   ~300-350px, added when group 5 became the first-rendered group) —
+   the artist found the resulting page visually inconsistent (some gaps
+   tiny, one enormous) and asked for one uniform gap between every
+   section instead. Both modifiers, their CSS rules, the JS that added
+   them (main.js's LARGE_GAP_AFTER/XL_GAP_AFTER), and the
+   window.ARCHIVE_LARGE_GAP_AFTER/ARCHIVE_XL_GAP_AFTER declarations that
+   drove them (works/archive/index.html) were removed rather than left
+   in place unused — dead opt-in machinery nobody was meant to opt
+   back into is exactly the kind of thing that causes an accidental
+   reintroduction of this same inconsistency later. --archive-section-gap
+   is a fixed 10rem (160px), not viewport-scaled — the artist asked for
+   "approximately 140-180px on desktop" as ONE value, not a range that
+   moves with viewport width, so a flat value is the more literal,
+   simpler match (compare column-gap/row-gap above, which genuinely do
+   need to scale with the grid's own width). It's declared as a custom
+   property, rather than inlined directly into the margin-top below, so
+   a future request for a different single value only means changing
+   it in this one place. This is unrelated to and independent of
+   ".archive-grid--cols-2" above (group 4's compact-width layout) — a
+   group can still use that column-layout variant while getting the
+   exact same section gap as everyone else, since the two rules target
+   different elements and different properties. */
+.archive-section + .archive-section {
+  margin-top: var(--archive-section-gap);
 }
 
 .archive-figure { margin: 0; }
@@ -1511,9 +1621,6 @@ body.archive-lightbox-open { overflow: hidden; }
 .archive-lightbox-close:hover,
 .archive-lightbox-close:focus-visible { color: var(--color-active); }
 
-@media (max-width: 900px) {
-  .archive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 @media (max-width: 520px) {
   .archive-grid {
     grid-template-columns: 1fr;
@@ -1839,6 +1946,64 @@ body.archive-lightbox-open { overflow: hidden; }
   .work-detail-info { margin-top: var(--space-5); }
   .work-detail-stage { grid-column: 1; grid-row: 2; }
   .work-carousel-slide { width: 100%; height: 50vh; }
+
+  /* MOBILE TYPOGRAPHY REFINEMENT — Selected Works detail pages only
+     (Calling A Deer A Horse, Ignore, The Boundary, The Stranger — the
+     four pages that carry body.work-detail-page; see the template
+     comment near .work-detail-shell above), inside this same
+     breakpoint rather than a new one, since it only makes sense once
+     the layout above has already stacked into one column. Every
+     selector below is prefixed with body.work-detail-page specifically
+     so nothing here touches the header, Selected Works styling, or
+     any other page (Archive, Home, Exhibitions, Contact, News, About)
+     — those don't carry that body class, so they're structurally
+     unreachable by these rules regardless of viewport width.
+
+     Sizes are pinned to plain px (not clamp()) so they're exact and
+     predictable on a phone, rather than left to a vw-based formula
+     whose floor happens to land nearby. text-size-adjust: 100% turns
+     off WebKit/iOS Safari's own automatic font-boosting heuristic
+     (it silently enlarges text in narrow single-column blocks like
+     this one) — without it, a phone can render noticeably larger than
+     any of the pixel values actually written here, which is the most
+     likely real explanation for "everything looks oversized" despite
+     the underlying CSS already being fairly restrained. */
+  body.work-detail-page {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body.work-detail-page .wordmark { font-size: 18px; }
+  body.work-detail-page .lang-toggle { font-size: 14px; }
+  body.work-detail-page .nav-toggle { font-size: 14px; }
+
+  /* Weight stays the inherited 400 + hairline text-stroke from the
+     base rule above (see its comment: this typeface has no true
+     medium/500 face, so that stroke is what "medium weight" already
+     means here) — only size and line-height change on mobile. */
+  body.work-detail-page .selected-works-heading { font-size: 15px; line-height: 1.4; }
+  body.work-detail-page .selected-works-list a { font-size: 14px; line-height: 1.4; }
+
+  body.work-detail-page .work-detail-info .work-detail-title { font-size: 14px; line-height: 1.4; }
+  body.work-detail-page .work-detail-info .work-detail-meta { font-size: 13px; line-height: 1.45; }
+  body.work-detail-page .work-detail-info .work-detail-credit { font-size: 13px; line-height: 1.45; }
+
+  /* SPACING: shortens, but does not remove, the two gaps between
+     "Selected Works" list → metadata → first artwork image (the
+     desktop-only .selected-works-list margin-top a bit above already
+     doesn't apply below 701px, so that particular gap was untouched
+     already — these two are the ones actually inflating the distance
+     to the image on mobile). Both were living off the same shared
+     --space-5 / --space-6 tokens desktop uses for much roomier
+     purposes; giving mobile its own smaller, explicit values here
+     keeps a deliberate, visible gap at each step (never 0, never
+     compressed together) while bringing the image up noticeably
+     sooner on the scroll. Pages with no .work-detail-info block
+     (Ignore, The Boundary, The Stranger) only ever have the second
+     gap (.work-detail's row-gap) to begin with, so they benefit from
+     that one alone. */
+  body.work-detail-page .work-detail-info { margin-top: 1.25rem; }
+  body.work-detail-page .work-detail { row-gap: 1.75rem; }
 
   /* Stranger preview: same single-column stack, image below Selected
      Works, natural aspect ratio preserved (no fixed height). */
