@@ -335,7 +335,50 @@
     it is the normal inter-group one, the same spacing used between
     every other section on this page.
 
-    Section 5 onward, and any reordering of sections 1-4, are left for
+    "2022-2026" REBUILD, group 5 (archive-94 through archive-102, 9
+    works): back to the page's normal 3-column layout (no LARGE_GAP_AFTER
+    or ARCHIVE_GROUP_LAYOUT entry, so it gets the plain inter-group gap,
+    same spacing used between every other section) — a straightforward
+    3x3 block, laid out in the artist's exact reference-screenshot
+    reading order (row by row, left to right), which is also the DOM
+    order the grid needs. Sourced from two uploaded ZIPs (9 files, one
+    work each, each opened and visually compared against the reference
+    screenshot before being placed — same verification practice as
+    every prior identify-by-filename batch here). Resized the same way
+    as every other jpg/png batch on this page — long edge capped at
+    2200px for `image`, 900px for `thumbnail`, aspect ratio untouched,
+    re-encoded as JPEG, never cropped, stretched, or upscaled.
+
+    Every titled work in this group is, by title and medium, the exact
+    same real artwork as an entry already in the pre-reset "2022-2026"
+    collection this file's comments describe further up (archive-64
+    "Relayed Flame" being the first instance of this pattern): "Red for
+    Family, Green for Ancestral Mountain", "The Stranger" (×2, distinct
+    works, same title — same repeated-title handling used throughout
+    this file), "Drift", "Dirty Knight" (×2), "Relayed Flame 10" and
+    "Relayed Flame 70" all match titles already sitting in main.js's
+    ARCHIVE_TITLES dictionary from before this page's 2022-2026 reset —
+    that dictionary was never touched by the reset (it lives in
+    main.js, the reset only ever removed entries from the ARCHIVE_WORKS
+    array in this file), so every one of those titles already had a
+    correct Chinese pairing waiting for it; only "The Stranger" needed
+    a new ARCHIVE_TITLES entry added (it was already in the site-wide,
+    Selected-Works-facing TITLES dictionary, but that one isn't
+    consulted by the Archive page's zhTitle(), so it had to be added to
+    ARCHIVE_TITLES separately). Every work's medium here — "亚克力板上
+    丙烯、中国绢" — matches the ARCHIVE_MEDIUM_EXTRA translation pair
+    already in main.js too, so it's rendered as "Acrylic on acrylic
+    board, Chinese silk" with no new translation work needed. None of
+    this group's filenames include a year, so `year` is left out of
+    every entry here rather than guessed. archive-98 ("场景 2.JPG",
+    "Scene 2") is a documentation/installation photo, not an
+    individually titled artwork — its filename carries no title,
+    medium, or dimensions, so (like archive-41/42, -86 through -89
+    above) none of those fields are guessed for it; its visible content
+    (two other archive works under gallery lighting) is exactly what
+    its position in the reference screenshot's row 2 shows.
+
+    Section 6 onward, and any reordering of sections 1-5, are left for
     a future update — nothing about this structure needs to change to
     append another group later (see the `group` field description
     above).
@@ -912,6 +955,111 @@
       group: 4,
       width: 2200,
       height: 1649
+    },
+    {
+      id: 'archive-94',
+      image: '../../assets/images/archive/archive-94-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-94-thumb.jpg',
+      title: 'Red for Family, Green for Ancestral Mountain',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '30 × 40 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1650
+    },
+    {
+      id: 'archive-95',
+      image: '../../assets/images/archive/archive-95-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-95-thumb.jpg',
+      title: 'The Stranger',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '28.9 × 30 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1669
+    },
+    {
+      id: 'archive-96',
+      image: '../../assets/images/archive/archive-96-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-96-thumb.jpg',
+      title: 'Drift',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '31 × 37 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-97',
+      image: '../../assets/images/archive/archive-97-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-97-thumb.jpg',
+      title: 'Dirty Knight',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '27.5 × 38.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-98',
+      image: '../../assets/images/archive/archive-98-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-98-thumb.jpg',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1467
+    },
+    {
+      id: 'archive-99',
+      image: '../../assets/images/archive/archive-99-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-99-thumb.jpg',
+      title: 'The Stranger',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '23.8 × 25 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-100',
+      image: '../../assets/images/archive/archive-100-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-100-thumb.jpg',
+      title: 'Relayed Flame 10',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '23 × 39.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-101',
+      image: '../../assets/images/archive/archive-101-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-101-thumb.jpg',
+      title: 'Relayed Flame 70',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '59 × 62.7 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 1650,
+      height: 2200
+    },
+    {
+      id: 'archive-102',
+      image: '../../assets/images/archive/archive-102-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-102-thumb.jpg',
+      title: 'Dirty Knight',
+      medium: 'Acrylic on acrylic board, Chinese silk',
+      dimensions: '26.2 × 31.5 cm',
+      category: '2022-2026',
+      group: 5,
+      width: 2200,
+      height: 1650
     },
   ];
 </script>

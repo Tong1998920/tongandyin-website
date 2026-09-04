@@ -676,7 +676,8 @@ var TY_I18N = (function () {
     'Press Release': '新闻稿',
     'Untitled 16': '未命名作品16',
     'Escape Room': '逃离房间',
-    'How can you do this to me': '你怎么可以这样对我'
+    'How can you do this to me': '你怎么可以这样对我',
+    'The Stranger': '异乡人'
   };
   var ARCHIVE_MEDIUM_EXTRA = [
     ['Acrylic on acrylic board, Chinese silk', '亚克力板上丙烯、中国绢'],
