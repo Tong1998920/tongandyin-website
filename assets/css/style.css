@@ -1433,7 +1433,10 @@ body.work-detail-page .primary-nav .submenu a {
    ends its last row short — CSS grid doesn't add filler cells, so no
    empty placeholder appears. The 900px "tablet" breakpoint just below
    steps this down to 2 columns; the 520px "phone" breakpoint further
-   down (1 column) is unchanged. */
+   down stays 2 columns as well (see that rule's own comment — it used
+   to drop to a single centered column, changed at the artist's
+   request so phones always show two artworks per row), just with
+   smaller gaps sized for the narrower screen. */
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1622,12 +1625,27 @@ body.archive-lightbox-open { overflow: hidden; }
 .archive-lightbox-close:focus-visible { color: var(--color-active); }
 
 @media (max-width: 520px) {
+  /* Two artworks per row on true phone widths, not one — the artist
+     found a single centered column (this rule's previous
+     grid-template-columns: 1fr; max-width: 420px; margin: auto) read
+     as too sparse. Now matches the 900px "tablet" breakpoint above:
+     .archive-grid stays 2 equal-width columns all the way down, so
+     there's no separate narrower phone layout to maintain, and this
+     rule only needs to tighten the gaps for the smaller screen.
+     column-gap ~14px / row-gap ~35px (both within the artist's
+     requested 12-16px / 28-36px ranges) via the existing --space-3 /
+     --space-5 tokens, rather than inventing new fixed px values. The
+     grid fills the same content width .section.wrap already provides
+     (--page-margin) — no extra max-width/centering of its own, so
+     mobile page margins are exactly what they were before this
+     change. .archive-thumb img is width:100%; height:auto; already
+     (see its own rule above), so every image keeps its original
+     aspect ratio and simply scales to its half-width cell — nothing
+     cropped or stretched. */
   .archive-grid {
-    grid-template-columns: 1fr;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-    row-gap: var(--space-6);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-3);
+    row-gap: var(--space-5);
   }
   .archive-lightbox { padding: 24px 20px; }
   .archive-lightbox-image { max-width: calc(100vw - 48px); max-height: calc(100vh - 140px); }
@@ -1817,19 +1835,23 @@ body.archive-lightbox-open { overflow: hidden; }
 
 .contact-portrait { flex: 0 0 auto; margin: 0; }
 
-/* Reduced from an earlier clamp(380px, 31vw, 500px) at the artist's
-   request — the portrait was reading as too dominant next to the
-   biography; this quieter size still scales a little with viewport
-   width (so it isn't a single frozen number) but settles around
-   270-300px on most desktop widths, roughly resolving to the low-to-
-   mid 300s of the vw range in between. max-width:100%/height:auto is
-   unchanged from before, so the image still can never be
-   stretched/distorted or overflow a narrow viewport — see the comment
-   above .contact-intro for why height is deliberately left to resolve
-   from width alone. */
+/* Reduced twice now at the artist's request — first from an original
+   clamp(380px, 31vw, 500px) down to clamp(260px, 20vw, 300px), then
+   (this round) halved again to roughly half THOSE displayed
+   dimensions: every number in the clamp is simply divided by 2, so it
+   scales the same way across viewport widths as before, just smaller
+   throughout — settling around 130-150px on most desktop widths
+   instead of 270-300px. This rule only ever applies at 901px and
+   above; the dedicated @media (max-width: 900px) override further
+   down (min(220px, 100%)) is untouched, so this round — explicitly
+   scoped to "the desktop Contact page" — has no effect on mobile.
+   max-width:100%/height:auto is unchanged, so the image still can
+   never be stretched/distorted or overflow a narrow viewport — see
+   the comment above .contact-intro for why height is deliberately
+   left to resolve from width alone. */
 .contact-portrait img {
   display: block;
-  width: clamp(260px, 20vw, 300px);
+  width: clamp(130px, 10vw, 150px);
   max-width: 100%;
   height: auto;
 }

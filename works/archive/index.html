@@ -353,6 +353,32 @@
     section-to-section gap as every other group, just with a different
     column count inside its own grid.
 
+    IMAGE REPLACEMENT, group 4 (archive-91 → archive-103 + archive-104):
+    the old "Persona" entry (archive-91, a single Digital Art image,
+    2022) was removed and replaced with two newly supplied original
+    images, both also titled "Persona" per their own filenames
+    ("Persona-30 × 30 cm-印刷-2021.JPG" and "Persona-30 × 30cm-印刷-2021.JPG"
+    — note the near-identical filenames differ only by a missing space
+    before "cm"; they are two distinct source files, verified by hash
+    before processing, and were never allowed to overwrite one another).
+    Per those filenames: medium "印刷" (Print, not the old entry's
+    "Digital Art"), dimensions "30 × 30 cm" (unchanged), year 2021 (not
+    2022). Both are independent, individually-clickable Archive grid
+    items — not a collage or slideshow of one image — each processed
+    the same way as every other Archive image on this page (long edge
+    capped at 2200px for `image`, 900px for `thumbnail`, aspect ratio
+    untouched, EXIF-orientation-corrected, JPEG re-encoded, never
+    cropped/stretched/rotated/recolored); both source photos were
+    already square (1440×1441 and 1440×1440) and well under the 2200px
+    cap, so their "full" files kept their native resolution. The two new
+    entries sit in archive-91's old array position, so group 4 is now
+    five items (Tears, the two new Persona images, Love, "How can you
+    do this to me") instead of four — still rendered through the same
+    `cols-2` two-column block (see ARCHIVE_GROUP_LAYOUT below), which
+    simply gains an uneven last row rather than needing any layout
+    change. No other group-4 entry, other Archive section, section
+    spacing, or the 3-column layout system itself was touched.
+
     "2022-2026" REBUILD, group 5 (archive-94 through archive-102, 9
     works): back to the page's normal 3-column layout (no
     ARCHIVE_GROUP_LAYOUT entry, so it renders with the default 3-column
@@ -1131,17 +1157,30 @@
       height: 964
     },
     {
-      id: 'archive-91',
-      image: '../../assets/images/archive/archive-91-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-91-thumb.jpg',
+      id: 'archive-103',
+      image: '../../assets/images/archive/archive-103-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-103-thumb.jpg',
       title: 'Persona',
-      year: '2022',
-      medium: 'Digital Art',
+      year: '2021',
+      medium: 'Print',
       dimensions: '30 × 30 cm',
       category: '2022-2026',
       group: 4,
-      width: 2200,
-      height: 1278
+      width: 1440,
+      height: 1441
+    },
+    {
+      id: 'archive-104',
+      image: '../../assets/images/archive/archive-104-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-104-thumb.jpg',
+      title: 'Persona',
+      year: '2021',
+      medium: 'Print',
+      dimensions: '30 × 30 cm',
+      category: '2022-2026',
+      group: 4,
+      width: 1440,
+      height: 1440
     },
     {
       id: 'archive-92',
