@@ -3,29 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exhibitions — Tong Yin</title>
-<meta name="description" content="Exhibition history — Tong Yin.">
-<link rel="stylesheet" href="../assets/css/style.css">
+<title>Tong Yin</title>
+<meta name="description" content="Tong Yin — artist website. Works, exhibitions, news, and contact.">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
-
 <header class="site-header">
-  <a class="wordmark" href="../">Tong Yin</a>
+  <a class="wordmark" href="/" aria-current="page">Tong Yin</a>
   <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
   <div class="header-right">
   <nav class="primary-nav" id="primary-nav" aria-label="Primary">
     <ul>
       <li class="has-submenu">
-        <a href="../works/calling-a-deer-a-horse/" aria-haspopup="true">Works</a>
+        <a href="works/calling-a-deer-a-horse/" aria-haspopup="true">Works</a>
         <ul class="submenu">
-        <li><a href="../works/calling-a-deer-a-horse/">Selected Works</a></li>
-        <li><a href="../works/archive/">Archive</a></li>
+        <li><a href="works/calling-a-deer-a-horse/">Selected Works</a></li>
+        <li><a href="works/archive/">Archive</a></li>
         </ul>
       </li>
-      <li><a href="../exhibitions/" aria-current="page">Exhibitions</a></li>
-      <li><a href="../contact/">Contact</a></li>
+      <li><a href="exhibitions/">Exhibitions</a></li>
+      <li><a href="contact/">Contact</a></li>
     </ul>
   </nav>
   <div class="lang-toggle" aria-label="Language">
@@ -33,162 +32,69 @@
   </div>
   </div>
 </header>
-
 <main id="main">
-  <section class="section wrap">
-    <h1 class="eyebrow" style="margin-bottom: var(--space-6);">Exhibitions</h1>
+  <noscript><style>.carousel-arrow{display:none;}</style></noscript>
+  <div class="carousel" data-carousel>
+    <div class="carousel-stage">
+      <button type="button" class="carousel-arrow carousel-arrow--prev" data-carousel-prev aria-label="Previous artwork">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"></polyline></svg>
+      </button>
 
-    <!--
-      EXHIBITION ARCHIVE
-      ---------------------------------------------------------------
-      Three chronological lists — Solo Exhibitions, Group Exhibitions,
-      then Art Fairs — each most-recent-first, per the artist's
-      confirmed classification. (An earlier pass had removed this
-      split rather than guess which show was solo vs. group; restored
-      now that the classification is explicitly given, not guessed.
-      Art Fairs was added later as its own third category, since an
-      art fair is a distinct kind of event from a group exhibition —
-      never merge one into the other.) Each row is still one
-      <div class="exhibition-row">, unchanged in shape; to add an
-      exhibition, copy a whole row into the correct section and edit
-      its fields. If it has installation photographs, wrap the title
-      in a link pointing to a new folder under /exhibitions/ (copy the
-      example-solo-2025 folder as a starting point). Rows without a
-      detail page stay plain text, as below. Titles and venue names
-      are used exactly as given, not re-cased to match the rest of the
-      list's style.
-
-      DATE PRECISION: every row's only date field is the year in
-      .exhibition-year (left column) — there has never been a
-      day-level date field in this markup. When a specific date range
-      is supplied for an entry (e.g. "September 11–13, 2026"), it is
-      appended to the end of the .exhibition-venue line after a " · "
-      separator, rather than inventing a new field/row shape just for
-      that entry — same convention used for both new 2026 rows added
-      below (BODIES, MORE OR LESS; POSITIONS Berlin Art Fair). This
-      keeps every row visually and structurally identical.
-    -->
-    <h2 class="exhibition-group-heading">Solo Exhibitions</h2>
-    <div class="exhibition-list">
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2026</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Drifting</span>
-          <span class="exhibition-venue">DODGERS GALLERY, Guangzhou, China</span>
-        </span>
+      <div class="carousel-viewport">
+        <ul class="carousel-track">
+          <li class="carousel-slide is-active is-visible" data-index="0">
+            <a class="carousel-figure carousel-figure-link" href="works/calling-a-deer-a-horse/" aria-label="Calling A Deer A Horse">
+              <img src="assets/images/home/home-01-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917" fetchpriority="high">
+            </a>
+          </li>
+          <li class="carousel-slide" data-index="1">
+            <a class="carousel-figure carousel-figure-link" href="works/the-stranger/stranger-01/" aria-label="The Stranger">
+              <img src="assets/images/home/home-02-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+            </a>
+          </li>
+          <li class="carousel-slide" data-index="2">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-01/" aria-label="Ignore">
+              <img src="assets/images/home/home-03-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+            </a>
+          </li>
+          <li class="carousel-slide" data-index="3">
+            <a class="carousel-figure carousel-figure-link" href="works/the-boundary/boundary-02/" aria-label="The Boundary">
+              <img src="assets/images/home/home-04-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+            </a>
+          </li>
+          <li class="carousel-slide" data-index="4">
+            <a class="carousel-figure carousel-figure-link" href="works/the-boundary/boundary-03/" aria-label="The Boundary">
+              <img src="assets/images/home/home-05-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+            </a>
+          </li>
+          <li class="carousel-slide" data-index="5">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
+              <img src="assets/images/home/home-06-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+            </a>
+          </li>
+          <li class="carousel-slide" data-index="6">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
+              <img src="assets/images/home/home-07-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+            </a>
+          </li>
+          <li class="carousel-slide" data-index="7">
+            <a class="carousel-figure carousel-figure-link" href="works/ignore/ignore-02/" aria-label="Ignore">
+              <img src="assets/images/home/home-08-ignore.jpg" alt="Ignore, Tong Yin" width="2400" height="1917">
+            </a>
+          </li>
+        </ul>
       </div>
-
+      <button type="button" class="carousel-arrow carousel-arrow--next" data-carousel-next aria-label="Next artwork">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+      </button>
     </div>
-
-    <h2 class="exhibition-group-heading">Group Exhibitions</h2>
-    <div class="exhibition-list">
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2026</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">BODIES, MORE OR LESS</span>
-          <span class="exhibition-venue">Galerie Met, SP2 Gallery, Schillerpromenade 2, 12049 Berlin, Germany · September 11–13, 2026</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2026</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Conditions of Presence</span>
-          <span class="exhibition-venue">Auguststr. 11–13, Berlin, Germany</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2026</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Rundgang</span>
-          <span class="exhibition-venue">Universität der Künste Berlin, Berlin, Germany</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2025</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Rundgang</span>
-          <span class="exhibition-venue">Universität der Künste Berlin, Berlin, Germany</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2022</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">The Generation of Gap-Fillers</span>
-          <span class="exhibition-venue">MOUart, Beijing, China</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2020</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Please Jump Down Too</span>
-          <span class="exhibition-venue">KeYi Gallery, Hefei, China</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2020</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">EVOLUTION chapter 1</span>
-          <span class="exhibition-venue">enjoyartmuseum, Beijing, China</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2019</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Ask questions at night</span>
-          <span class="exhibition-venue">horizonartspace, Beijing, China</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2018</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Abstract Beijing</span>
-          <span class="exhibition-venue">NL Museum, Beijing, China</span>
-        </span>
-      </div>
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2018</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">Summoning and Evolution - Fifth Studio teachers and students Art Exhibition</span>
-          <span class="exhibition-venue">enjoyartmuseum, Beijing, China</span>
-        </span>
-      </div>
-
-    </div>
-
-    <h2 class="exhibition-group-heading">Art Fairs</h2>
-    <div class="exhibition-list">
-
-      <div class="exhibition-row">
-        <span class="exhibition-year">2026</span>
-        <span class="exhibition-main">
-          <span class="exhibition-title">POSITIONS Berlin Art Fair</span>
-          <span class="exhibition-venue">Galerie Met, Hangar 7, Tempelhof Airport, Tempelhofer Damm 45, 12101 Berlin, Germany · September 11–13, 2026</span>
-        </span>
-      </div>
-
-    </div>
-  </section>
+  </div>
 </main>
 
 <footer class="site-footer">
   <p class="copyright">© Tong Yin</p>
-  <div class="footer-links">
-    <a href="../contact/">Email</a>
-    <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-  </div>
 </footer>
 
-<script src="../assets/js/main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
