@@ -54,15 +54,22 @@
       artist's request — the .contact-credit rule in style.css is left
       in place, unused, in case a future portrait needs one again; see
       the markup below for where a <figcaption class="contact-credit">
-      would go). Email and Instagram sit directly under the biography
-      paragraph, inside .contact-bio (.contact-details) — plain
-      left-aligned text, not the page footer; this page's own
+      would go). Email, Instagram, and (added later, same quiet
+      register, no new CSS needed — .contact-details is a flex column
+      with a fixed gap, so a third <p> just joins the same list) a
+      Portfolio PDF link sit directly under the biography paragraph,
+      inside .contact-bio (.contact-details) — plain left-aligned
+      text, not the page footer; this page's own
       <footer class="site-footer"> below now carries just the
-      copyright. To update later: swap
-      assets/images/contact/portrait.jpg (keep its own aspect ratio —
-      just update the <img> width/height attributes to match), edit
-      the credit line, edit the biography paragraph, or edit the two
-      contact-details links' text/href below.
+      copyright. The PDF link opens ../assets/files/
+      TongYin_SelectedWorks_2025-2026.pdf in a new tab (target="_blank"
+      rel="noopener noreferrer", same convention as the Instagram
+      link) — replace that file (keep the same filename, or update
+      this href too) to swap in a newer portfolio. To update later:
+      swap assets/images/contact/portrait.jpg (keep its own aspect
+      ratio — just update the <img> width/height attributes to match),
+      edit the credit line, edit the biography paragraph, or edit any
+      of the three contact-details links' text/href below.
     -->
     <div class="contact-intro">
       <figure class="contact-portrait">
@@ -75,6 +82,7 @@
         <div class="contact-details meta-text">
           <p><a href="mailto:y630239920@gmail.com">Email: y630239920@gmail.com</a></p>
           <p><a href="https://www.instagram.com/tong_yin_/" target="_blank" rel="noopener noreferrer">Instagram: tong_yin_</a></p>
+          <p><a href="../assets/files/TongYin_SelectedWorks_2025-2026.pdf" target="_blank" rel="noopener noreferrer">Portfolio PDF ↓</a></p>
         </div>
       </div>
     </div>
