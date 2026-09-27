@@ -596,6 +596,32 @@
   // Today only group 4 opts into the compact two-column variant; every
   // other group is absent from this object and renders the normal way.
   window.ARCHIVE_GROUP_LAYOUT = { '2022-2026:4': 'cols-2' };
+  // ARCHIVE CLEANUP (2026-09-27): removed 9 works entirely — the
+  // object literal, lightbox/detail data, and everything about each
+  // one — at the artist's explicit request, confirmed against 9
+  // reference screenshots before any edit was made. No CSS hiding, no
+  // placeholder cells: these ids simply no longer appear in this
+  // array, so renderGrid()'s existing CSS Grid reflows the remaining
+  // works forward with no gaps, in both the desktop 3-column and
+  // mobile 2-column layouts, exactly as it does for any other change
+  // in array length. Nothing else was reordered, retitled, or
+  // recategorized.
+  //   2022-2026: archive-66 "Birthday", archive-92 "Love" (Print —
+  //   distinct from archive-75, the "Love" animation-installation GIF,
+  //   which is unaffected), archive-89 (untitled, group 3).
+  //   before-2022: archive-51 "Home", archive-45 "Persona" (distinct
+  //   from archive-103/archive-104, the unrelated "Persona" pair added
+  //   in an earlier round, which are unaffected), archive-42
+  //   (untitled), archive-53 "Untitled 16", archive-54 "Escape Room",
+  //   archive-52 "Press Release".
+  // The four now-orphaned Chinese-title lookups this left in main.js
+  // (Home/Press Release/Untitled 16/Escape Room — see ARCHIVE_TITLES)
+  // were removed in the same pass, since nothing references them
+  // anymore. The historical provenance note above this array (where
+  // archive-51/52/53/54 and archive-41/42 are first introduced) is
+  // left as-is: it documents where those ids originally came from, not
+  // what's currently live, same convention as every other append in
+  // this file's history.
   window.ARCHIVE_WORKS = [
     {
       id: 'archive-41',
@@ -604,14 +630,6 @@
       category: 'before-2022',
       width: 2101,
       height: 2200
-    },
-    {
-      id: 'archive-42',
-      image: '../../assets/images/archive/archive-42-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-42-thumb.jpg',
-      category: 'before-2022',
-      width: 1730,
-      height: 1223
     },
     {
       id: 'archive-43',
@@ -636,18 +654,6 @@
       category: 'before-2022',
       width: 1032,
       height: 1422
-    },
-    {
-      id: 'archive-45',
-      image: '../../assets/images/archive/archive-45-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-45-thumb.jpg',
-      title: 'Persona',
-      year: '2020',
-      medium: 'Pencil',
-      dimensions: '25 × 18 cm',
-      category: 'before-2022',
-      width: 1086,
-      height: 1402
     },
     {
       id: 'archive-46',
@@ -708,49 +714,6 @@
       category: 'before-2022',
       width: 2200,
       height: 1235
-    },
-    {
-      id: 'archive-51',
-      image: '../../assets/images/archive/archive-51-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-51-thumb.jpg',
-      title: 'Home',
-      year: '2020',
-      medium: 'Print, watercolor, paper',
-      dimensions: 'A4 size',
-      category: 'before-2022',
-      width: 2200,
-      height: 1461
-    },
-    {
-      id: 'archive-52',
-      image: '../../assets/images/archive/archive-52-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-52-thumb.jpg',
-      title: 'Press Release',
-      year: '2020',
-      medium: 'Digital art',
-      category: 'before-2022',
-      width: 2200,
-      height: 1815
-    },
-    {
-      id: 'archive-53',
-      image: '../../assets/images/archive/archive-53-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-53-thumb.jpg',
-      title: 'Untitled 16',
-      category: 'before-2022',
-      width: 1650,
-      height: 2200
-    },
-    {
-      id: 'archive-54',
-      image: '../../assets/images/archive/archive-54-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-54-thumb.jpg',
-      title: 'Escape Room',
-      year: '2020',
-      medium: 'Game',
-      category: 'before-2022',
-      width: 2116,
-      height: 1279
     },
     {
       id: 'archive-94',
@@ -920,19 +883,6 @@
       group: 1,
       width: 842,
       height: 1386
-    },
-    {
-      id: 'archive-66',
-      image: '../../assets/images/archive/archive-66-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-66-thumb.jpg',
-      title: 'Birthday',
-      year: '2022',
-      medium: 'Inkjet print and acrylic',
-      dimensions: '85 × 75 cm',
-      category: '2022-2026',
-      group: 1,
-      width: 2200,
-      height: 1650
     },
     {
       id: 'archive-67',
@@ -1177,15 +1127,6 @@
       height: 1608
     },
     {
-      id: 'archive-89',
-      image: '../../assets/images/archive/archive-89-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-89-thumb.jpg',
-      category: '2022-2026',
-      group: 3,
-      width: 2200,
-      height: 1636
-    },
-    {
       id: 'archive-90',
       image: '../../assets/images/archive/archive-90-full.jpg',
       thumbnail: '../../assets/images/archive/archive-90-thumb.jpg',
@@ -1223,18 +1164,6 @@
       group: 4,
       width: 1440,
       height: 1440
-    },
-    {
-      id: 'archive-92',
-      image: '../../assets/images/archive/archive-92-full.jpg',
-      thumbnail: '../../assets/images/archive/archive-92-thumb.jpg',
-      title: 'Love',
-      year: '2022',
-      medium: 'Print',
-      category: '2022-2026',
-      group: 4,
-      width: 1714,
-      height: 1372
     },
     {
       id: 'archive-93',
