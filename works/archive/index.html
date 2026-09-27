@@ -255,6 +255,35 @@
     leading number, positioned as #9 per the artist's reference
     screenshot rather than its filename — both now moot, since
     archive-69 was removed; see the large-gap note below.)
+
+    IMAGE ADDITION, group 1 (archive-105 "Great sacrifice"): a single
+    new work appended to the END of group 1's array position — right
+    after archive-68 "The god of panties" — per the artist's own
+    screenshot showing the group's last row (archive-67, archive-68)
+    with an empty third cell, requesting this new work fill that
+    specific empty cell. The artist's screenshot was identified by
+    matching the visible artworks' own thumbnails pixel-for-pixel
+    against this file's data (the flame-shaped archive-64 "Relayed
+    Flame", the pink archive-65 "Bunny Girl", the candle sketch
+    archive-66 "Birthday" in the row above; archive-67 "Angry apple"
+    and archive-68 "The god of panties" in the empty row itself) —
+    not inferred from any group's total item count. group 1 is now 9
+    works, still the default 3-column grid (no ARCHIVE_GROUP_LAYOUT
+    entry), so it simply gains a third, now-complete row rather than
+    needing any layout change. Title "Great sacrifice", medium
+    "Acrylic on paper" (from the source filename's "纸上丙烯",
+    matching the same English rendering "Acrylic on paper" already
+    used for archive-46/47 elsewhere in this file), dimensions
+    "63 × 88 cm", and year 2022 are all taken verbatim from the
+    supplied filename ("Great sacrifice-63cm×88cm-纸上丙烯-2022(1).jpeg"),
+    same convention as every other entry here. Processed the same way
+    as every other Archive image — EXIF-orientation-checked (none
+    needed), long edge capped at 2200px for `image` (1567×2200) / 900px
+    for `thumbnail` (641×900), original portrait aspect ratio
+    untouched, never cropped/stretched/rotated. No other group-1 entry,
+    other Archive section, section spacing, or the 3-column layout
+    system itself was touched.
+
     "2022-2026" REBUILD, group 3 (archive-80 through archive-89, 10
     works): the third group of the collection, laid out as a 4-row,
     3-column block per the artist's reference screenshot (10 works in
@@ -930,6 +959,19 @@
       group: 1,
       width: 1660,
       height: 1244
+    },
+    {
+      id: 'archive-105',
+      image: '../../assets/images/archive/archive-105-full.jpg',
+      thumbnail: '../../assets/images/archive/archive-105-thumb.jpg',
+      title: 'Great sacrifice',
+      year: '2022',
+      medium: 'Acrylic on paper',
+      dimensions: '63 × 88 cm',
+      category: '2022-2026',
+      group: 1,
+      width: 1567,
+      height: 2200
     },
     {
       id: 'archive-72',
