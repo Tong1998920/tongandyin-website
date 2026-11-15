@@ -1829,16 +1829,29 @@ body.archive-lightbox-open { overflow: hidden; }
   align-items: center;
   flex-wrap: wrap;
   gap: clamp(2rem, 4vw, 3.5rem);
-  max-width: 1080px;
+  max-width: var(--content-max);
   margin-top: var(--space-5);
 }
 
-/* Left image column: a defined width (this is what the portrait now
-   fills), instead of letting the figure shrink-wrap a tiny image.
-   Left edge sits flush with the "Contact" heading (margin: 0). */
+/* Left image column: a defined width (this is what the portrait
+   fills). Left edge sits flush with the "Contact" heading (margin: 0).
+   The width is derived from the viewport HEIGHT so that, on desktop,
+   the photo's bottom edge lands ~50px above the bottom of the window:
+     photo height  = 100vh - 258px
+                     (~208px = header + heading + existing spacing above
+                      the photo, + 50px bottom clearance)
+     column width  = photo height x 0.78375   (3135 / 4000, the photo's
+                     own width/height ratio)
+   The <img> inside is width:100% + height:auto, so its height always
+   follows from this width via its own intrinsic ratio — never cropped,
+   stretched or distorted. Floor of 220px for very short windows; ceiling
+   of 58% of the content width so the biography always keeps room beside
+   it instead of wrapping below. Mobile (max-width: 900px) overrides this
+   further down and is unchanged. */
 .contact-portrait {
   flex: 0 0 auto;
-  width: clamp(220px, 24vw, 340px);
+  width: clamp(220px, calc((100vh - 258px) * 0.78375), 58%);
+  width: clamp(220px, calc((100svh - 258px) * 0.78375), 58%);
   margin: 0;
 }
 
