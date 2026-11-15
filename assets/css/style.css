@@ -1902,6 +1902,81 @@ body.archive-lightbox-open { overflow: hidden; }
 .contact-details a { transition: color 0.2s var(--ease); }
 .contact-details a:hover, .contact-details a:focus-visible { color: var(--color-ink); }
 
+/* ------------------------------------------------- contact: full-bleed portrait
+   Desktop only (901px and up). The portrait fills the whole left side
+   of the viewport — flush to the top, bottom and left edges, no margin
+   or padding — at 40% of the viewport width, cropped with object-fit:
+   cover (never stretched). object-position keeps the subject (she sits
+   left of centre in the photo) in frame when the sides are trimmed.
+   The biography / contact details stay in the right column, vertically
+   centred in the viewport. Every rule is scoped with
+   body:has(.contact-intro), which only exists on the Contact page, so
+   no other page is affected. Typography, colours and the navigation
+   markup are untouched; the header simply floats over the page (it was
+   already transparent) instead of taking up space above the photo.
+   Mobile (max-width: 900px) is unchanged: the later @media block keeps
+   the stacked, small-portrait layout. */
+@media (min-width: 901px) {
+  body:has(.contact-intro) {
+    --contact-pad: clamp(2rem, 6vw, 7rem);
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  /* Header floats over the page so the photo can reach the top edge. */
+  body:has(.contact-intro) .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  /* Right column: everything except the photo, centred vertically. */
+  body:has(.contact-intro) main {
+    margin-left: 40vw;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  body:has(.contact-intro) main > .section.wrap {
+    max-width: none;
+    margin: 0;
+    padding: 0 var(--contact-pad);
+  }
+
+  /* Left column: full-height, full-bleed photo. */
+  body:has(.contact-intro) .contact-portrait {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 40vw;
+    margin: 0;
+  }
+
+  body:has(.contact-intro) .contact-portrait img {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% 50%;
+  }
+
+  /* Copyright pinned to the bottom of the right column, so the page
+     never scrolls and the text block above stays truly centred. */
+  body:has(.contact-intro) .site-footer {
+    position: absolute;
+    left: 40vw;
+    right: 0;
+    bottom: 0;
+    margin-top: 0;
+    padding-left: var(--contact-pad);
+    padding-right: var(--contact-pad);
+  }
+}
+
 /* --------------------------------------------------------------- callout */
 .placeholder-note {
   background: transparent;
