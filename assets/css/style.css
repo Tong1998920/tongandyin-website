@@ -1828,12 +1828,19 @@ body.archive-lightbox-open { overflow: hidden; }
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: clamp(1.6rem, 3vw, 2.8rem);
+  gap: clamp(2rem, 4vw, 3.5rem);
   max-width: 1080px;
   margin-top: var(--space-5);
 }
 
-.contact-portrait { flex: 0 0 auto; margin: 0; }
+/* Left image column: a defined width (this is what the portrait now
+   fills), instead of letting the figure shrink-wrap a tiny image.
+   Left edge sits flush with the "Contact" heading (margin: 0). */
+.contact-portrait {
+  flex: 0 0 auto;
+  width: clamp(220px, 24vw, 340px);
+  margin: 0;
+}
 
 /* Reduced twice now at the artist's request — first from an original
    clamp(380px, 31vw, 500px) down to clamp(260px, 20vw, 300px), then
@@ -1851,7 +1858,7 @@ body.archive-lightbox-open { overflow: hidden; }
    left to resolve from width alone. */
 .contact-portrait img {
   display: block;
-  width: clamp(130px, 10vw, 150px);
+  width: 100%;
   max-width: 100%;
   height: auto;
 }
@@ -1907,7 +1914,7 @@ body.archive-lightbox-open { overflow: hidden; }
      absolute value, so the portrait doesn't end up reading larger on
      mobile than it now does on desktop. Still responsive (the 100%
      term) so it never overflows a narrower phone. */
-  .contact-portrait img { width: min(220px, 100%); }
+  .contact-portrait { width: min(220px, 100%); }
 
   .plate--left, .plate--right, .plate--right-narrow, .plate--left-narrow, .plate--center {
     grid-column: 1 / -1;
